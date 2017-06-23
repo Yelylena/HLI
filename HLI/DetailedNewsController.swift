@@ -64,51 +64,51 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             var commentImage: UIImage?
             var commentQuote: String?
             
-            for newsItem in doc.css("div[class^='block block_type_news']") {
+            for newsItem in doc.css("div[class='block block_type_news']") {
                 
                 //Title
-                newsTitle = newsItem.at_css("a[class^='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                newsTitle = newsItem.at_css("a[class='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //News URL
-                var newsURLLoc = newsItem.at_css("h2[class^='news-title'] > a")
+                var newsURLLoc = newsItem.at_css("h2[class='news-title'] > a")
                 newsURL = URL(string: (newsURLLoc?["href"]!)!)
                 
                 //News date
-                var newsDateLoc = newsItem.at_css("p[class^='post-date']")
+                var newsDateLoc = newsItem.at_css("p[class='post-date']")
                 newsDate = newsDateLoc?["data-date"]
                 
                 //Author
-                newsAuthor = newsItem.at_css("p[class^='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                newsAuthor = newsItem.at_css("p[class='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Tags
                 var tagsInItem = [String]()
-                for tag in newsItem.css("p[class^='news__tags'] > a") {
+                for tag in newsItem.css("p[class='news__tags'] > a") {
                     tagsInItem.append(tag.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
                 }
                 newsTags = tagsInItem
                 
                 //Tags URL
                 var tagsURLInItem = [URL]()
-                for url in newsItem.css("p[class^='news__tags'] > a") {
+                for url in newsItem.css("p[class='news__tags'] > a") {
                     tagsURLInItem.append(URL(string: url["href"]!)!)
                 }
                 tagsURL = tagsURLInItem
                 
                 //Comments
-                newsComments = newsItem.at_css("p[class^='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                newsComments = newsItem.at_css("p[class='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Body
-                newsBody = newsItem.at_css("div[class^='block-body']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                newsBody = newsItem.at_css("div[class='block-body']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 
                 newsItems.append(News(newsURL: newsURL!, title: newsTitle!, date: newsDate!, author: newsAuthor!, tags: newsTags as! [String], tagsURL: tagsURL as! [URL], comments: newsComments!, body: newsBody!))
                 
             }
             
-            for commentItem in doc.css("div[class='comment']") {
+            for commentItem in doc.css("div[itemscope='itemscope']") {
                 
                 //Name
-                commentName = commentItem.at_css("div[class^='comment__name']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                commentName = commentItem.at_css("div[class='comment__name']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Comment date
                 commentDate = commentItem.at_css("time[class='comment__date']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -121,7 +121,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 //Comment quote
                 commentItems.append(Comment(name: commentName!, date: commentDate!, text: commentText!, commentQuote: ""))
             }
-            print("\(commentItems)")
+//            print("\(commentItems)")
         }
         DispatchQueue.main.async {
             self.detailedNewsTable.reloadData()
@@ -159,6 +159,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 cell.body.text = news.body
                 cell.body.sizeToFit()
             }
+            cell.isUserInteractionEnabled = false
             return cell
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentCell
