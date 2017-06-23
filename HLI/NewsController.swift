@@ -10,11 +10,11 @@ import UIKit
 import Kanna
 import Alamofire
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var newsTable: UITableView!
     
-    var newsItems = [HLINews]()
+    var newsItems = [News]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,46 +51,47 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             var comments: String?
             var body: String?
             
-            for item in doc.css("div[class^='block block_type_news']") {
+            for newsItem in doc.css("div[class^='block block_type_news']") {
                 
                 //Title
-                title = item.at_css("a[class^='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                title = newsItem.at_css("a[class^='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //NewsURL
-                var newsURLLoc = item.at_css("h2[class^='news-title'] > a")
+                var newsURLLoc = newsItem.at_css("h2[class^='news-title'] > a")
                 newsURL = URL(string: (newsURLLoc?["href"]!)!)
                 
                 //Date
-                date = item.at_css("p[class^='post-date']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-                
+                var dateLoc = newsItem.at_css("p[class^='post-date']")
+                date = dateLoc?["data-date"]
+
                 //Author
-                author = item.at_css("p[class^='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                author = newsItem.at_css("p[class^='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Tags
                 var tagsInItem = [String]()
-                for tag in item.css("p[class^='news__tags'] > a") {
+                for tag in newsItem.css("p[class^='news__tags'] > a") {
                     tagsInItem.append(tag.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
                 }
                 tags = tagsInItem
                 
                 //TagsURL
                 var tagsURLInItem = [URL]()
-                for url in item.css("p[class^='news__tags'] > a") {
+                for url in newsItem.css("p[class^='news__tags'] > a") {
                     tagsURLInItem.append(URL(string: url["href"]!)!)
                 }
                 tagsURL = tagsURLInItem
                 
                 //Comments
-                comments = item.at_css("p[class^='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                comments = newsItem.at_css("p[class^='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Body
-                body = item.at_css("div[class^='block-body']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                body = newsItem.at_css("div[class^='block-body']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 
-                newsItems.append(HLINews(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body!))
+                newsItems.append(News(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body!))
                 
             }
-            print("\(newsItems)")
+//            print("\(newsItems)")
         }
         DispatchQueue.main.async {
             self.newsTable.reloadData()
@@ -124,7 +125,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let news = newsItems[indexPath.row]
         let bodyFont = UIFont(name: "Helvetica", size: 17.0)
+        
+        //FIXME: Recount height for cell
         return 200 + news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: bodyFont!)
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "DetailedNewsSegue", sender: nil)
+    }
 }
+
 

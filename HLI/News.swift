@@ -8,15 +8,15 @@
 
 import Foundation
 
-struct HLINews {
-    var newsURL: URL
-    var title: String
-    var date: String
-    var author: String
-    var tags: [String]
-    var tagsURL: [URL]
+struct News {
+    var newsURL:  URL
+    var title:    String
+    var date:     String
+    var author:   String
+    var tags:     [String]
+    var tagsURL:  [URL]
     var comments: String
-    var body: String
+    var body:     String
     
     init(newsURL: URL, title: String, date: String, author: String, tags: [String], tagsURL: [URL], comments: String, body: String) {
         self.newsURL = newsURL
