@@ -13,7 +13,7 @@ import Alamofire
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
-    
+    var link: URL?
     var newsItems = [News]()
     var commentItems = [Comment]()
     
@@ -32,7 +32,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func scrape() -> Void {
-        Alamofire.request("https://www.hl-inside.ru/comments/?1497952256").responseString { response in
+        
+        Alamofire.request(link!).responseString { response in
             print("\(response.result.isSuccess)")
             if let html = response.result.value {
                 self.parseHTML(html: html)

@@ -15,6 +15,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var newsTable: UITableView!
     
     var newsItems = [News]()
+    var newsURL: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +44,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if let doc = HTML(html: html, encoding: .windowsCP1251) {
             
             var title: String?
-            var newsURL: URL?
+            
             var date: String?
             var author: String?
             var tags = [String?]()
@@ -58,7 +59,8 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
                 //NewsURL
                 var newsURLLoc = newsItem.at_css("h2[class^='news-title'] > a")
-                newsURL = URL(string: (newsURLLoc?["href"]!)!)
+                var newsURLString = "https://www.hl-inside.ru/" + (newsURLLoc?["href"]!)!
+                newsURL = URL(string: newsURLString)
                 
                 //Date
                 var dateLoc = newsItem.at_css("p[class^='post-date']")
@@ -122,6 +124,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return cell
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let news = newsItems[indexPath.row]
         let bodyFont = UIFont(name: "Helvetica", size: 17.0)
@@ -129,8 +132,22 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //FIXME: Recount height for cell
         return 200 + news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: bodyFont!)
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         performSegue(withIdentifier: "DetailedNewsSegue", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "DetailedNewsSegue" {
+            if let viewController = segue.destination as? DetailedNewsController {
+                if let indexPath = newsTable.indexPathForSelectedRow {
+                    let news = newsItems[indexPath.row]
+                    viewController.link = news.newsURL as URL!
+                
+                }
+            }
+        }
     }
 }
 
