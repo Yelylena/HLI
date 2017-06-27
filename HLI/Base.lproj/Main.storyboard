@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UpY-9L-jNU">
-                                <rect key="frame" x="0.0" y="28" width="375" height="639"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="588"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -103,11 +103,21 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="qhL-8f-n6y"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Brc-QL-utP">
+                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Previous"/>
+                                <connections>
+                                    <action selector="showPrevNews:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F0Q-Z2-pUZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="X4c-fc-PvX"/>
                     <connections>
+                        <outlet property="PrevButton" destination="Brc-QL-utP" id="T3b-L7-EJo"/>
                         <outlet property="newsTable" destination="UpY-9L-jNU" id="RAr-cM-8Zu"/>
                         <segue destination="5PO-hX-cGw" kind="show" identifier="DetailedNewsSegue" id="aQV-yv-uPz"/>
                     </connections>
@@ -219,7 +229,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="joO-5p-8Vw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1940" y="51"/>
+            <point key="canvasLocation" x="1940" y="50.824587706146929"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="j4R-Dk-ax0">

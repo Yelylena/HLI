@@ -13,7 +13,7 @@ import Alamofire
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
-    var link: URL?
+    var newsURL: URL?
     var newsItems = [News]()
     var commentItems = [Comment]()
     
@@ -23,7 +23,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         detailedNewsTable.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: "CommentCell")
         detailedNewsTable.delegate = self
         detailedNewsTable.dataSource = self
-        self.scrape()
+        self.parseHTML()
     }
     
     override func didReceiveMemoryWarning() {
@@ -31,19 +31,11 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-    func scrape() -> Void {
-        
-        Alamofire.request(link!).responseString { response in
-            print("\(response.result.isSuccess)")
-            if let html = response.result.value {
-                self.parseHTML(html: html)
-            }
-            
-        }
-    }
     
-    func parseHTML(html: String) -> Void {
-        if let doc = HTML(html: html, encoding: .windowsCP1251) {
+    func parseHTML() -> Void {
+        Alamofire.request(newsURL!).responseString { response in
+            if let html = response.result.value,
+               let doc = HTML(html: html, encoding: .windowsCP1251) {
             
             //News
             //FIXME: Make dictionary for title
@@ -102,7 +94,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 newsBody = newsItem.at_css("div[class='block-body']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 
-                newsItems.append(News(newsURL: newsURL!, title: newsTitle!, date: newsDate!, author: newsAuthor!, tags: newsTags as! [String], tagsURL: tagsURL as! [URL], comments: newsComments!, body: newsBody!))
+                self.newsItems.append(News(newsURL: newsURL!, title: newsTitle!, date: newsDate!, author: newsAuthor!, tags: newsTags as! [String], tagsURL: tagsURL as! [URL], comments: newsComments!, body: newsBody!))
                 
             }
             
@@ -120,13 +112,14 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 //Image
                 
                 //Comment quote
-                commentItems.append(Comment(name: commentName!, date: commentDate!, text: commentText!, commentQuote: ""))
+                self.commentItems.append(Comment(name: commentName!, date: commentDate!, text: commentText!, commentQuote: ""))
             }
 //            print("\(commentItems)")
         }
         DispatchQueue.main.async {
             self.detailedNewsTable.reloadData()
         }
+    }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -188,6 +181,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             return 100 + comment.text.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
         }
        return 0
+    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0:
+            return ""
+        case 1:
+            return "Comments"
+        default:
+            return ""
+        }
     }
     //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     //        <#code#>
