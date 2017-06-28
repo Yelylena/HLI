@@ -6,6 +6,7 @@ target ‘HLI’ do
   use_frameworks!
   pod 'Kanna', '~> 2.1.0'
   pod 'Alamofire', '~> 4.4'
+  pod 'SDWebImage', '~>3.8'
   project ‘HLI.xcodeproj'
   # Pods for HLI
 

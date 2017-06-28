@@ -13,6 +13,7 @@ class CommentCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var date: UILabel!
     //FIXME: Add image
+    @IBOutlet weak var commentImage: UIImageView!
     @IBOutlet weak var commentText: UILabel!
     
     override func awakeFromNib() {

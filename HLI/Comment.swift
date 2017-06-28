@@ -13,15 +13,15 @@ struct Comment {
 //    var email: String
     var date: String
     var text: String
-//    var image: String?
+    var image: String?
     var commentQuote: String?
 //    var commentQuoteAuthor: String?
     
-    init(name: String, date: String, text: String, commentQuote: String?) {
+    init(name: String, date: String, text: String, image: String?, commentQuote: String?) {
         self.name = name
         self.date = date
         self.text = text
-//        self.image = image
+        self.image = image
         self.commentQuote = commentQuote
     }
 }

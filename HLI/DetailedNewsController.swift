@@ -9,6 +9,7 @@
 import UIKit
 import Kanna
 import Alamofire
+import SDWebImage
 
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -54,8 +55,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
 //            var email: String?
             var commentDate: String?
             var commentText: String?
-            var commentImage: UIImage?
-            var commentQuote: String?
+            var commentImage: String?
+//            var commentQuote: String?
             
             for newsItem in doc.css("div[class='block block_type_news']") {
                 
@@ -110,11 +111,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 commentText = commentItem.at_css("div[class='comment__text']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Image
-                
+                var imageLoc = commentItem.at_css("div[class='comment__steam'] > a > img")
+                if imageLoc != nil {
+                    commentImage = imageLoc?["src"]
+                } else {
+                    commentImage = ""
+                }
                 //Comment quote
-                self.commentItems.append(Comment(name: commentName!, date: commentDate!, text: commentText!, commentQuote: ""))
+                self.commentItems.append(Comment(name: commentName!, date: commentDate!, text: commentText!, image: commentImage, commentQuote: ""))
             }
-//            print("\(commentItems)")
+            print("\(self.commentItems)")
         }
         DispatchQueue.main.async {
             self.detailedNewsTable.reloadData()
@@ -161,6 +167,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 let comment = commentItems[indexPath.row]
                 cell.name.text = comment.name
                 cell.date.text = comment.date
+                cell.commentImage.sd_setImage(with: URL(string: comment.image!))
                 cell.commentText.text = comment.text
                 cell.commentText.sizeToFit()
             }

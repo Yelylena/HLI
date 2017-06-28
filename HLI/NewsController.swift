@@ -166,7 +166,6 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print("\(String(describing: newsURL))")
         newsItems = [News]()
         self.parseHTML()
-        self.newsTable.reloadData()
     }
     
 }
