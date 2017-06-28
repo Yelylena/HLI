@@ -7,15 +7,16 @@
 //
 
 import UIKit
+import ActiveLabel
 
 class NewsCell: UITableViewCell {
     
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var author: UILabel!
-    @IBOutlet weak var tags: UILabel!
+    @IBOutlet weak var tags: ActiveLabel!
     @IBOutlet weak var comments: UILabel!
-    @IBOutlet weak var body: UILabel!
+    @IBOutlet weak var body: ActiveLabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

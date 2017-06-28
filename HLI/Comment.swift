@@ -10,7 +10,6 @@ import UIKit
 
 struct Comment {
     var name: String
-//    var email: String
     var date: String
     var text: String
     var image: String?

@@ -10,6 +10,7 @@ import UIKit
 import Kanna
 import Alamofire
 import SDWebImage
+import ActiveLabel
 
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -52,7 +53,6 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             
             //Comment
             var commentName: String?
-//            var email: String?
             var commentDate: String?
             var commentText: String?
             var commentImage: String?
@@ -112,15 +112,12 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 
                 //Image
                 var imageLoc = commentItem.at_css("div[class='comment__steam'] > a > img")
-                if imageLoc != nil {
-                    commentImage = imageLoc?["src"]
-                } else {
-                    commentImage = ""
-                }
+                commentImage = imageLoc?["src"] ?? ""
+
                 //Comment quote
                 self.commentItems.append(Comment(name: commentName!, date: commentDate!, text: commentText!, image: commentImage, commentQuote: ""))
             }
-            print("\(self.commentItems)")
+ //           print("\(self.commentItems)")
         }
         DispatchQueue.main.async {
             self.detailedNewsTable.reloadData()

@@ -9,6 +9,7 @@
 import UIKit
 import Kanna
 import Alamofire
+import ActiveLabel
 
 class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -128,8 +129,16 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.title.text = news.title
             cell.date.text = news.date
             cell.author.text = news.author
-            cell.tags.text = news.tags.description
+            //Tags
+            var temp = ""
+            for tag in news.tags {
+                temp += "\(tag) "
+            }
+            cell.tags.enabledTypes = [.mention, .hashtag, .url]
+            cell.tags.text = temp
+
             cell.comments.text = news.comments
+            cell.body.enabledTypes = [.mention, .hashtag, .url]
             cell.body.text = news.body
             cell.body.sizeToFit()
         }
