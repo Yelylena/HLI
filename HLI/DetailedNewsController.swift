@@ -59,7 +59,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
 //            var commentQuote: String?
             
             for newsItem in doc.css("div[class='block block_type_news']") {
-                
+
                 //Title
                 newsTitle = newsItem.at_css("a[class='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
@@ -69,7 +69,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 
                 //News date
                 var newsDateLoc = newsItem.at_css("p[class='post-date']")
-                newsDate = newsDateLoc?["data-date"]
+                newsDate = newsDateLoc?["data-date"] ?? String()
                 
                 //Author
                 newsAuthor = newsItem.at_css("p[class='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -92,8 +92,82 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 newsComments = newsItem.at_css("p[class='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Body
-                newsBody = newsItem.at_css("div[class='block-body']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-                
+                for body in newsItem.css("div[class^='block-body']") {
+                    newsBody = body.innerHTML!
+
+                    print(newsBody!)
+                    
+                    //Strong
+                    for strong in body.css("strong") {
+                        let strongText = strong.text!
+                        print(strongText)
+                        
+                        let range = newsBody?.range(of: strong.toHTML!)
+                        print("Range of strong is: \(String(describing: range))")
+                    }
+                    
+                    //Image
+                    for img in body.css("a > img") {
+                        let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
+//                        DispatchQueue.global(qos: .userInitiated).async {
+//                            
+//                            let imageView = UIImageView(frame: CGRect(x:0, y:0, width:UIScreen.main.bounds.size.width, height:200))
+//                            imageView.center = self.view.center
+//                            
+//                            // When from background thread, UI needs to be updated on main_queue
+//                            DispatchQueue.main.async {
+//                                imageView.sd_setImage(with: URL(string: imageURLString))
+//                                imageView.contentMode = UIViewContentMode.scaleAspectFit
+//                                self.view.addSubview(imageView)
+//                            }
+//                        }
+                        print(imageURLString)
+                        let range = newsBody?.range(of: img.toHTML!)
+                        print("Range of image is: \(String(describing: range))")
+                    }
+                    
+                    //Unordered list
+                    var unorderedList = [String]()
+                    for ul in body.css("ul > li") {
+                        let range = newsBody?.range(of: ul.toHTML!)
+                        print("Range of unordered list is: \(String(describing: range))")
+                        let listItem = "\u{25CF} " + ul.text!
+                        unorderedList.append(listItem)
+                    }
+                    print(unorderedList)
+                    
+                    //Ordered list
+                    var orderedList = [String]()
+                    var listItemNumber = 1
+                    for ol in body.css("ol > li") {
+                        let listItem = String(listItemNumber) + ol.text!
+                        let range = newsBody?.range(of: ol.toHTML!)
+                        print("Range of ordered list is: \(String(describing: range))")
+                        orderedList.append(listItem)
+                        listItemNumber += 1
+                    }
+                    print(orderedList)
+                    
+                    
+                    //Video
+                    for video in body.css("a[class*='video']") {
+                        
+                        let range = newsBody?.range(of: video.toHTML!)
+                        print("Range of video is: \(String(describing: range))")
+                    }
+                    
+                    //Paragraph
+                    for paragraph in body.css("p") {
+                        let paragraphText = paragraph.text!
+                        
+                        let range = newsBody?.range(of: paragraph.toHTML!)
+                        print("Range of paragraph is: \(String(describing: range))")
+                    }
+                    
+                    newsBody = newsBody?.replacingOccurrences(of: "<br>", with: "\n")
+ 
+                    print(newsBody?.distance(from: (newsBody?.startIndex)!, to: (newsBody?.endIndex)!) ?? 0)
+                }
                 
                 self.newsItems.append(News(newsURL: newsURL!, title: newsTitle!, date: newsDate!, author: newsAuthor!, tags: newsTags as! [String], tagsURL: tagsURL as! [URL], comments: newsComments!, body: newsBody!))
                 
@@ -151,8 +225,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 cell.title.text = news.title
                 cell.date.text = news.date
                 cell.author.text = news.author
-                cell.tags.text = news.tags.description
+                //Tags
+                var temp = ""
+                for tag in news.tags {
+                    temp += "\(tag) "
+                }
+                cell.tags.enabledTypes = [.mention, .hashtag, .url]
+                cell.tags.text = temp
+                
                 cell.comments.text = ""
+                cell.body.enabledTypes = [.mention, .hashtag, .url]
                 cell.body.text = news.body
                 cell.body.sizeToFit()
             }

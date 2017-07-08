@@ -84,8 +84,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     comments = newsItem.at_css("p[class^='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                     
                     //Body
-                    body = newsItem.at_css("div[class^='block-body']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-                    
+                    body = newsItem.at_css("div[class^='block-body']")?.text!
                     
                     self.newsItems.append(News(newsURL: self.newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body!))
                     
@@ -99,11 +98,13 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     //                print(prevNews)
                     
                     //Next news
-                    //                if newsURL != URL(string: "https://www.hl-inside.ru/") {
-                    //                    var nextLoc = newsNavigation.at_css("span[class='next-prev__next'] > a")
-                    //                    var nextNewsString = "https://www.hl-inside.ru/" + (nextLoc?["href"]!)!
-                    //                    nextNews = URL(string: nextNewsString)
-                    //                }
+                    var nextLoc = newsNavigation.at_css("span[class='next-prev__next'] > a")
+                    if nextLoc != nil {
+                        var nextNewsString = "https://www.hl-inside.ru" + (nextLoc?["href"]!)!
+                        self.nextNews = URL(string: nextNewsString)
+                    } else {
+                        self.nextNews = URL(string: "https://www.hl-inside.ru/")
+                    }
                 }
             }
             DispatchQueue.main.async {
@@ -175,8 +176,16 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print("\(String(describing: newsURL))")
         newsItems = [News]()
         self.parseHTML()
+        self.newsTable.reloadData()
     }
     
+    @IBAction func showNextNews(_ sender: UIButton) {
+        newsURL = nextNews
+        print("\(String(describing: newsURL))")
+        newsItems = [News]()
+        self.parseHTML()
+        self.newsTable.reloadData()
+    }
 }
 
 

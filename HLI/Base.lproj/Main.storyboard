@@ -104,12 +104,21 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Brc-QL-utP">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                <rect key="frame" x="195" y="617" width="180" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Previous"/>
                                 <connections>
                                     <action selector="showPrevNews:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F0Q-Z2-pUZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hcv-WA-9Cf">
+                                <rect key="frame" x="0.0" y="617" width="180" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Next"/>
+                                <connections>
+                                    <action selector="showNextNews:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lua-By-l0n"/>
                                 </connections>
                             </button>
                         </subviews>

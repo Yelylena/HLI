@@ -26,7 +26,7 @@
                         <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" tag="101" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2 мая 2017, 18:22" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RYh-yt-Tpe">
-                        <rect key="frame" x="8" y="48" width="160" height="21"/>
+                        <rect key="frame" x="8" y="48" width="180" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="15"/>
                         <nil key="textColor"/>
