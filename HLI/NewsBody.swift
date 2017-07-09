@@ -9,13 +9,23 @@
 import Foundation
 
 struct NewsBody {
-    var type: String
-    var anyObject: Any
-    var range: Range<String>
+    enum DataType {
+        case strong
+        case image
+        case link
+        case video
+        case unorderedList
+        case orderedList
+        case paragraph
+        case blockquote
+    }
+    var type: DataType
+    var data: Any
+    var range: Range<String.Index>
     
-    init(type: String, anyObject: Any, range:  Range<String>) {
+    init(type: DataType, data: Any, range:  Range<String.Index>) {
         self.type = type
-        self.anyObject = anyObject
+        self.data = data
         self.range = range
     }
 }

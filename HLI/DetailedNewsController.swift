@@ -17,6 +17,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var detailedNewsTable: UITableView!
     var newsURL: URL?
     var news = [News]()
+    var newsBodyArray = [NewsBody]()
     var comments = [Comment]()
     
     override func viewDidLoad() {
@@ -95,16 +96,15 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 //Body
                 for body in newsItem.css("div[class^='block-body']") {
                     newsBody = body.innerHTML!
-
+                    newsBody = newsBody?.replacingOccurrences(of: "<br>", with: "\n")
                     print(newsBody!)
                     
                     //Strong
                     for strong in body.css("strong") {
                         let strongText = strong.text!
-                        print(strongText)
-                        
-                        let range = newsBody?.range(of: strong.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: strong.toHTML!)
                         print("Range of strong is: \(String(describing: range))")
+                        self.newsBodyArray.append(NewsBody(type: NewsBody.DataType.strong, data: strongText, range: range!))
                     }
                     
                     //Image in link
@@ -122,75 +122,64 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
 //                                self.view.addSubview(imageView)
 //                            }
 //                        }
-                        print(imageURLString)
-                        let range = newsBody?.range(of: img.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: img.toHTML!)
                         print("Range of image in link is: \(String(describing: range))")
+                        self.newsBodyArray.append(NewsBody(type: NewsBody.DataType.image, data: imageURLString, range: range!))
                     }
                     
                     //Image in paragraph
                     for img in body.css("p > img") {
                         let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
-                        //                        DispatchQueue.global(qos: .userInitiated).async {
-                        //
-                        //                            let imageView = UIImageView(frame: CGRect(x:0, y:0, width:UIScreen.main.bounds.size.width, height:200))
-                        //                            imageView.center = self.view.center
-                        //
-                        //                            // When from background thread, UI needs to be updated on main_queue
-                        //                            DispatchQueue.main.async {
-                        //                                imageView.sd_setImage(with: URL(string: imageURLString))
-                        //                                imageView.contentMode = UIViewContentMode.scaleAspectFit
-                        //                                self.view.addSubview(imageView)
-                        //                            }
-                        //                        }
-                        print(imageURLString)
-                        let range = newsBody?.range(of: img.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: img.toHTML!)
                         print("Range of image in paragraph is: \(String(describing: range))")
+                        self.newsBodyArray.append(NewsBody(type: NewsBody.DataType.image, data: imageURLString, range: range!))
                     }
                     
                     //Unordered list
-                    var unorderedList = [String]()
                     for ul in body.css("ul > li") {
-                        let range = newsBody?.range(of: ul.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: ul.toHTML!)
                         print("Range of unordered list is: \(String(describing: range))")
                         let listItem = "\u{25CF} " + ul.text!
-                        unorderedList.append(listItem)
+                        self.newsBodyArray.append(NewsBody(type: NewsBody.DataType.unorderedList, data: listItem, range: range!))
                     }
-//                    print(unorderedList)
                     
                     //Ordered list
-                    var orderedList = [String]()
                     var listItemNumber = 1
                     for ol in body.css("ol > li") {
                         let listItem = String(listItemNumber) + ol.text!
-                        let range = newsBody?.range(of: ol.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: ol.toHTML!)
                         print("Range of ordered list is: \(String(describing: range))")
-                        orderedList.append(listItem)
+                        self.newsBodyArray.append(NewsBody(type: NewsBody.DataType.orderedList, data: listItem, range: range!))
                         listItemNumber += 1
                     }
-//                    print(orderedList)
-                    
                     
                     //Video
                     for video in body.css("a[class*='video']") {
-                        
-                        let range = newsBody?.range(of: video.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: video.toHTML!)
                         print("Range of video is: \(String(describing: range))")
                     }
                     
                     //Paragraph
                     for paragraph in body.css("p") {
                         let paragraphText = paragraph.text!
-                        let range = newsBody?.range(of: paragraph.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: paragraph.toHTML!)
                         print("Range of paragraph is: \(String(describing: range))")
+                        self.newsBodyArray.append(NewsBody(type: NewsBody.DataType.paragraph, data: paragraphText, range: range!))
                     }
                     //Blockquote
                     for blockquote in body.css("blockquote > p") {
                         let blockquoteText = blockquote.text!
-                        let range = newsBody?.range(of: blockquote.toHTML!)
+                        let range = newsBody?.localizedStandardRange(of: blockquote.toHTML!)
                         print("Range of blockquote is: \(String(describing: range))")
+                        self.newsBodyArray.append(NewsBody(type: NewsBody.DataType.blockquote, data: blockquoteText, range: range!))
+                        
                     }
-                    newsBody = newsBody?.replacingOccurrences(of: "<br>", with: "\n")
- 
+                    print(self.newsBodyArray)
+                    self.newsBodyArray = self.newsBodyArray.sorted(by: { (first:NewsBody, last:NewsBody) -> Bool in
+                        return first.range.lowerBound < last.range.upperBound
+                    })
+                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    print(self.newsBodyArray)
                     print(newsBody?.distance(from: (newsBody?.startIndex)!, to: (newsBody?.endIndex)!) ?? 0)
                 }
                 
@@ -223,7 +212,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     }
-    
+    // MARK: - Table view data source    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }

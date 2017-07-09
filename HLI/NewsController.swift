@@ -113,7 +113,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
-    
+    // MARK: - Table view data source    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
