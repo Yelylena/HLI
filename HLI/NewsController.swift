@@ -16,7 +16,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var newsTable: UITableView!
     @IBOutlet weak var PrevButton: UIButton!
     
-    var newsItems = [News]()
+    var news = [News]()
     private var newsURL = URL(string: "https://www.hl-inside.ru/")
     private var prevNews: URL?
     private var nextNews: URL?
@@ -86,10 +86,10 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     //Body
                     body = newsItem.at_css("div[class^='block-body']")?.text!
                     
-                    self.newsItems.append(News(newsURL: self.newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body!))
+                    self.news.append(News(newsURL: self.newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body!))
                     
                 }
-                //            print("\(self.newsItems)")
+                
                 for newsNavigation in doc.css("div[class='next-prev']") {
                     //Previous news
                     var prevLoc = newsNavigation.at_css("span[class='next-prev__prev'] > a")
@@ -99,6 +99,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     
                     //Next news
                     var nextLoc = newsNavigation.at_css("span[class='next-prev__next'] > a")
+
                     if nextLoc != nil {
                         var nextNewsString = "https://www.hl-inside.ru" + (nextLoc?["href"]!)!
                         self.nextNews = URL(string: nextNewsString)
@@ -118,14 +119,14 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsItems.count
+        return news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! NewsCell
         
-        if newsItems.count > indexPath.row {
-            let news = newsItems[indexPath.row]
+        if news.count > indexPath.row {
+            let news = self.news[indexPath.row]
             
             cell.title.text = news.title
             cell.date.text = news.date
@@ -147,7 +148,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let news = newsItems[indexPath.row]
+        let news = self.news[indexPath.row]
         let bodyFont = UIFont(name: "Helvetica", size: 17.0)
         
         //FIXME: Recount height for cell
@@ -163,7 +164,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if segue.identifier == "DetailedNewsSegue" {
             if let viewController = segue.destination as? DetailedNewsController {
                 if let indexPath = newsTable.indexPathForSelectedRow {
-                    let news = newsItems[indexPath.row]
+                    let news = self.news[indexPath.row]
                     viewController.newsURL = news.newsURL as URL!
                 
                 }
@@ -174,7 +175,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func showPrevNews(_ sender: UIButton) {
         newsURL = prevNews
         print("\(String(describing: newsURL))")
-        newsItems = [News]()
+        news = [News]()
         self.parseHTML()
         self.newsTable.reloadData()
     }
@@ -182,7 +183,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func showNextNews(_ sender: UIButton) {
         newsURL = nextNews
         print("\(String(describing: newsURL))")
-        newsItems = [News]()
+        news = [News]()
         self.parseHTML()
         self.newsTable.reloadData()
     }

@@ -16,8 +16,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var detailedNewsTable: UITableView!
     var newsURL: URL?
-    var newsItems = [News]()
-    var commentItems = [Comment]()
+    var news = [News]()
+    var comments = [Comment]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +49,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             var newsTags = [String?]()
             var tagsURL = [URL?]()
             var newsComments: String?
+            //FIXME: Fix body with new struct
             var newsBody: String?
             
             //Comment
@@ -106,7 +107,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                         print("Range of strong is: \(String(describing: range))")
                     }
                     
-                    //Image
+                    //Image in link
                     for img in body.css("a > img") {
                         let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
 //                        DispatchQueue.global(qos: .userInitiated).async {
@@ -123,7 +124,27 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
 //                        }
                         print(imageURLString)
                         let range = newsBody?.range(of: img.toHTML!)
-                        print("Range of image is: \(String(describing: range))")
+                        print("Range of image in link is: \(String(describing: range))")
+                    }
+                    
+                    //Image in paragraph
+                    for img in body.css("p > img") {
+                        let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
+                        //                        DispatchQueue.global(qos: .userInitiated).async {
+                        //
+                        //                            let imageView = UIImageView(frame: CGRect(x:0, y:0, width:UIScreen.main.bounds.size.width, height:200))
+                        //                            imageView.center = self.view.center
+                        //
+                        //                            // When from background thread, UI needs to be updated on main_queue
+                        //                            DispatchQueue.main.async {
+                        //                                imageView.sd_setImage(with: URL(string: imageURLString))
+                        //                                imageView.contentMode = UIViewContentMode.scaleAspectFit
+                        //                                self.view.addSubview(imageView)
+                        //                            }
+                        //                        }
+                        print(imageURLString)
+                        let range = newsBody?.range(of: img.toHTML!)
+                        print("Range of image in paragraph is: \(String(describing: range))")
                     }
                     
                     //Unordered list
@@ -134,7 +155,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                         let listItem = "\u{25CF} " + ul.text!
                         unorderedList.append(listItem)
                     }
-                    print(unorderedList)
+//                    print(unorderedList)
                     
                     //Ordered list
                     var orderedList = [String]()
@@ -146,7 +167,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                         orderedList.append(listItem)
                         listItemNumber += 1
                     }
-                    print(orderedList)
+//                    print(orderedList)
                     
                     
                     //Video
@@ -159,17 +180,21 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                     //Paragraph
                     for paragraph in body.css("p") {
                         let paragraphText = paragraph.text!
-                        
                         let range = newsBody?.range(of: paragraph.toHTML!)
                         print("Range of paragraph is: \(String(describing: range))")
                     }
-                    
+                    //Blockquote
+                    for blockquote in body.css("blockquote > p") {
+                        let blockquoteText = blockquote.text!
+                        let range = newsBody?.range(of: blockquote.toHTML!)
+                        print("Range of blockquote is: \(String(describing: range))")
+                    }
                     newsBody = newsBody?.replacingOccurrences(of: "<br>", with: "\n")
  
                     print(newsBody?.distance(from: (newsBody?.startIndex)!, to: (newsBody?.endIndex)!) ?? 0)
                 }
                 
-                self.newsItems.append(News(newsURL: newsURL!, title: newsTitle!, date: newsDate!, author: newsAuthor!, tags: newsTags as! [String], tagsURL: tagsURL as! [URL], comments: newsComments!, body: newsBody!))
+                self.news.append(News(newsURL: newsURL!, title: newsTitle!, date: newsDate!, author: newsAuthor!, tags: newsTags as! [String], tagsURL: tagsURL as! [URL], comments: newsComments!, body: newsBody!))
                 
             }
             
@@ -189,7 +214,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 commentImage = imageLoc?["src"] ?? ""
 
                 //Comment quote
-                self.commentItems.append(Comment(name: commentName!, date: commentDate!, text: commentText!, image: commentImage, commentQuote: ""))
+                self.comments.append(Comment(name: commentName!, date: commentDate!, text: commentText!, image: commentImage, commentQuote: ""))
             }
  //           print("\(self.commentItems)")
         }
@@ -206,9 +231,9 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return newsItems.count
+            return news.count
         case 1:
-            return commentItems.count
+            return comments.count
         default:
             return 0
         }
@@ -219,8 +244,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! NewsCell
-            if newsItems.count > indexPath.row {
-                let news = newsItems[indexPath.row]
+            if news.count > indexPath.row {
+                let news = self.news[indexPath.row]
                 
                 cell.title.text = news.title
                 cell.date.text = news.date
@@ -242,8 +267,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentCell
-            if commentItems.count > indexPath.row {
-                let comment = commentItems[indexPath.row]
+            if comments.count > indexPath.row {
+                let comment = comments[indexPath.row]
                 cell.name.text = comment.name
                 cell.date.text = comment.date
                 cell.commentImage.sd_setImage(with: URL(string: comment.image!))
@@ -259,11 +284,11 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         let font = UIFont(name: "Helvetica", size: 17.0)
         
         if indexPath.section == 0 {
-            let news = newsItems[indexPath.row]
+            let news = self.news[indexPath.row]
             //FIXME: Recount height for cell
             return 200 + news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
         } else if indexPath.section == 1 {
-            let comment = commentItems[indexPath.row]
+            let comment = comments[indexPath.row]
             return 100 + comment.text.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
         }
        return 0
