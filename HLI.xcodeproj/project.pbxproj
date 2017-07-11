@@ -100,9 +100,9 @@
 			children = (
 				BF7898BB1EF00453009B7927 /* AppDelegate.swift */,
 				BFFD70D41EF926F100E5942C /* Extensions.swift */,
+				BF44691E1F14FE2400952578 /* Parser.swift */,
 				BF7898BD1EF00453009B7927 /* NewsController.swift */,
 				BF5CB3A71EFC0BD200451A7E /* DetailedNewsController.swift */,
-				BF44691E1F14FE2400952578 /* Parser.swift */,
 				BF44691C1F128A5000952578 /* NewsBody.swift */,
 				BF9CBF641EF43FD3004DA7A8 /* News.swift */,
 				BF5CB3A91EFC25D400451A7E /* Comment.swift */,

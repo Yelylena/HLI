@@ -15,7 +15,7 @@ import ActiveLabel
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
-    var newsURL: URL?
+    var pageURL: URL?
     var news = [News]()
     var newsBodyArray = [NewsBody]()
     var comments = [Comment]()
@@ -36,7 +36,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     
     
     func parseHTML() -> Void {
-        Alamofire.request(newsURL!).responseString { response in
+        Alamofire.request(pageURL!).responseString { response in
             if let html = response.result.value,
                let doc = HTML(html: html, encoding: .windowsCP1251) {
             
@@ -97,7 +97,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 //Body
                 for body in newsItem.css("div[class^='block-body']") {
                     newsBody = body.innerHTML!
-                    newsBody = newsBody?.replacingOccurrences(of: "<br>", with: "\n")
+//                    newsBody = newsBody?.replacingOccurrences(of: "<br>", with: "\n")
                     print(newsBody!)
                     
                     //Strong

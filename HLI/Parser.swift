@@ -14,30 +14,21 @@ import ActiveLabel
 
 class Parser {
     
-    var newsURL: URL?
-    var html = String()
+    var pageURL: URL?
+    var html: String
     
-    init(newsURL: URL) {
-        self.newsURL = newsURL
+    init(pageURL: URL, html: String) {
+        self.pageURL = pageURL
+        self.html = html
     }
-    
-    func viewDidLoad() {
-        self.parseHTML()
-    }
-    
-    func parseHTML() -> String {
-        Alamofire.request(newsURL!).responseString { response in
-            self.html = response.result.value!
-        }
-        return html
-    }
-    
+  
     func parseNews() -> [News] {
         
         var news = [News]()
         
         //FIXME: Make dictionary for title
         var title: String?
+        var newsURL: URL?
         var date: String?
         var author: String?
         //FIXME: Make dictionary for tags
@@ -55,7 +46,8 @@ class Parser {
                 
                 //News URL
                 var newsURLLoc = newsItem.at_css("h2[class='news-title'] > a")
-                self.newsURL = URL(string: (newsURLLoc?["href"]!)!)
+                newsURL = URL(string: "https://www.hl-inside.ru" + (newsURLLoc?["href"]!)!)
+                print(newsURL)
                 
                 //News date
                 var newsDateLoc = newsItem.at_css("p[class='post-date']")
@@ -83,15 +75,15 @@ class Parser {
                 
                 //Body
                 for bodyItem in newsItem.css("div[class^='block-body']") {
-                    var newsBodyString = bodyItem.innerHTML!
-                    newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
-                    print(newsBodyString)
+                    let newsBodyString = bodyItem.innerHTML!
+                    //newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
+//                    print(newsBodyString)
                     
                     //Strong
                     for strong in bodyItem.css("strong") {
                         let strongText = strong.text!
                         let range = newsBodyString.localizedStandardRange(of: strong.toHTML!)
-                        print("Range of strong is: \(String(describing: range))")
+//                        print("Range of strong is: \(String(describing: range))")
                         body.append(NewsBody(type: NewsBody.DataType.strong, data: strongText, range: range!))
                     }
                     
@@ -111,7 +103,7 @@ class Parser {
                         //                            }
                         //                        }
                         let range = newsBodyString.localizedStandardRange(of: img.toHTML!)
-                        print("Range of image in link is: \(String(describing: range))")
+//                        print("Range of image in link is: \(String(describing: range))")
                         body.append(NewsBody(type: NewsBody.DataType.image, data: imageURLString, range: range!))
                     }
                     
@@ -119,14 +111,14 @@ class Parser {
                     for img in bodyItem.css("p > img") {
                         let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
                         let range = newsBodyString.localizedStandardRange(of: img.toHTML!)
-                        print("Range of image in paragraph is: \(String(describing: range))")
+//                        print("Range of image in paragraph is: \(String(describing: range))")
                         body.append(NewsBody(type: NewsBody.DataType.image, data: imageURLString, range: range!))
                     }
                     
                     //Unordered list
                     for ul in bodyItem.css("ul > li") {
                         let range = newsBodyString.localizedStandardRange(of: ul.toHTML!)
-                        print("Range of unordered list is: \(String(describing: range))")
+//                        print("Range of unordered list is: \(String(describing: range))")
                         let listItem = "\u{25CF} " + ul.text!
                         body.append(NewsBody(type: NewsBody.DataType.unorderedList, data: listItem, range: range!))
                     }
@@ -136,7 +128,7 @@ class Parser {
                     for ol in bodyItem.css("ol > li") {
                         let listItem = String(listItemNumber) + ol.text!
                         let range = newsBodyString.localizedStandardRange(of: ol.toHTML!)
-                        print("Range of ordered list is: \(String(describing: range))")
+//                        print("Range of ordered list is: \(String(describing: range))")
                         body.append(NewsBody(type: NewsBody.DataType.orderedList, data: listItem, range: range!))
                         listItemNumber += 1
                     }
@@ -144,30 +136,32 @@ class Parser {
                     //Video
                     for video in bodyItem.css("a[class*='video']") {
                         let range = newsBodyString.localizedStandardRange(of: video.toHTML!)
-                        print("Range of video is: \(String(describing: range))")
+//                        print("Range of video is: \(String(describing: range))")
                     }
                     
                     //Paragraph
                     for paragraph in bodyItem.css("p") {
                         let paragraphText = paragraph.text!
                         let range = newsBodyString.localizedStandardRange(of: paragraph.toHTML!)
-                        print("Range of paragraph is: \(String(describing: range))")
+//                        print(paragraphText)
+//                        print(paragraph.toHTML!)
+//                        print("Range of paragraph is: \(String(describing: range))")
                         body.append(NewsBody(type: NewsBody.DataType.paragraph, data: paragraphText, range: range!))
                     }
                     //Blockquote
-                    for blockquote in bodyItem.css("blockquote > p") {
+                    for blockquote in bodyItem.css("blockquote") {
                         let blockquoteText = blockquote.text!
                         let range = newsBodyString.localizedStandardRange(of: blockquote.toHTML!)
-                        print("Range of blockquote is: \(String(describing: range))")
+//                        print("Range of blockquote is: \(String(describing: range))")
                         body.append(NewsBody(type: NewsBody.DataType.blockquote, data: blockquoteText, range: range!))
                         
                     }
-                    print(body)
+//                    print(body)
                     body = body.sorted(by: { (first:NewsBody, last:NewsBody) -> Bool in
                         return first.range.lowerBound < last.range.upperBound
                     })
-                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(body)
+//                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+//                    print(body)
                     print(body.distance(from: (body.startIndex), to: (body.endIndex)))
                 }
                 //FIXME: Fix body type
@@ -176,6 +170,7 @@ class Parser {
         }
         return news
     }
+    
     func parseComment() -> [Comment] {
         
         var comments = [Comment]()
@@ -210,7 +205,7 @@ class Parser {
         return comments
     }
     
-    func parseNavigation() -> (URL, URL) {
+    func parseNavigation() -> (prevNews: URL?, nextNews: URL?) {
         
         var prevNews: URL?
         var nextNews: URL?
@@ -219,10 +214,13 @@ class Parser {
             for newsNavigation in doc.css("div[class='next-prev']") {
                 //Previous news
                 var prevLoc = newsNavigation.at_css("span[class='next-prev__prev'] > a")
-                let prevNewsString = "https://www.hl-inside.ru" + (prevLoc?["href"]!)!
-                prevNews = URL(string: prevNewsString)
-                //                print(prevNews)
-                
+                if prevLoc != nil {
+                    let prevNewsString = "https://www.hl-inside.ru" + (prevLoc?["href"]!)!
+                    prevNews = URL(string: prevNewsString) ?? URL(string:"https://www.hl-inside.ru/fock")
+                    //                print(prevNews)
+                } else {
+                    prevNews = URL(string: "https://www.hl-inside.ru/")
+                }
                 //Next news
                 var nextLoc = newsNavigation.at_css("span[class='next-prev__next'] > a")
                 
