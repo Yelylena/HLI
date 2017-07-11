@@ -47,7 +47,6 @@ class Parser {
                 //News URL
                 var newsURLLoc = newsItem.at_css("h2[class='news-title'] > a")
                 newsURL = URL(string: "https://www.hl-inside.ru" + (newsURLLoc?["href"]!)!)
-                print(newsURL)
                 
                 //News date
                 var newsDateLoc = newsItem.at_css("p[class='post-date']")
@@ -75,8 +74,8 @@ class Parser {
                 
                 //Body
                 for bodyItem in newsItem.css("div[class^='block-body']") {
-                    let newsBodyString = bodyItem.innerHTML!
-                    //newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
+                    var newsBodyString = bodyItem.innerHTML!
+
 //                    print(newsBodyString)
                     
                     //Strong
@@ -141,7 +140,7 @@ class Parser {
                     
                     //Paragraph
                     for paragraph in bodyItem.css("p") {
-                        let paragraphText = paragraph.text!
+                        var paragraphText = paragraph.text!
                         let range = newsBodyString.localizedStandardRange(of: paragraph.toHTML!)
 //                        print(paragraphText)
 //                        print(paragraph.toHTML!)
@@ -157,6 +156,7 @@ class Parser {
                         
                     }
 //                    print(body)
+//                    newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
                     body = body.sorted(by: { (first:NewsBody, last:NewsBody) -> Bool in
                         return first.range.lowerBound < last.range.upperBound
                     })
