@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BF44691D1F128A5000952578 /* NewsBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF44691C1F128A5000952578 /* NewsBody.swift */; };
+		BF44691F1F14FE2400952578 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF44691E1F14FE2400952578 /* Parser.swift */; };
 		BF5CB3A81EFC0BD200451A7E /* DetailedNewsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CB3A71EFC0BD200451A7E /* DetailedNewsController.swift */; };
 		BF5CB3AA1EFC25D400451A7E /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5CB3A91EFC25D400451A7E /* Comment.swift */; };
 		BF5CB3AC1EFD67CA00451A7E /* CommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF5CB3AB1EFD67CA00451A7E /* CommentCell.xib */; };
@@ -29,6 +30,7 @@
 		31B4C9635960A2A7C0BA3BA4 /* Pods_HLI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HLI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC52B3B54CF02F1F803B08B2 /* Pods-HLI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HLI.release.xcconfig"; path = "Pods/Target Support Files/Pods-HLI/Pods-HLI.release.xcconfig"; sourceTree = "<group>"; };
 		BF44691C1F128A5000952578 /* NewsBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsBody.swift; sourceTree = "<group>"; };
+		BF44691E1F14FE2400952578 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		BF5CB3A71EFC0BD200451A7E /* DetailedNewsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedNewsController.swift; sourceTree = "<group>"; };
 		BF5CB3A91EFC25D400451A7E /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		BF5CB3AB1EFD67CA00451A7E /* CommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentCell.xib; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				BFFD70D41EF926F100E5942C /* Extensions.swift */,
 				BF7898BD1EF00453009B7927 /* NewsController.swift */,
 				BF5CB3A71EFC0BD200451A7E /* DetailedNewsController.swift */,
+				BF44691E1F14FE2400952578 /* Parser.swift */,
 				BF44691C1F128A5000952578 /* NewsBody.swift */,
 				BF9CBF641EF43FD3004DA7A8 /* News.swift */,
 				BF5CB3A91EFC25D400451A7E /* Comment.swift */,
@@ -242,6 +245,7 @@
 			files = (
 				BFFD70D51EF926F100E5942C /* Extensions.swift in Sources */,
 				BF7898BE1EF00453009B7927 /* NewsController.swift in Sources */,
+				BF44691F1F14FE2400952578 /* Parser.swift in Sources */,
 				BF44691D1F128A5000952578 /* NewsBody.swift in Sources */,
 				BF7898BC1EF00453009B7927 /* AppDelegate.swift in Sources */,
 				BF5CB3AA1EFC25D400451A7E /* Comment.swift in Sources */,

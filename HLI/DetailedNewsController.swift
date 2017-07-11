@@ -72,6 +72,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 //News date
                 var newsDateLoc = newsItem.at_css("p[class='post-date']")
                 newsDate = newsDateLoc?["data-date"] ?? String()
+                print(newsDateLoc)
                 
                 //Author
                 newsAuthor = newsItem.at_css("p[class='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
