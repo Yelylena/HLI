@@ -79,7 +79,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
             cell.comments.text = news.comments
             cell.body.enabledTypes = [.mention, .hashtag, .url]
-            cell.body.text = news.body
+            cell.body.text = news.body.description
             cell.body.sizeToFit()
         }
         return cell

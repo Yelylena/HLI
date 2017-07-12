@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct NewsBody {
+struct Body {
     enum DataType {
         case strong
         case image

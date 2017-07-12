@@ -85,7 +85,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 
                 cell.comments.text = ""
                 cell.body.enabledTypes = [.mention, .hashtag, .url]
-                cell.body.text = news.body
+                cell.body.text = news.body.description
                 cell.body.sizeToFit()
             }
             cell.isUserInteractionEnabled = false
@@ -111,7 +111,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         if indexPath.section == 0 {
             let news = self.news[indexPath.row]
             //FIXME: Recount height for cell
-            return 200 + news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
+            return 200
+                //+ news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
         } else if indexPath.section == 1 {
             let comment = comments[indexPath.row]
             return 100

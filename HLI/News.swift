@@ -16,9 +16,9 @@ struct News {
     var tags:     [String]
     var tagsURL:  [URL]
     var comments: String
-    var body:     String
+    var body:     [Body]
     
-    init(newsURL: URL, title: String, date: String, author: String, tags: [String], tagsURL: [URL], comments: String, body: String) {
+    init(newsURL: URL, title: String, date: String, author: String, tags: [String], tagsURL: [URL], comments: String, body: [Body]) {
         self.newsURL = newsURL
         self.title = title
         self.date = date

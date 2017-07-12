@@ -35,7 +35,7 @@ class Parser {
         var tags = [String?]()
         var tagsURL = [URL?]()
         var comments: String?
-        var body = [NewsBody]()
+        var body = [Body]()
         
         if let doc = HTML(html: html, encoding: .windowsCP1251) {
             
@@ -74,16 +74,16 @@ class Parser {
                 
                 //Body
                 for bodyItem in newsItem.css("div[class^='block-body']") {
-                    var newsBodyString = bodyItem.innerHTML!
+                    var bodyString = bodyItem.innerHTML!
 
 //                    print(newsBodyString)
                     
                     //Strong
                     for strong in bodyItem.css("strong") {
                         let strongText = strong.text!
-                        let range = newsBodyString.localizedStandardRange(of: strong.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: strong.toHTML!)
 //                        print("Range of strong is: \(String(describing: range))")
-                        body.append(NewsBody(type: NewsBody.DataType.strong, data: strongText, range: range!))
+                        body.append(Body(type: Body.DataType.strong, data: strongText, range: range!))
                     }
                     
                     //Image in link
@@ -101,71 +101,71 @@ class Parser {
                         //                                self.view.addSubview(imageView)
                         //                            }
                         //                        }
-                        let range = newsBodyString.localizedStandardRange(of: img.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: img.toHTML!)
 //                        print("Range of image in link is: \(String(describing: range))")
-                        body.append(NewsBody(type: NewsBody.DataType.image, data: imageURLString, range: range!))
+                        body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
                     }
                     
                     //Image in paragraph
                     for img in bodyItem.css("p > img") {
                         let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
-                        let range = newsBodyString.localizedStandardRange(of: img.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: img.toHTML!)
 //                        print("Range of image in paragraph is: \(String(describing: range))")
-                        body.append(NewsBody(type: NewsBody.DataType.image, data: imageURLString, range: range!))
+                        body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
                     }
                     
                     //Unordered list
                     for ul in bodyItem.css("ul > li") {
-                        let range = newsBodyString.localizedStandardRange(of: ul.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: ul.toHTML!)
 //                        print("Range of unordered list is: \(String(describing: range))")
                         let listItem = "\u{25CF} " + ul.text!
-                        body.append(NewsBody(type: NewsBody.DataType.unorderedList, data: listItem, range: range!))
+                        body.append(Body(type: Body.DataType.unorderedList, data: listItem, range: range!))
                     }
                     
                     //Ordered list
                     var listItemNumber = 1
                     for ol in bodyItem.css("ol > li") {
                         let listItem = String(listItemNumber) + ol.text!
-                        let range = newsBodyString.localizedStandardRange(of: ol.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: ol.toHTML!)
 //                        print("Range of ordered list is: \(String(describing: range))")
-                        body.append(NewsBody(type: NewsBody.DataType.orderedList, data: listItem, range: range!))
+                        body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!))
                         listItemNumber += 1
                     }
                     
                     //Video
                     for video in bodyItem.css("a[class*='video']") {
-                        let range = newsBodyString.localizedStandardRange(of: video.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: video.toHTML!)
 //                        print("Range of video is: \(String(describing: range))")
                     }
                     
                     //Paragraph
                     for paragraph in bodyItem.css("p") {
                         var paragraphText = paragraph.text!
-                        let range = newsBodyString.localizedStandardRange(of: paragraph.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: paragraph.toHTML!)
 //                        print(paragraphText)
 //                        print(paragraph.toHTML!)
 //                        print("Range of paragraph is: \(String(describing: range))")
-                        body.append(NewsBody(type: NewsBody.DataType.paragraph, data: paragraphText, range: range!))
+                        body.append(Body(type: Body.DataType.paragraph, data: paragraphText, range: range!))
                     }
                     //Blockquote
                     for blockquote in bodyItem.css("blockquote") {
                         let blockquoteText = blockquote.text!
-                        let range = newsBodyString.localizedStandardRange(of: blockquote.toHTML!)
+                        let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
 //                        print("Range of blockquote is: \(String(describing: range))")
-                        body.append(NewsBody(type: NewsBody.DataType.blockquote, data: blockquoteText, range: range!))
+                        body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                         
                     }
 //                    print(body)
 //                    newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
-                    body = body.sorted(by: { (first:NewsBody, last:NewsBody) -> Bool in
+                    body = body.sorted(by: { (first:Body, last:Body) -> Bool in
                         return first.range.lowerBound < last.range.upperBound
                     })
 //                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-//                    print(body)
-                    print(body.distance(from: (body.startIndex), to: (body.endIndex)))
+                    print(body)
+                    //print(body.distance(from: (body.startIndex), to: (body.endIndex)))
                 }
                 //FIXME: Fix body type
-                news.append(News(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: ""))
+                news.append(News(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body))
             }
         }
         return news
