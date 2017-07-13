@@ -126,8 +126,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="X4c-fc-PvX"/>
                     <connections>
-                        <outlet property="PrevButton" destination="Brc-QL-utP" id="T3b-L7-EJo"/>
                         <outlet property="newsTable" destination="UpY-9L-jNU" id="RAr-cM-8Zu"/>
+                        <outlet property="nextButton" destination="Hcv-WA-9Cf" id="LRk-US-22Q"/>
+                        <outlet property="prevButton" destination="Brc-QL-utP" id="t2Z-Ax-Bvc"/>
                         <segue destination="5PO-hX-cGw" kind="show" identifier="DetailedNewsSegue" id="aQV-yv-uPz"/>
                     </connections>
                 </viewController>

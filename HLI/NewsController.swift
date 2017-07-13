@@ -14,7 +14,8 @@ import ActiveLabel
 class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var newsTable: UITableView!
-    @IBOutlet weak var PrevButton: UIButton!
+    @IBOutlet weak var prevButton: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
     
     var news = [News]()
     private var  pageURL = URL(string: "https://www.hl-inside.ru/")
@@ -78,8 +79,29 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.tags.text = temp
 
             cell.comments.text = news.comments
+            
+            //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
-            cell.body.text = news.body.description
+//            cell.body.text = news.body.description
+//            for item in news.body {
+//                var position = CGPoint(x: 0, y: 0)
+//                if item.type == Body.DataType.unorderedList {
+//                    let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+//                    listView.text = item.data as? String
+//                    cell.addSubview(listView)
+//                }
+//                if item.type == Body.DataType.image {
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+////                        imageView.center = cell.center
+//                        DispatchQueue.main.async {
+//                            imageView.sd_setImage(with: URL(string: item.data as! String))
+//                            imageView.contentMode = UIViewContentMode.scaleAspectFit
+//                            cell.addSubview(imageView)
+//                        }
+//                    }
+//                }
+//            }
             cell.body.sizeToFit()
         }
         return cell
@@ -90,7 +112,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let bodyFont = UIFont(name: "Helvetica", size: 17.0)
         
         //FIXME: Recount height for cell
-        return 200
+        return 600
             //+ news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: bodyFont!)
     }
     

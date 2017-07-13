@@ -120,6 +120,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
        return 0
     }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:

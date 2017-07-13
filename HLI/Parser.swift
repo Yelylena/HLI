@@ -89,18 +89,6 @@ class Parser {
                     //Image in link
                     for img in bodyItem.css("a > img") {
                         let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
-                        //                        DispatchQueue.global(qos: .userInitiated).async {
-                        //
-                        //                            let imageView = UIImageView(frame: CGRect(x:0, y:0, width:UIScreen.main.bounds.size.width, height:200))
-                        //                            imageView.center = self.view.center
-                        //
-                        //                            // When from background thread, UI needs to be updated on main_queue
-                        //                            DispatchQueue.main.async {
-                        //                                imageView.sd_setImage(with: URL(string: imageURLString))
-                        //                                imageView.contentMode = UIViewContentMode.scaleAspectFit
-                        //                                self.view.addSubview(imageView)
-                        //                            }
-                        //                        }
                         let range = bodyString.localizedStandardRange(of: img.toHTML!)
 //                        print("Range of image in link is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
@@ -131,16 +119,16 @@ class Parser {
                         body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!))
                         listItemNumber += 1
                     }
-                    
+                    //FIXME: Add data in video item
                     //Video
-                    for video in bodyItem.css("a[class*='video']") {
-                        let range = bodyString.localizedStandardRange(of: video.toHTML!)
+//                    for video in bodyItem.css("a[class*='video']") {
+//                        let range = bodyString.localizedStandardRange(of: video.toHTML!)
 //                        print("Range of video is: \(String(describing: range))")
-                    }
+//                    }
                     
                     //Paragraph
                     for paragraph in bodyItem.css("p") {
-                        var paragraphText = paragraph.text!
+                        let paragraphText = paragraph.text!
                         let range = bodyString.localizedStandardRange(of: paragraph.toHTML!)
 //                        print(paragraphText)
 //                        print(paragraph.toHTML!)
@@ -164,7 +152,6 @@ class Parser {
                     print(body)
                     //print(body.distance(from: (body.startIndex), to: (body.endIndex)))
                 }
-                //FIXME: Fix body type
                 news.append(News(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body))
             }
         }
