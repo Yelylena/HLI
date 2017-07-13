@@ -51,7 +51,23 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
-        
+    
+    @IBAction func showPrevNews(_ sender: UIButton) {
+        pageURL = prevNews
+        print("\(String(describing: pageURL))")
+        news = [News]()
+        self.parse()
+        self.newsTable.reloadData()
+    }
+    
+    @IBAction func showNextNews(_ sender: UIButton) {
+        pageURL = nextNews
+        print("\(String(describing: pageURL))")
+        news = [News]()
+        self.parse()
+        self.newsTable.reloadData()
+    }
+    
     // MARK: - Table view data source
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -82,26 +98,36 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
+            var position = CGPoint(x: 0, y: 300)
 //            cell.body.text = news.body.description
-//            for item in news.body {
-//                var position = CGPoint(x: 0, y: 0)
-//                if item.type == Body.DataType.unorderedList {
-//                    let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
-//                    listView.text = item.data as? String
-//                    cell.addSubview(listView)
-//                }
-//                if item.type == Body.DataType.image {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
-////                        imageView.center = cell.center
-//                        DispatchQueue.main.async {
-//                            imageView.sd_setImage(with: URL(string: item.data as! String))
-//                            imageView.contentMode = UIViewContentMode.scaleAspectFit
-//                            cell.addSubview(imageView)
-//                        }
-//                    }
-//                }
-//            }
+            for item in news.body {
+                if item.type == Body.DataType.unorderedList {
+                    let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 70))
+                    listView.numberOfLines = 1000
+                    listView.text = item.data as? String
+                    cell.addSubview(listView)
+                    position.y += listView.frame.height
+                }
+                if item.type == Body.DataType.image {
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+//                        imageView.center = cell.center
+                        DispatchQueue.main.async {
+                            imageView.sd_setImage(with: URL(string: item.data as! String))
+                            imageView.contentMode = UIViewContentMode.scaleAspectFit
+                            cell.addSubview(imageView)
+                            position.y += imageView.frame.height
+                        }
+                    }
+                }
+                if item.type == Body.DataType.strong {
+                    let strongView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 20))
+                    strongView.font = UIFont(name:"Helvetica-Bold", size: 17.0)
+                    strongView.numberOfLines = 1000
+                    cell.addSubview(strongView)
+                    position.y += strongView.frame.height
+                }
+            }
             cell.body.sizeToFit()
         }
         return cell
@@ -132,22 +158,6 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
         }
-    }
-    
-    @IBAction func showPrevNews(_ sender: UIButton) {
-        pageURL = prevNews
-        print("\(String(describing: pageURL))")
-        news = [News]()
-        self.parse()
-        self.newsTable.reloadData()
-    }
-    
-    @IBAction func showNextNews(_ sender: UIButton) {
-        pageURL = nextNews
-        print("\(String(describing: pageURL))")
-        news = [News]()
-        self.parse()
-        self.newsTable.reloadData()
     }
 }
 
