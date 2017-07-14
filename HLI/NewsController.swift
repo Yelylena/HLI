@@ -99,18 +99,30 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
             var position = CGPoint(x: 0, y: 300)
+            let bodyFont = UIFont(name: "Helvetica", size: 17.0)
 //            cell.body.text = news.body.description
             for item in news.body {
+                
+                for subview in cell.subviews {
+                    if subview.tag >= 1000 {
+                        subview.removeFromSuperview()
+                    }
+                }
+                
                 if item.type == Body.DataType.unorderedList {
-                    let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 70))
+                    let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 30))
                     listView.numberOfLines = 1000
+                    listView.tag = 1000
                     listView.text = item.data as? String
+//                    listView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: bodyFont!)
                     cell.addSubview(listView)
                     position.y += listView.frame.height
                 }
+                
                 if item.type == Body.DataType.image {
                     DispatchQueue.global(qos: .userInitiated).async {
                         let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+                        imageView.tag = 1001
 //                        imageView.center = cell.center
                         DispatchQueue.main.async {
                             imageView.sd_setImage(with: URL(string: item.data as! String))
@@ -120,14 +132,17 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         }
                     }
                 }
+                
                 if item.type == Body.DataType.strong {
                     let strongView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 20))
-                    strongView.font = UIFont(name:"Helvetica-Bold", size: 17.0)
+                    strongView.tag = 1002
+                    strongView.font = UIFont.boldSystemFont(ofSize: 17.0)
                     strongView.numberOfLines = 1000
                     cell.addSubview(strongView)
                     position.y += strongView.frame.height
                 }
             }
+            
             cell.body.sizeToFit()
         }
         return cell
@@ -138,7 +153,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let bodyFont = UIFont(name: "Helvetica", size: 17.0)
         
         //FIXME: Recount height for cell
-        return 600
+        return 800
             //+ news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: bodyFont!)
     }
     
