@@ -98,19 +98,20 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
-            var position = CGPoint(x: 0, y: 300)
+            var position = CGPoint(x: 0, y: 120)
             let bodyFont = UIFont(name: "Helvetica", size: 17.0)
-//            cell.body.text = news.body.description
+            cell.body.text = ""
+            for subview in cell.subviews {
+                if subview.tag >= 1000 {
+                    subview.removeFromSuperview()
+                }
+            }
             for item in news.body {
                 
-                for subview in cell.subviews {
-                    if subview.tag >= 1000 {
-                        subview.removeFromSuperview()
-                    }
-                }
+
                 
                 if item.type == Body.DataType.unorderedList {
-                    let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 30))
+                    let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 70))
                     listView.numberOfLines = 1000
                     listView.tag = 1000
                     listView.text = item.data as? String
@@ -153,7 +154,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let bodyFont = UIFont(name: "Helvetica", size: 17.0)
         
         //FIXME: Recount height for cell
-        return 800
+        return 1000
             //+ news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: bodyFont!)
     }
     
