@@ -29,7 +29,7 @@ class Body {
         self.data = data
         self.range = range
     }
-    
+    //FIXME: Fix removing
     func removeBodySubviews(cell: UITableViewCell) {
         for subview in cell.subviews {
             if subview.tag >= 1000 {
@@ -37,10 +37,9 @@ class Body {
             }
         }
     }
-    
+    //FIXME: Fix adding
     func makeBobySubviews(cell: UITableViewCell, item: Body, position: CGPoint) {
         var position = position
-        
         if item.type == Body.DataType.unorderedList {
             let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 70))
             listView.numberOfLines = 1000
