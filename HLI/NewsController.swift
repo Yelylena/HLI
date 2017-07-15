@@ -107,9 +107,6 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
             for item in news.body {
-                
-
-                
                 if item.type == Body.DataType.unorderedList {
                     let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 70))
                     listView.numberOfLines = 1000
