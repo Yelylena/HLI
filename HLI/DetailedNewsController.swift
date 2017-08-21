@@ -33,7 +33,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-    func parse() -> Void {
+    func parse() {
         Alamofire.request(pageURL!).responseString { response in
             //           print("\(response.result.isSuccess)")
             let html = response.result.value!

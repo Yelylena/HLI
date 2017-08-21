@@ -26,7 +26,6 @@ class Parser {
         
         var news = [News]()
         
-        //FIXME: Make dictionary for title
         var title: String?
         var newsURL: URL?
         var date: String?
@@ -35,12 +34,12 @@ class Parser {
         var tags = [String?]()
         var tagsURL = [URL?]()
         var comments: String?
-        var body = [Body]()
+        //var body = [Body]()
         
         if let doc = HTML(html: html, encoding: .windowsCP1251) {
             
             for newsItem in doc.css("div[class='block block_type_news']") {
-                
+                var body = [Body]()
                 //Title
                 title = newsItem.at_css("a[class='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
@@ -74,7 +73,7 @@ class Parser {
                 
                 //Body
                 for bodyItem in newsItem.css("div[class^='block-body']") {
-                    var bodyString = bodyItem.innerHTML!
+                    let bodyString = bodyItem.innerHTML!
 
 //                    print(newsBodyString)
                     
@@ -143,18 +142,23 @@ class Parser {
                         body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                         
                     }
-//                    print(body)
+                    for item in body {
+                        print(item.data)
+                    }
 //                    newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
                     body = body.sorted(by: { (first:Body, last:Body) -> Bool in
                         return first.range.lowerBound < last.range.upperBound
                     })
-//                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(body)
-                    //print(body.distance(from: (body.startIndex), to: (body.endIndex)))
                 }
                 news.append(News(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body))
             }
         }
+//        for idx in 0..<news.count {
+//            let n = news[idx]
+//            for i in 0..<n.body.count {
+//                print("news[\(idx)], bodyItem[\(i)], text[\(n.body[i].data)]")
+//            }
+//        }
         return news
     }
     
