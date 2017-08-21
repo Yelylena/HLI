@@ -98,26 +98,13 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
-            var position = CGPoint(x: 0, y: 120)
-            var tag = 1000
+            
+            news.removeBobySubviews(subviews: cell.subviews, cell: cell)
+            news.makeBobySubviews(body: news.body, cell: cell)
+            
             let bodyFont = UIFont(name: "Helvetica", size: 17.0)
             cell.body.text = ""
-                        
-            for subview in cell.subviews {
-                if subview.tag >= 1000 {
-                    subview.removeFromSuperview()
-                    
-                    print("Removed subview with tag [\(subview.tag)]")
-                } else {
-                    print("fock")
-                }
-            }
-            
-            for item in news.body {
-                item.makeBobySubviews(cell: cell, item: item, position: &position, tag: &tag)
-                
-            }
-            
+ 
             cell.body.sizeToFit()
         }
         return cell
