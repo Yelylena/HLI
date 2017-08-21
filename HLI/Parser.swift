@@ -120,12 +120,13 @@ class Parser {
                         body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!))
                         listItemNumber += 1
                     }
-                    //FIXME: Add data in video item
                     //Video
-//                    for video in bodyItem.css("a[class*='video']") {
-//                        let range = bodyString.localizedStandardRange(of: video.toHTML!)
-//                        print("Range of video is: \(String(describing: range))")
-//                    }
+                    for video in bodyItem.css("a[class*='video_type_youtube']") {
+                        let videoItem = video["data-youtube-id"]!
+                        let range = bodyString.localizedStandardRange(of: video.toHTML!)
+                        print("Range of video is: \(String(describing: range))")
+                        body.append(Body(type: Body.DataType.video, data: videoItem, range: range!))
+                    }
                     
                     //Paragraph
                     for paragraph in bodyItem.css("p") {

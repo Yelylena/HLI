@@ -84,8 +84,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 cell.tags.text = temp
                 
                 cell.comments.text = ""
+                
+                //MARK: Body
                 cell.body.enabledTypes = [.mention, .hashtag, .url]
-                cell.body.text = news.body.description
+                
+                news.removeBobySubviews(subviews: cell.subviews, cell: cell)
+                news.makeBobySubviews(body: news.body, cell: cell)
+                
+                let bodyFont = UIFont(name: "Helvetica", size: 17.0)
+                cell.body.text = ""
+                
                 cell.body.sizeToFit()
             }
             cell.isUserInteractionEnabled = false
@@ -111,7 +119,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         if indexPath.section == 0 {
             let news = self.news[indexPath.row]
             //FIXME: Recount height for cell
-            return 200
+            return 800
                 //+ news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
         } else if indexPath.section == 1 {
             let comment = comments[indexPath.row]
