@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import YouTubePlayer
 
 class News {
     var newsURL:  URL
@@ -76,6 +77,14 @@ class News {
                 cell.addSubview(strongView)
                 bodySubviews.append(strongView)
                 position.y += strongView.frame.height
+            }
+            
+            if item.type == Body.DataType.video {
+                let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+                videoView.loadVideoID(item.data as! String)
+                cell.addSubview(videoView)
+                bodySubviews.append(videoView)
+                position.y += videoView.frame.height
             }
             
             for view in bodySubviews {

@@ -8,6 +8,7 @@ target ‘HLI’ do
   pod 'Alamofire', '~> 4.4'
   pod 'SDWebImage', '~>3.8'
   pod 'ActiveLabel'
+  pod 'YouTubePlayer'
   project ‘HLI.xcodeproj'
   # Pods for HLI
 
