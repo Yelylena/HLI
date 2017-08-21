@@ -99,7 +99,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
             
-            news.removeBobySubviews(subviews: cell.subviews, cell: cell)
+            news.removeBobySubviews(cell: cell)
             news.makeBobySubviews(body: news.body, cell: cell)
             
             let bodyFont = UIFont(name: "Helvetica", size: 17.0)
