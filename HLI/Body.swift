@@ -70,6 +70,7 @@ class Body {
         if item.type == Body.DataType.strong {
             let strongView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 20))
             strongView.font = UIFont.boldSystemFont(ofSize: 17.0)
+            strongView.text = item.data as? String
             strongView.numberOfLines = 1000
             cell.addSubview(strongView)
             bodySubviews.append(strongView)

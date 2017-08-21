@@ -30,16 +30,18 @@ class Parser {
         var newsURL: URL?
         var date: String?
         var author: String?
-        //FIXME: Make dictionary for tags
-        var tags = [String?]()
-        var tagsURL = [URL?]()
         var comments: String?
-        //var body = [Body]()
         
         if let doc = HTML(html: html, encoding: .windowsCP1251) {
             
             for newsItem in doc.css("div[class='block block_type_news']") {
+                
+                //FIXME: Make dictionary for tags
+                var tags = [String?]()
+                var tagsURL = [URL?]()
+                
                 var body = [Body]()
+                
                 //Title
                 title = newsItem.at_css("a[class='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
@@ -55,18 +57,18 @@ class Parser {
                 author = newsItem.at_css("p[class='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Tags
-                var tagsInItem = [String]()
+                
                 for tag in newsItem.css("p[class='news__tags'] > a") {
-                    tagsInItem.append(tag.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
+                    tags.append(tag.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
                 }
-                tags = tagsInItem
+                
                 
                 //Tags URL
-                var tagsURLInItem = [URL]()
+                
                 for url in newsItem.css("p[class='news__tags'] > a") {
-                    tagsURLInItem.append(URL(string: url["href"]!)!)
+                    tagsURL.append(URL(string: url["href"]!)!)
                 }
-                tagsURL = tagsURLInItem
+                
                 
                 //Comments
                 comments = newsItem.at_css("p[class='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -141,9 +143,6 @@ class Parser {
 //                        print("Range of blockquote is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                         
-                    }
-                    for item in body {
-                        print(item.data)
                     }
 //                    newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
                     body = body.sorted(by: { (first:Body, last:Body) -> Bool in
