@@ -88,15 +88,14 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 //MARK: Body
                 cell.body.enabledTypes = [.mention, .hashtag, .url]
                 
-                news.removeBobySubviews(cell: cell)
-                news.makeBobySubviews(body: news.body, cell: cell)
-                
-                let bodyFont = UIFont(name: "Helvetica", size: 17.0)
+                removeBobySubviews(cell: cell)
+                makeBobySubviews(body: news.body, cell: cell)
                 cell.body.text = ""
                 
                 cell.body.sizeToFit()
             }
-            cell.isUserInteractionEnabled = false
+            cell.selectionStyle = .none
+
             return cell
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentCell
@@ -114,15 +113,12 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let font = UIFont(name: "Helvetica", size: 17.0)
+//        let font = UIFont(name: "Helvetica", size: 17.0)
         
         if indexPath.section == 0 {
-            let news = self.news[indexPath.row]
-            //FIXME: Recount height for cell
-            return 800
-                //+ news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
+            return makeBodyHeight()
         } else if indexPath.section == 1 {
-            let comment = comments[indexPath.row]
+//            let comment = comments[indexPath.row]
             return 100
                 //+ comment.text.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
         }

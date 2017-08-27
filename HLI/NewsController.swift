@@ -35,6 +35,12 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let indexPath = newsTable.indexPathForSelectedRow {
+            newsTable.deselectRow(at: indexPath, animated: animated)
+        }
+    }
 
     func parse() {
         Alamofire.request(pageURL!).responseString { response in
@@ -99,10 +105,9 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
             
-            news.removeBobySubviews(cell: cell)
-            news.makeBobySubviews(body: news.body, cell: cell)
-            
-            let bodyFont = UIFont(name: "Helvetica", size: 17.0)
+            removeBobySubviews(cell: cell)
+            makeBobySubviews(body: news.body, cell: cell)
+
             cell.body.text = ""
  
             cell.body.sizeToFit()
@@ -111,12 +116,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let news = self.news[indexPath.row]
-        let bodyFont = UIFont(name: "Helvetica", size: 17.0)
-        
-        //FIXME: Recount height for cell
-        return 1000
-            //+ news.body.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: bodyFont!)
+        return makeBodyHeight()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -62,13 +62,11 @@ class Parser {
                     tags.append(tag.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
                 }
                 
-                
                 //Tags URL
                 
                 for url in newsItem.css("p[class='news__tags'] > a") {
                     tagsURL.append(URL(string: url["href"]!)!)
                 }
-                
                 
                 //Comments
                 comments = newsItem.at_css("p[class='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -87,7 +85,7 @@ class Parser {
                         body.append(Body(type: Body.DataType.strong, data: strongText, range: range!))
                     }
                     
-                    //Image in link
+                    //Image in link (JPG)
                     for img in bodyItem.css("a > img") {
                         let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
                         let range = bodyString.localizedStandardRange(of: img.toHTML!)
@@ -95,11 +93,19 @@ class Parser {
                         body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
                     }
                     
-                    //Image in paragraph
+                    //Image in paragraph (JPG)
                     for img in bodyItem.css("p > img") {
                         let imageURLString = "https://www.hl-inside.ru" + (img["src"])!
                         let range = bodyString.localizedStandardRange(of: img.toHTML!)
 //                        print("Range of image in paragraph is: \(String(describing: range))")
+                        body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
+                    }
+                    
+                    //Image in paragraph (PNG)
+                    for img in bodyItem.css("p[class='c'] > img") {
+                        let imageURLString = "https:" + (img["src"])!
+                        let range = bodyString.localizedStandardRange(of: img.toHTML!)
+                        //                        print("Range of image in paragraph is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
                     }
                     
@@ -124,7 +130,7 @@ class Parser {
                     for video in bodyItem.css("a[class*='video_type_youtube']") {
                         let videoItem = video["data-youtube-id"]!
                         let range = bodyString.localizedStandardRange(of: video.toHTML!)
-                        print("Range of video is: \(String(describing: range))")
+//                        print("Range of video is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.video, data: videoItem, range: range!))
                     }
                     
