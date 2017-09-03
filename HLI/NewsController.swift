@@ -106,7 +106,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.body.enabledTypes = [.mention, .hashtag, .url]
             
             removeBobySubviews(cell: cell)
-            makeBobySubviews(body: news.body, cell: cell)
+            getBobySubviews(body: news.body, cell: cell)
 
             cell.body.text = ""
  
@@ -116,7 +116,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return makeBodyHeight()
+        return getBodyHeight()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

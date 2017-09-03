@@ -66,8 +66,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! NewsCell
             if news.count > indexPath.row {
                 let news = self.news[indexPath.row]
@@ -89,50 +89,44 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 cell.body.enabledTypes = [.mention, .hashtag, .url]
                 
                 removeBobySubviews(cell: cell)
-                makeBobySubviews(body: news.body, cell: cell)
+                getBobySubviews(body: news.body, cell: cell)
                 cell.body.text = ""
                 
                 cell.body.sizeToFit()
             }
             cell.selectionStyle = .none
-
+            
             return cell
-        } else if indexPath.section == 1 {
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentCell
             if comments.count > indexPath.row {
                 let comment = comments[indexPath.row]
                 cell.name.text = comment.name
                 cell.date.text = comment.date
                 cell.commentImage.sd_setImage(with: URL(string: comment.image!))
-                cell.commentText.text = comment.text
+                removeBobySubviews(cell: cell)
+                getBobySubviews(body: comment.body, cell: cell)
+                cell.commentText.text = ""
                 cell.commentText.sizeToFit()
             }
             return cell
+        default:
+            return tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath)
         }
-        return tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let font = UIFont(name: "Helvetica", size: 17.0)
-        
-        if indexPath.section == 0 {
-            return makeBodyHeight()
-        } else if indexPath.section == 1 {
-//            let comment = comments[indexPath.row]
-            return 100
-                //+ comment.text.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: font!)
-        }
-       return 0
+       return getBodyHeight()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return ""
+            return String()
         case 1:
             return "Comments"
         default:
-            return ""
+            return String()
         }
     }
     //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -11,16 +11,14 @@ import UIKit
 struct Comment {
     var name: String
     var date: String
-    var text: String
+    var body: [Body]
     var image: String?
-    var commentQuote: String?
 //    var commentQuoteAuthor: String?
     
-    init(name: String, date: String, text: String, image: String?, commentQuote: String?) {
+    init(name: String, date: String, body: [Body], image: String?) {
         self.name = name
         self.date = date
-        self.text = text
+        self.body = body
         self.image = image
-        self.commentQuote = commentQuote
     }
 }
