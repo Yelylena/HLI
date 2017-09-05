@@ -44,14 +44,13 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     func parse() {
         Alamofire.request(pageURL!).responseString { response in
- //           print("\(response.result.isSuccess)")
             let html = response.result.value!
+            let parser = Parser(pageURL: self.pageURL!, html: html)
 
-            let newsTest = Parser(pageURL: self.pageURL!, html: html)
-
-            self.news = newsTest.parseNews()
-            self.nextNews = newsTest.parseNavigation().nextNews
-            self.prevNews = newsTest.parseNavigation().prevNews
+            self.news = parser.parseNews()
+            self.nextNews = parser.parseNavigation().nextNews
+            self.prevNews = parser.parseNavigation().prevNews
+            
             DispatchQueue.main.async {
                 self.newsTable.reloadData()
             }

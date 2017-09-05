@@ -35,13 +35,12 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     
     func parse() {
         Alamofire.request(pageURL!).responseString { response in
-            //           print("\(response.result.isSuccess)")
             let html = response.result.value!
+            let parser = Parser(pageURL: self.pageURL!, html: html)
             
-            let newsTest = Parser(pageURL: self.pageURL!, html: html)
+            self.news = parser.parseNews()
+            self.comments = parser.parseComment()
             
-            self.news = newsTest.parseNews()
-            self.comments = newsTest.parseComment()
             DispatchQueue.main.async {
                 self.detailedNewsTable.reloadData()
             }
