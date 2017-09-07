@@ -13,7 +13,7 @@ import SDWebImage
 
 var bodyHeight: CGFloat = 0
 
-func getBobySubviews(body: [Body], cell: UITableViewCell) {
+func getSubviews(body: [Body], cell: UITableViewCell) {
     
     var position = CGPoint(x: 0, y: 120)
     var tag = 1000
@@ -126,7 +126,7 @@ func getBobySubviews(body: [Body], cell: UITableViewCell) {
     bodyHeight = CGFloat(position.y)
 }
 
-func removeBobySubviews(cell: UITableViewCell) {
+func removeSubviews(cell: UITableViewCell) {
     for subview in cell.subviews {
         if subview.tag >= 1000 {
             subview.removeFromSuperview()
@@ -134,6 +134,6 @@ func removeBobySubviews(cell: UITableViewCell) {
     }
 }
 
-func getBodyHeight() -> CGFloat {
+func getHeight() -> CGFloat {
     return bodyHeight
 }

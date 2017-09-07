@@ -92,30 +92,26 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.date.text = news.date
             cell.author.text = news.author
             //Tags
-            var temp = ""
+            var tags = ""
             for tag in news.tags {
-                temp += "\(tag) "
+                tags += "\(tag) "
             }
             cell.tags.enabledTypes = [.mention, .hashtag, .url]
-            cell.tags.text = temp
+            cell.tags.text = tags
 
             cell.comments.text = news.comments
             
             //MARK: Body
             cell.body.enabledTypes = [.mention, .hashtag, .url]
             
-            removeBobySubviews(cell: cell)
-            getBobySubviews(body: news.body, cell: cell)
-
-            cell.body.text = ""
- 
-            cell.body.sizeToFit()
+            removeSubviews(cell: cell) // remove old subviews
+            getSubviews(body: news.body, cell: cell) // create new subviews
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return getBodyHeight()
+        return getHeight()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -129,7 +125,6 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     let news = self.news[indexPath.row]
                     print(news.newsURL)
                     viewController.pageURL = news.newsURL as URL!
-                
                 }
             }
         }

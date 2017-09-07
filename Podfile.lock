@@ -1,0 +1,26 @@
+PODS:
+  - ActiveLabel (0.7.1)
+  - Alamofire (4.4.0)
+  - Kanna (2.1.1)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+  - YouTubePlayer (0.4.0)
+
+DEPENDENCIES:
+  - ActiveLabel
+  - Alamofire (~> 4.4)
+  - Kanna (~> 2.1.0)
+  - SDWebImage (~> 3.8)
+  - YouTubePlayer
+
+SPEC CHECKSUMS:
+  ActiveLabel: 68625f22775f51c31bb691ca8de20f1e5a3bc825
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Kanna: 9b4b086c218703f2b94f5b21a466217dd2f9332e
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  YouTubePlayer: 028451f6772f372d4759866db99824c676ac1473
+
+PODFILE CHECKSUM: 1480a4ad27f35412a4a248f301837ca665193d73
+
+COCOAPODS: 1.2.0

@@ -46,7 +46,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" tag="105" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="1000" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wcg-eL-aBy" customClass="ActiveLabel" customModule="ActiveLabel">
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="105" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="1000" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wcg-eL-aBy" customClass="ActiveLabel" customModule="ActiveLabel">
                         <rect key="frame" x="7" y="111" width="360" height="80"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <string key="text">Вслед за Марком Лейдлоу и Эриком Волпа, Valve покинул ещё один сценарист — Чет Фалисек. После прихода в компанию в 2005 году, Чет успел поработать над двумя эпизодами Half-Life 2, обеими частями Left 4 Dead и Portal, писал тексты для CSGO и Dota 2. Последние годы он занимался продвижением VR, активно помогая инди-разработчикам.</string>

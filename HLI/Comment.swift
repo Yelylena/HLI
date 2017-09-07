@@ -13,7 +13,6 @@ struct Comment {
     var date: String
     var body: [Body]
     var image: String?
-//    var commentQuoteAuthor: String?
     
     init(name: String, date: String, body: [Body], image: String?) {
         self.name = name

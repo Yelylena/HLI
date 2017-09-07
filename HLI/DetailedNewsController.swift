@@ -87,11 +87,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 //MARK: Body
                 cell.body.enabledTypes = [.mention, .hashtag, .url]
                 
-                removeBobySubviews(cell: cell)
-                getBobySubviews(body: news.body, cell: cell)
-                cell.body.text = ""
-                
-                cell.body.sizeToFit()
+                removeSubviews(cell: cell)
+                getSubviews(body: news.body, cell: cell)
             }
             cell.selectionStyle = .none
             
@@ -103,10 +100,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 cell.name.text = comment.name
                 cell.date.text = comment.date
                 cell.commentImage.sd_setImage(with: URL(string: comment.image!))
-                removeBobySubviews(cell: cell)
-                getBobySubviews(body: comment.body, cell: cell)
-                cell.commentText.text = ""
-                cell.commentText.sizeToFit()
+                removeSubviews(cell: cell)
+                getSubviews(body: comment.body, cell: cell)
             }
             return cell
         default:
@@ -115,7 +110,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       return getBodyHeight()
+       return getHeight()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -128,7 +123,4 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             return String()
         }
     }
-    //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    //        <#code#>
-    //    }
 }
