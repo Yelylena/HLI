@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class News {
+struct News {
     var newsURL:  URL
     var title:    String
     var date:     String

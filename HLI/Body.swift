@@ -13,6 +13,7 @@ class Body {
     enum DataType {
         case strong
         case image
+        case imagePNG
         case link
         case video
         case unorderedList

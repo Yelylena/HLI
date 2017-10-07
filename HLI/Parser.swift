@@ -75,14 +75,12 @@ class Parser {
                 //Body
                 for bodyItem in newsItem.css("div[class^='block-body']") {
                     let bodyString = bodyItem.innerHTML!
-                    //FIXME: Add parser for text without tags
-//                    print(newsBodyString)
+//                    print(bodyString)
                     
                     //MARK: Strong
                     for strong in bodyItem.css("strong") {
                         let strongText = strong.text!
                         let range = bodyString.localizedStandardRange(of: strong.toHTML!)
-//                        print("Range of strong is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.strong, data: strongText, range: range!))
                     }
                     
@@ -90,40 +88,45 @@ class Parser {
                     for image in bodyItem.css("img") {
                         let imageURL = image["src"]
                         var imageURLString = String()
-                        //                        let imageWidth = image["width"]
-                        //                        let imageHeight = image["height"]
+                        let width = image["width"]
+                        let height = image["height"]
                         if imageURL?[1] == "/" {
                             imageURLString = "https:" + imageURL!
                         } else {
                             imageURLString = "https://www.hl-inside.ru" + imageURL!
                         }
                         let range = bodyString.localizedStandardRange(of: image.toHTML!)
-                        //                        print("Range of image in link is: \(String(describing: range))")
-                        body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
+                        if width != nil && height != nil {
+                            let imagePNG = ImagePNG(url: imageURLString, width: Int(width!)!, height: Int(height!)!)
+                            body.append(Body(type: Body.DataType.imagePNG, data: imagePNG, range: range!))
+                        } else {
+                            body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
+                        }
                     }
                     
                     //MARK: Unordered list
-                    for ul in bodyItem.css("ul > li") {
-                        let range = bodyString.localizedStandardRange(of: ul.toHTML!)
-//                        print("Range of unordered list is: \(String(describing: range))")
-                        let listItem = "\u{25CF} " + ul.text!
-                        body.append(Body(type: Body.DataType.unorderedList, data: listItem, range: range!))
+                    for ul in bodyItem.css("ul") {
+                        for li in ul.css("li") {
+                            let listItem = "\u{25CF} \(li.text!)"
+                            let range = bodyString.localizedStandardRange(of: ul.toHTML!)
+                            body.append(Body(type: Body.DataType.unorderedList, data: listItem, range: range!))
+                        }
                     }
                     
                     //MARK: Ordered list
                     var listItemNumber = 1
                     for ol in bodyItem.css("ol > li") {
-                        let listItem = String(listItemNumber) + ol.text!
-                        let range = bodyString.localizedStandardRange(of: ol.toHTML!)
-//                        print("Range of ordered list is: \(String(describing: range))")
-                        body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!))
+                        for li in ol.css("li") {
+                            let listItem = "\(listItemNumber) \(li.text!)"
+                            let range = bodyString.localizedStandardRange(of: ol.toHTML!)
+                            body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!))
+                        }
                         listItemNumber += 1
                     }
                     //MARK: Video
                     for video in bodyItem.css("a[class*='video_type_youtube']") {
                         let videoItem = video["data-youtube-id"]!
                         let range = bodyString.localizedStandardRange(of: video.toHTML!)
-//                        print("Range of video is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.video, data: videoItem, range: range!))
                     }
                     
@@ -131,18 +134,40 @@ class Parser {
                     for paragraph in bodyItem.css("p") {
                         let paragraphText = paragraph.text!
                         let range = bodyString.localizedStandardRange(of: paragraph.toHTML!)
-//                        print("Range of paragraph is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.paragraph, data: paragraphText, range: range!))
                     }
                     //MARK: Blockquote
                     for blockquote in bodyItem.css("blockquote") {
                         let blockquoteText = blockquote.text!
                         let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
-//                        print("Range of blockquote is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                         
                     }
 //                    newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
+                    body = body.sorted(by: { (first:Body, last:Body) -> Bool in
+                        return first.range.lowerBound < last.range.upperBound
+                    })
+                    
+                    var prevItem = body[0]
+                    var prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
+                    for idx in 1..<body.count {
+                        let item = body[idx]
+                        let startPos = bodyString.distance(from: bodyString.startIndex, to: item.range.lowerBound)
+                        let endPos = bodyString.distance(from: bodyString.startIndex, to: item.range.upperBound)
+                        
+//                        print("start: \(prevEnd) end: \(startPos)")
+                        if ((prevEnd + 1) != startPos) && (prevEnd+1 < startPos) {
+                            let text = bodyString.substring(with: prevItem.range.upperBound..<item.range.lowerBound)
+                            print("Ordinary text: \(text)")
+                            let range = bodyString.localizedStandardRange(of: text)
+                            body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
+                        }
+                        prevItem = item
+                        prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
+//                        print("First range: \(startPos), last range: \(endPos)")
+//                        print("First range: \(item.range.lowerBound), last range: \(item.range.upperBound)")
+                        
+                    }
                     body = body.sorted(by: { (first:Body, last:Body) -> Bool in
                         return first.range.lowerBound < last.range.upperBound
                     })
@@ -194,7 +219,6 @@ class Parser {
                     for blockquote in textItem.css("div[class='comment__quote']") {
                         let blockquoteText = blockquote.text!
                         let range = textString.localizedStandardRange(of: blockquote.toHTML!)
-                        //                        print("Range of blockquote is: \(String(describing: range))")
                         body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                         
                     }
@@ -222,7 +246,6 @@ class Parser {
                 if prevLoc != nil {
                     let prevNewsString = "https://www.hl-inside.ru" + (prevLoc?["href"]!)!
                     prevNews = URL(string: prevNewsString) ?? URL(string:"https://www.hl-inside.ru/fock")
-                    //                print(prevNews)
                 } else {
                     prevNews = URL(string: "https://www.hl-inside.ru/")
                 }

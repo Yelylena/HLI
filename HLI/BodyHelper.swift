@@ -19,10 +19,13 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
     var tag = 1000
     
     for item in body {
+        
         var bodySubviews = [UIView]()
         
+        switch item.type {
+            
         //MARK: Paragraph
-        if item.type == Body.DataType.paragraph {
+        case Body.DataType.paragraph:
             let paragraphView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
             paragraphView.text = item.data as? String
             paragraphView.numberOfLines = 1000
@@ -31,10 +34,9 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             cell.addSubview(paragraphView)
             bodySubviews.append(paragraphView)
             position.y += paragraphView.frame.height
-        }
         
-        //MARK: Unordered list
-        if item.type == Body.DataType.unorderedList {
+        //MARK: List
+        case Body.DataType.unorderedList, Body.DataType.orderedList:
             let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
             listView.numberOfLines = 1000
             listView.text = item.data as? String
@@ -42,32 +44,30 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             cell.addSubview(listView)
             bodySubviews.append(listView)
             position.y += listView.frame.height
-        }
-        
-        //MARK: Ordered list
-        if item.type == Body.DataType.orderedList {
-            let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
-            listView.numberOfLines = 1000
-            listView.text = item.data as? String
-            listView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (listView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
-            cell.addSubview(listView)
-            bodySubviews.append(listView)
-            position.y += listView.frame.height
-        }
         
         //MARK: Image
-        if item.type == Body.DataType.image {
+        case Body.DataType.image:
             let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
-            //                        imageView.center = cell.center            
+            //                        imageView.center = cell.center
             imageView.sd_setImage(with: URL(string: item.data as! String))
             imageView.contentMode = UIViewContentMode.scaleAspectFit
             cell.addSubview(imageView)
             bodySubviews.append(imageView)
             position.y += imageView.frame.height
-        }
         
+        //MARK: ImagePNG
+        case Body.DataType.imagePNG:
+            let imagePNG = item.data as! ImagePNG
+            let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: CGFloat(imagePNG.width), height: CGFloat(imagePNG.height)))
+            imageView.sd_setImage(with: URL(string: imagePNG.url))
+            imageView.contentMode = UIViewContentMode.scaleAspectFit
+            imageView.center = CGPoint(x: UIScreen.main.bounds.size.width/2, y: position.y + imageView.frame.height/2)
+            cell.addSubview(imageView)
+            bodySubviews.append(imageView)
+            position.y += imageView.frame.height
+            
         //MARK: Strong
-        if item.type == Body.DataType.strong {
+        case Body.DataType.strong:
             let strongView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
             
             //FIXME: Move to style file
@@ -79,24 +79,17 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             cell.addSubview(strongView)
             bodySubviews.append(strongView)
             position.y += strongView.frame.height
-        }
-        
+            
         //MARK: Video
-        if item.type == Body.DataType.video {
+        case Body.DataType.video:
             let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
             videoView.loadVideoID(item.data as! String)
             cell.addSubview(videoView)
             bodySubviews.append(videoView)
             position.y += videoView.frame.height
-        }
-        
-        //MARK: Link
-        if item.type == Body.DataType.link {
-            
-        }
         
         //MARK: Blockquote
-        if item.type == Body.DataType.blockquote {
+        case Body.DataType.blockquote:
             let blockquoteView = UILabel(frame: CGRect(x: 30, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
             blockquoteView.text = item.data as? String
             blockquoteView.numberOfLines = 1000
@@ -112,10 +105,17 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             blockquoteViewBorder.fillColor = nil
             blockquoteViewBorder.path = UIBezierPath(rect: blockquoteView.bounds).cgPath
             blockquoteView.layer.addSublayer(blockquoteViewBorder)
-
+            
             cell.addSubview(blockquoteView)
             bodySubviews.append(blockquoteView)
             position.y += blockquoteView.frame.height
+        
+        //MARK: Link
+        case Body.DataType.link:
+            print()
+        
+        default:
+            print()
         }
         
         for view in bodySubviews {
