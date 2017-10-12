@@ -13,4 +13,15 @@ struct ImagePNG {
     var url: String
     var width: Int
     var height: Int
+    
+    init(url: String, width: Int, height: Int) {
+        self.url = url
+        self.width = width
+        self.height = height
+    }
+    init() {
+        url = String()
+        width = 0
+        height = 0
+    }
 }

@@ -15,12 +15,22 @@ import ActiveLabel
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
+    var commentView: CommentView!
     var pageURL: URL?
     var news = [News]()
     var comments = [Comment]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        commentView = CommentView(frame: CGRect.zero)
+        commentView.backgroundColor = UIColor.AppColors.BgDark
+        self.view.addSubview(commentView)
+        
+        // AutoLayout
+        commentView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.init(top: UIScreen.main.bounds.height - 60.0, left: 0, bottom: 0, right: 0))
+
+        
         detailedNewsTable.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
         detailedNewsTable.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: "CommentCell")
         detailedNewsTable.delegate = self

@@ -9,6 +9,7 @@ target ‘HLI’ do
   pod 'SDWebImage', '~>3.8'
   pod 'ActiveLabel'
   pod 'YouTubePlayer'
+  pod 'PureLayout', '~> 2.0.5'
   project ‘HLI.xcodeproj'
   # Pods for HLI
 
