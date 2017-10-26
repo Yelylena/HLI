@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 import Kanna
 import Alamofire
 import SDWebImage
@@ -19,6 +20,11 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     var pageURL: URL?
     var news = [News]()
     var comments = [Comment]()
+    var formData = FormData()
+
+    let date = Date()
+    let calendar = Calendar.current
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +32,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         commentView = CommentView(frame: CGRect.zero)
         commentView.backgroundColor = UIColor.AppColors.BgDark
         self.view.addSubview(commentView)
+ //       commentView.sendButton.addTarget(self, action: #selector(sendComment), for: .touchUpInside)
         
         // AutoLayout
         commentView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.init(top: UIScreen.main.bounds.height - 60.0, left: 0, bottom: 0, right: 0))
@@ -50,6 +57,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             
             self.news = parser.parseNews()
             self.comments = parser.parseComment()
+            self.formData = parser.parseForm()
             
             DispatchQueue.main.async {
                 self.detailedNewsTable.reloadData()
@@ -132,5 +140,18 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         default:
             return String()
         }
+    }
+    
+    func sendComment(sender: UIButton!) {
+        let parameters = [
+            "name": "Swift_test",
+            "email": "",
+            "textdata": self.commentView.textView.text!,
+            "date": formData.date,
+            "wallace": formData.wallace,
+            "breen": formData.breen
+        ]
+        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
+        self.detailedNewsTable.reloadData()
     }
 }

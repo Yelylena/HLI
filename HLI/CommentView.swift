@@ -6,7 +6,6 @@
 //  Copyright © 2017 Lena. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import PureLayout
 
@@ -21,13 +20,22 @@ class CommentView: UIView {
         
         textView = UITextView(frame: CGRect.zero)
         textView.backgroundColor = UIColor.AppColors.Text
-        textView.autoSetDimensions(to: CGSize(width: 150.0, height: 30.0))
+        textView.autoSetDimensions(to: CGSize(width: 250.0, height: 30.0))
+        textView.layer.cornerRadius = 5.0
+        //textView.text = "Add your comment"
+        
+        textView.textColor = UIColor.gray
+        if textView.text.isEmpty {
+            textView.text = "Test"
+        }
+
         
         self.addSubview(textView)
         
         sendButton = UIButton(frame: CGRect.zero)
         sendButton.backgroundColor = UIColor.AppColors.Brand
         sendButton.autoSetDimensions(to: CGSize(width: 50.0, height: 30.0))
+        sendButton.layer.cornerRadius = 5.0
         sendButton.setTitle("Send", for: .normal)
         
         self.addSubview(sendButton)
@@ -45,7 +53,7 @@ class CommentView: UIView {
             textView.autoPinEdge(toSuperviewEdge: .top, withInset: edgesInset)
             textView.autoPinEdge(toSuperviewEdge: .left, withInset: edgesInset)
             textView.autoPinEdge(toSuperviewEdge: .bottom, withInset: edgesInset)
-            textView.autoPinEdge(.right, to: .left, of: sendButton, withOffset: edgesInset)
+            //textView.autoPinEdge(.right, to: .left, of: sendButton, withOffset: edgesInset)
             
             sendButton.autoPinEdge(toSuperviewEdge: .top, withInset: edgesInset)
             sendButton.autoPinEdge(toSuperviewEdge: .right, withInset: edgesInset)

@@ -233,6 +233,25 @@ class Parser {
         return comments
     }
     
+    //MARK: Form
+    func parseForm() -> FormData {
+        var formData = FormData(date: String(), wallace: String(), breen: String())
+        if let doc = HTML(html: html, encoding: .windowsCP1251) {
+            for form in doc.css("form") {
+                for date in form.css("input[name='date']") {
+                    formData.date = date["value"]!
+                }
+                for wallace in form.css("input[name='wallace']") {
+                    formData.wallace = wallace["value"]!
+                }
+                for breen in form.css("input[name='breen']") {
+                    formData.breen = breen["value"]!
+                }
+            }
+        }
+        return formData
+    }
+    
     //MARK: Navigation
     func parseNavigation() -> (prevNews: URL?, nextNews: URL?) {
         
