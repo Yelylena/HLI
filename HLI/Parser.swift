@@ -22,6 +22,80 @@ class Parser {
         self.html = html
     }
     
+    //MARK: Sort
+    func sortBody(body: [Body]) -> [Body] {
+        return body.sorted(by: { (first:Body, last:Body) -> Bool in
+            return first.range.lowerBound < last.range.upperBound
+        })
+    }
+    
+    //Mark: Parse ordinary text
+    func parseOrdinaryText(body: [Body], bodyString: String) -> [Body] {
+        
+        var body = self.sortBody(body: body)
+        
+        if body.isEmpty {
+            let range = bodyString.localizedStandardRange(of: bodyString)
+            body.append(Body(type: Body.DataType.paragraph, data: bodyString, range: range!))
+        } else {
+            var prevItem = body[0]
+            var prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
+
+            //MARK: Ordinary text before body array
+            if bodyString.distance(from: bodyString.startIndex, to: prevItem.range.lowerBound) != String.IndexDistance.init(exactly: 1.0) {
+                let text = bodyString.substring(with: bodyString.startIndex..<prevItem.range.lowerBound)
+//                print("Ordinary text before array: \(text)")
+                let range = bodyString.localizedStandardRange(of: text)
+                body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
+            }
+            
+            for idx in 1..<body.count {
+                let item = body[idx]
+                let startPos = bodyString.distance(from: bodyString.startIndex, to: item.range.lowerBound)
+//                let endPos = bodyString.distance(from: bodyString.startIndex, to: item.range.upperBound)
+            
+                if ((prevEnd + 1) != startPos) && ((prevEnd + 1) < startPos) {
+                    let text = bodyString.substring(with: prevItem.range.upperBound..<item.range.lowerBound)
+//                    print("Ordinary text in array: \(text)")
+                    let range = bodyString.localizedStandardRange(of: text)
+                    body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
+                }
+                prevItem = item
+                prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
+            }
+            
+            body = self.sortBody(body: body)
+
+            //MARK: Ordinary text after body array
+            if bodyString.distance(from: (body.last?.range.upperBound)!, to: bodyString.endIndex) != String.IndexDistance.init(exactly: 1.0) {
+                let text = bodyString.substring(with: (body.last?.range.upperBound)!..<bodyString.endIndex)
+//                print("Ordinary text after array: \(text)")
+                let range = bodyString.localizedStandardRange(of: text)
+                body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
+            }
+            
+            body = self.sortBody(body: body)
+            
+        }
+        return body
+    }
+    //FIXME: Fix removing
+//    func removeDuplicateElements(body: [Body]) -> [Body] {
+//        var body = body
+//        var newBody = [Body]()
+//        var prevItem = body[0]
+//
+//        for idx in 0..<body.count {
+//            let item = body[idx]
+//
+//            if item.range.lowerBound != prevItem.range.lowerBound {
+//                newBody.append(prevItem)
+//            }
+//            prevItem = item
+//        }
+//        return newBody
+//    }
+    
     //MARK: News
     func parseNews() -> [News] {
         
@@ -143,44 +217,12 @@ class Parser {
                         body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                         
                     }
-//                    newsBodyString = newsBodyString.replacingOccurrences(of: "<br>", with: "\n")
-                    body = body.sorted(by: { (first:Body, last:Body) -> Bool in
-                        return first.range.lowerBound < last.range.upperBound
-                    })
-                    
-                    var prevItem = body[0]
-                    var prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
-                    for idx in 1..<body.count {
-                        let item = body[idx]
-                        let startPos = bodyString.distance(from: bodyString.startIndex, to: item.range.lowerBound)
-                        let endPos = bodyString.distance(from: bodyString.startIndex, to: item.range.upperBound)
-                        
-//                        print("start: \(prevEnd) end: \(startPos)")
-                        if ((prevEnd + 1) != startPos) && (prevEnd+1 < startPos) {
-                            let text = bodyString.substring(with: prevItem.range.upperBound..<item.range.lowerBound)
-                            print("Ordinary text: \(text)")
-                            let range = bodyString.localizedStandardRange(of: text)
-                            body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
-                        }
-                        prevItem = item
-                        prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
-//                        print("First range: \(startPos), last range: \(endPos)")
-//                        print("First range: \(item.range.lowerBound), last range: \(item.range.upperBound)")
-                        
-                    }
-                    body = body.sorted(by: { (first:Body, last:Body) -> Bool in
-                        return first.range.lowerBound < last.range.upperBound
-                    })
+                    body = self.parseOrdinaryText(body: body, bodyString: bodyString)
+//                    body = self.removeDuplicateElements(body: body)
                 }
                 news.append(News(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body))
             }
         }
-//        for idx in 0..<news.count {
-//            let n = news[idx]
-//            for i in 0..<n.body.count {
-//                print("news[\(idx)], bodyItem[\(i)], text[\(n.body[i].data)]")
-//            }
-//        }
         return news
     }
     
@@ -210,21 +252,32 @@ class Parser {
                 image = imageLoc?["src"] ?? ""
                 
                 //Text
-                for textItem in commentItem.css("div[class='comment__text']") {
-                    let textString = textItem.innerHTML!
+                for bodyItem in commentItem.css("div[class='comment__text']") {
+                    let bodyString = bodyItem.innerHTML!
+                    print(bodyString)
                     
-                    
-                    
-                    //MARK: Blockquote
-                    for blockquote in textItem.css("div[class='comment__quote']") {
-                        let blockquoteText = blockquote.text!
-                        let range = textString.localizedStandardRange(of: blockquote.toHTML!)
-                        body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
+                    //Image
+                    for image in bodyItem.css("img") {
+                        let imageURL = image["src"]
+                        var imageURLString = String()
+                        if imageURL?[1] == "/" {
+                            imageURLString = "https:" + imageURL!
+                        } else {
+                            imageURLString = "https://www.hl-inside.ru" + imageURL!
+                        }
+                        let range = bodyString.localizedStandardRange(of: image.toHTML!)
                         
+                        let imagePNG = ImagePNG(url: imageURLString, width: 28, height: 25)
+                        body.append(Body(type: Body.DataType.imagePNG, data: imagePNG, range: range!))
                     }
-                    body = body.sorted(by: { (first:Body, last:Body) -> Bool in
-                        return first.range.lowerBound < last.range.upperBound
-                    })
+                    //MARK: Blockquote
+                    for blockquote in bodyItem.css("div[class='comment__quote']") {
+                        let blockquoteText = blockquote.text!
+                        let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
+                        body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
+                    }
+                    body = self.parseOrdinaryText(body: body, bodyString: bodyString)
+//                    body = self.removeDuplicateElements(body: body)
                 }
                 
                 comments.append(Comment(name: name!, date: date!, body: body, image: image))
@@ -260,27 +313,16 @@ class Parser {
         
         if let doc = HTML(html: html, encoding: .windowsCP1251) {
             for newsNavigation in doc.css("div[class='next-prev']") {
+                
                 //Previous news
-                var prevLoc = newsNavigation.at_css("span[class='next-prev__prev'] > a")
-                if prevLoc != nil {
-                    let prevNewsString = "https://www.hl-inside.ru" + (prevLoc?["href"]!)!
-                    prevNews = URL(string: prevNewsString) ?? URL(string:"https://www.hl-inside.ru/fock")
-                } else {
-                    prevNews = URL(string: "https://www.hl-inside.ru/")
-                }
+                let prevLoc = newsNavigation.at_css("span[class='next-prev__prev'] > a")
+                prevNews = URL(string: "https://www.hl-inside.ru" + ((prevLoc != nil) ? (prevLoc?["href"])! : "/"))
+                
                 //Next news
                 var nextLoc = newsNavigation.at_css("span[class='next-prev__next'] > a")
-                
-                if nextLoc != nil {
-                    let nextNewsString = "https://www.hl-inside.ru" + (nextLoc?["href"]!)!
-                    nextNews = URL(string: nextNewsString)
-                } else {
-                    nextNews = URL(string: "https://www.hl-inside.ru/")
-                }
-                
+                nextNews = URL(string: "https://www.hl-inside.ru" + ((nextLoc != nil) ? (nextLoc?["href"])! : "/"))
             }
         }
         return (prevNews!, nextNews!)
     }
-    
 }

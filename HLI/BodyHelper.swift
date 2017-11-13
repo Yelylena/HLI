@@ -28,6 +28,7 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
         case Body.DataType.paragraph:
             let paragraphView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
             paragraphView.text = item.data as? String
+            paragraphView.text = paragraphView.text?.replacingOccurrences(of: "<br>", with: "\n")
             paragraphView.numberOfLines = 1000
             paragraphView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (paragraphView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
             //                print("Height of paragraph: \(paragraphView.frame.height)")
