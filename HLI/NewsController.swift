@@ -67,7 +67,7 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBAction func showNextNews(_ sender: UIButton) {
         pageURL = nextNews
-        print("\(String(describing: pageURL))")
+//        print("\(String(describing: pageURL))")
         news = [News]()
         self.parse()
         self.newsTable.reloadData()

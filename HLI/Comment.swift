@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Comment {
+class Comment {
     var name: String
     var date: String
     var body: [Body]
@@ -19,5 +19,11 @@ struct Comment {
         self.date = date
         self.body = body
         self.image = image
+    }
+    
+    init() {
+        name = String()
+        date = String()
+        body = [Body]()
     }
 }

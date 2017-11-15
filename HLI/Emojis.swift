@@ -50,4 +50,6 @@ class Emojis {
         Emoji(name: "unhappy", url: "http://www.hl-inside.ru/images/emoticons/emo_unhappy.gif", data: ":unhappy:"),
         Emoji(name: "unsure", url: "http://www.hl-inside.ru/images/emoticons/emo_unsure.gif", data: ":unsure:")
     ]
+    
+    
 }
