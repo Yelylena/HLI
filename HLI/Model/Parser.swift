@@ -30,72 +30,23 @@ class Parser {
         var body = [Body]()
         
         for bodyItem in element.css(selector) {
-            let bodyString = bodyItem.innerHTML!
+//            let bodyString = bodyItem.innerHTML!
             
             //MARK: Strong
-            for strong in bodyItem.css("strong") {
-                let strongText = strong.text!
-                let range = bodyString.localizedStandardRange(of: strong.toHTML!)
-                body.append(Body(type: Body.DataType.strong, data: strongText, range: range!))
-            }
             
             //MARK: Image
-            for image in bodyItem.css("img") {
-                let imageURL = image["src"]
-                let width = image["width"]
-                let height = image["height"]
-                let imageURLString = ((imageURL?[1] == "/") ? "https:" : "https://www.hl-inside.ru") + imageURL!
-                let range = bodyString.localizedStandardRange(of: image.toHTML!)
-                if width != nil && height != nil {
-                    let imagePNG = ImagePNG(url: imageURLString, width: Int(width!)!, height: Int(height!)!)
-                    body.append(Body(type: Body.DataType.imagePNG, data: imagePNG, range: range!))
-                } else {
-                    body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
-                }
-            }
             
             //MARK: Unordered list
-            for ul in bodyItem.css("ul") {
-                for li in ul.css("li") {
-                    let listItem = "\u{25CF} \(li.text!)"
-                    let range = bodyString.localizedStandardRange(of: li.toHTML!)
-                    body.append(Body(type: Body.DataType.unorderedList, data: listItem, range: range!))
-                }
-            }
             
             //MARK: Ordered list
-            var listItemNumber = 1
-            for ol in bodyItem.css("ol > li") {
-                for li in ol.css("li") {
-                    let listItem = "\(listItemNumber) \(li.text!)"
-                    let range = bodyString.localizedStandardRange(of: ol.toHTML!)
-                    body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!))
-                }
-                listItemNumber += 1
-            }
+
             //MARK: Video
-            for video in bodyItem.css("a[class*='video_type_youtube']") {
-                let videoItem = video["data-youtube-id"]!
-                let range = bodyString.localizedStandardRange(of: video.toHTML!)
-                body.append(Body(type: Body.DataType.video, data: videoItem, range: range!))
-            }
             
             //MARK: Paragraph
-            for paragraph in bodyItem.css("p") {
-                let paragraphText = paragraph.text!
-                let range = bodyString.localizedStandardRange(of: paragraph.toHTML!)
-                body.append(Body(type: Body.DataType.paragraph, data: paragraphText, range: range!))
-            }
+
             //MARK: Blockquote
-            for blockquote in bodyItem.css("blockquote") {
-                let blockquoteText = blockquote.text!
-                let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
-                body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
-                
-            }        }
-        
-        
-        
+
+        }  
         return body
     }
     
@@ -109,20 +60,23 @@ class Parser {
     //Mark: Parse ordinary text
     func parseOrdinaryText(body: [Body], bodyString: String) -> [Body] {
         
+        func getOrdinaryText(start: String.Index, end: String.Index) -> Body {
+            let text = bodyString.substring(with: start..<end)
+            let range = bodyString.localizedStandardRange(of: text)
+            return Body(type: Body.DataType.paragraph, data: text, range: range!)
+        }
+        
         var body = self.sortBody(body: body)
         
         if body.isEmpty {
-            let range = bodyString.localizedStandardRange(of: bodyString)
-            body.append(Body(type: Body.DataType.paragraph, data: bodyString, range: range!))
+            body.append(getOrdinaryText(start: bodyString.startIndex, end: bodyString.endIndex))
         } else {
             var prevItem = body[0]
             var prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
 
             //MARK: Ordinary text before body array
             if bodyString.distance(from: bodyString.startIndex, to: prevItem.range.lowerBound) != String.IndexDistance.init(exactly: 1.0) {
-                let text = bodyString.substring(with: bodyString.startIndex..<prevItem.range.lowerBound)
-                let range = bodyString.localizedStandardRange(of: text)
-                body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
+                body.append(getOrdinaryText(start: bodyString.startIndex, end: prevItem.range.lowerBound))
             }
             
             for idx in 1..<body.count {
@@ -131,9 +85,7 @@ class Parser {
 //                let endPos = bodyString.distance(from: bodyString.startIndex, to: item.range.upperBound)
             
                 if ((prevEnd + 1) != startPos) && ((prevEnd + 1) < startPos) {
-                    let text = bodyString.substring(with: prevItem.range.upperBound..<item.range.lowerBound)
-                    let range = bodyString.localizedStandardRange(of: text)
-                    body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
+                    body.append(getOrdinaryText(start: prevItem.range.upperBound, end: item.range.lowerBound))
                 }
                 prevItem = item
                 prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
@@ -143,13 +95,10 @@ class Parser {
 
             //MARK: Ordinary text after body array
             if bodyString.distance(from: (body.last?.range.upperBound)!, to: bodyString.endIndex) != String.IndexDistance.init(exactly: 1.0) {
-                let text = bodyString.substring(with: (body.last?.range.upperBound)!..<bodyString.endIndex)
-                let range = bodyString.localizedStandardRange(of: text)
-                body.append(Body(type: Body.DataType.paragraph, data: text, range: range!))
+                body.append(getOrdinaryText(start: (body.last?.range.upperBound)!, end: bodyString.endIndex))
             }
             
             body = self.sortBody(body: body)
-            
         }
         return body
     }

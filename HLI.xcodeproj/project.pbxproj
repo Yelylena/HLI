@@ -87,6 +87,43 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		BF1594961FC3534900E2DBF3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BFB8F9AD1F9F86E5003E80E3 /* Emojis.swift */,
+				BF5CB3A91EFC25D400451A7E /* Comment.swift */,
+				BF63C82A1F8527B40065914F /* ImagePNG.swift */,
+				BF44691C1F128A5000952578 /* Body.swift */,
+				BF9CBF641EF43FD3004DA7A8 /* News.swift */,
+				BFB8F9AB1F99FD65003E80E3 /* FormData.swift */,
+				BFFD70D41EF926F100E5942C /* Extensions.swift */,
+				BF44691E1F14FE2400952578 /* Parser.swift */,
+				BFB11CF51F5334CD00250E50 /* BodyHelper.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		BF1594971FC3539B00E2DBF3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BF7898BD1EF00453009B7927 /* NewsController.swift */,
+				BF5CB3A71EFC0BD200451A7E /* DetailedNewsController.swift */,
+				BF57E02D1F8F7F7000E24BBC /* CommentView.swift */,
+				BF9CBF621EF428D8004DA7A8 /* NewsCell.swift */,
+				BF5CB3AD1EFD681E00451A7E /* CommentCell.swift */,
+				BF7898CD1EF02025009B7927 /* NewsCell.xib */,
+				BF5CB3AB1EFD67CA00451A7E /* CommentCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BF1594991FC353DC00E2DBF3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		BF7898AF1EF00453009B7927 = {
 			isa = PBXGroup;
 			children = (
@@ -109,22 +146,9 @@
 			isa = PBXGroup;
 			children = (
 				BF7898BB1EF00453009B7927 /* AppDelegate.swift */,
-				BFFD70D41EF926F100E5942C /* Extensions.swift */,
-				BF44691E1F14FE2400952578 /* Parser.swift */,
-				BFB8F9AB1F99FD65003E80E3 /* FormData.swift */,
-				BF63C82A1F8527B40065914F /* ImagePNG.swift */,
-				BF7898BD1EF00453009B7927 /* NewsController.swift */,
-				BF5CB3A71EFC0BD200451A7E /* DetailedNewsController.swift */,
-				BFB8F9AD1F9F86E5003E80E3 /* Emojis.swift */,
-				BF44691C1F128A5000952578 /* Body.swift */,
-				BFB11CF51F5334CD00250E50 /* BodyHelper.swift */,
-				BF9CBF641EF43FD3004DA7A8 /* News.swift */,
-				BF5CB3A91EFC25D400451A7E /* Comment.swift */,
-				BF57E02D1F8F7F7000E24BBC /* CommentView.swift */,
-				BF9CBF621EF428D8004DA7A8 /* NewsCell.swift */,
-				BF7898CD1EF02025009B7927 /* NewsCell.xib */,
-				BF5CB3AD1EFD681E00451A7E /* CommentCell.swift */,
-				BF5CB3AB1EFD67CA00451A7E /* CommentCell.xib */,
+				BF1594961FC3534900E2DBF3 /* Model */,
+				BF1594971FC3539B00E2DBF3 /* View */,
+				BF1594991FC353DC00E2DBF3 /* Controller */,
 				BF7898BF1EF00453009B7927 /* Main.storyboard */,
 				BF7898C21EF00453009B7927 /* Assets.xcassets */,
 				BF7898C41EF00453009B7927 /* LaunchScreen.storyboard */,

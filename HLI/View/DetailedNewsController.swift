@@ -29,13 +29,13 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        commentView = CommentView(frame: CGRect.zero)
-        commentView.backgroundColor = UIColor.AppColors.BgDark
-        self.view.addSubview(commentView)
+//        commentView = CommentView(frame: CGRect.zero)
+//        commentView.backgroundColor = UIColor.AppColors.BgDark
+//        self.view.addSubview(commentView)
  //       commentView.sendButton.addTarget(self, action: #selector(sendComment), for: .touchUpInside)
         
         // AutoLayout
-        commentView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.init(top: UIScreen.main.bounds.height - 60.0, left: 0, bottom: 0, right: 0))
+//        commentView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.init(top: UIScreen.main.bounds.height - 60.0, left: 0, bottom: 0, right: 0))
 
         
         detailedNewsTable.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
@@ -142,16 +142,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func sendComment(sender: UIButton!) {
-        let parameters = [
-            "name": "Swift_test",
-            "email": "",
-            "textdata": self.commentView.textView.text!,
-            "date": formData.date,
-            "wallace": formData.wallace,
-            "breen": formData.breen
-        ]
-        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
-        self.detailedNewsTable.reloadData()
-    }
+//    func sendComment(sender: UIButton!) {
+//        let parameters = [
+//            "name": "Swift_test",
+//            "email": "",
+//            "textdata": self.commentView.textView.text!,
+//            "date": formData.date,
+//            "wallace": formData.wallace,
+//            "breen": formData.breen
+//        ]
+//        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
+//        self.detailedNewsTable.reloadData()
+//    }
 }
