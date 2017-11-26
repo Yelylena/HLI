@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 import Kanna
 import Alamofire
 import SDWebImage
@@ -21,6 +22,7 @@ class Parser {
         self.pageURL = pageURL
         self.html = html
     }
+    
     //MARK: Get range
     
     //MARK: Parse element
@@ -30,7 +32,7 @@ class Parser {
         var body = [Body]()
         
         for bodyItem in element.css(selector) {
-//            let bodyString = bodyItem.innerHTML!
+            //            let bodyString = bodyItem.innerHTML!
             
             //MARK: Strong
             
@@ -39,13 +41,13 @@ class Parser {
             //MARK: Unordered list
             
             //MARK: Ordered list
-
+            
             //MARK: Video
             
             //MARK: Paragraph
-
+            
             //MARK: Blockquote
-
+            
         }  
         return body
     }
@@ -58,12 +60,17 @@ class Parser {
     }
     
     //Mark: Parse ordinary text
-    func parseOrdinaryText(body: [Body], bodyString: String) -> [Body] {
+    func parseOrdinaryText(body: [Body], bodyString: String, type: Body.DataType) -> [Body] {
         
         func getOrdinaryText(start: String.Index, end: String.Index) -> Body {
             let text = bodyString.substring(with: start..<end)
             let range = bodyString.localizedStandardRange(of: text)
-            return Body(type: Body.DataType.paragraph, data: text, range: range!)
+            
+            if type == Body.DataType.commentText {
+                return Body(type: type, data: NSMutableAttributedString(string: text), range: range!)
+            }
+            
+            return Body(type: type, data: text, range: range!)
         }
         
         var body = self.sortBody(body: body)
@@ -73,17 +80,16 @@ class Parser {
         } else {
             var prevItem = body[0]
             var prevEnd = bodyString.distance(from: bodyString.startIndex, to: prevItem.range.upperBound)
-
+            
             //MARK: Ordinary text before body array
             if bodyString.distance(from: bodyString.startIndex, to: prevItem.range.lowerBound) != String.IndexDistance.init(exactly: 1.0) {
                 body.append(getOrdinaryText(start: bodyString.startIndex, end: prevItem.range.lowerBound))
             }
             
-            for idx in 1..<body.count {
-                let item = body[idx]
+            for (_, item) in body.enumerated() {
                 let startPos = bodyString.distance(from: bodyString.startIndex, to: item.range.lowerBound)
-//                let endPos = bodyString.distance(from: bodyString.startIndex, to: item.range.upperBound)
-            
+                //                let endPos = bodyString.distance(from: bodyString.startIndex, to: item.range.upperBound)
+                
                 if ((prevEnd + 1) != startPos) && ((prevEnd + 1) < startPos) {
                     body.append(getOrdinaryText(start: prevItem.range.upperBound, end: item.range.lowerBound))
                 }
@@ -92,7 +98,7 @@ class Parser {
             }
             
             body = self.sortBody(body: body)
-
+            
             //MARK: Ordinary text after body array
             if bodyString.distance(from: (body.last?.range.upperBound)!, to: bodyString.endIndex) != String.IndexDistance.init(exactly: 1.0) {
                 body.append(getOrdinaryText(start: (body.last?.range.upperBound)!, end: bodyString.endIndex))
@@ -107,22 +113,11 @@ class Parser {
         var body = body
         var idx = 0
         for item in body {
-            print("Item \(idx)(\(item.type)): low \(item.range.lowerBound), upp \(item.range.upperBound)")
+            //            print("Item \(idx)(\(item.type)): low \(item.range.lowerBound), upp \(item.range.upperBound)")
             
             idx += 1
         }
         
-//        var newBody = [Body]()
-//        var prevItem = body[0]
-//
-//        for idx in 0..<body.count {
-//            let item = body[idx]
-//
-//            if item.range.lowerBound != prevItem.range.lowerBound {
-//                newBody.append(prevItem)
-//            }
-//            prevItem = item
-//        }
         return body
     }
     
@@ -179,7 +174,7 @@ class Parser {
                 //Body
                 for bodyItem in newsItem.css("div[class^='block-body']") {
                     let bodyString = bodyItem.innerHTML!
-//                    print(bodyString)
+                    //                    print(bodyString)
                     
                     //MARK: Strong
                     for strong in bodyItem.css("strong") {
@@ -191,19 +186,19 @@ class Parser {
                     //MARK: Image
                     for image in bodyItem.css("img") {
                         let imageURL = image["src"]
-//                        var imageURLString = String()
+                        //                        var imageURLString = String()
                         let width = image["width"]
                         let height = image["height"]
-//                        if imageURL?[1] == "/" {
-//                            imageURLString = "https:" + imageURL!
-//                        } else {
-//                            imageURLString = "https://www.hl-inside.ru" + imageURL!
-//                        }
+                        //                        if imageURL?[1] == "/" {
+                        //                            imageURLString = "https:" + imageURL!
+                        //                        } else {
+                        //                            imageURLString = "https://www.hl-inside.ru" + imageURL!
+                        //                        }
                         let imageURLString = ((imageURL?[1] == "/") ? "https:" : "https://www.hl-inside.ru") + imageURL!
                         let range = bodyString.localizedStandardRange(of: image.toHTML!)
                         if width != nil && height != nil {
-                            let imagePNG = ImagePNG(url: imageURLString, width: Int(width!)!, height: Int(height!)!)
-                            body.append(Body(type: Body.DataType.imagePNG, data: imagePNG, range: range!))
+                            let image = ImageWithSize(url: imageURLString, width: Int(width!)!, height: Int(height!)!)
+                            body.append(Body(type: Body.DataType.imageWithSize, data: image, range: range!))
                         } else {
                             body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
                         }
@@ -248,7 +243,7 @@ class Parser {
                         body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                         
                     }
-                    body = self.parseOrdinaryText(body: body, bodyString: bodyString)
+                    body = self.parseOrdinaryText(body: body, bodyString: bodyString, type: Body.DataType.paragraph)
                     body = self.removeDuplicateElements(body: body)
                 }
                 news.append(News(newsURL: newsURL!, title: title!, date: date!, author: author!, tags: tags as! [String], tagsURL: tagsURL as! [URL], comments: comments!, body: body))
@@ -261,6 +256,7 @@ class Parser {
     func parseComment() -> [Comment] {
         
         var comments = [Comment]()
+        var emojis = Emojis()
         
         var name: String?
         var date: String?
@@ -290,16 +286,9 @@ class Parser {
                     //Image
                     for image in bodyItem.css("img") {
                         let imageURL = image["src"]
-                        var imageURLString = String()
-                        if imageURL?[1] == "/" {
-                            imageURLString = "https:" + imageURL!
-                        } else {
-                            imageURLString = "https://www.hl-inside.ru" + imageURL!
-                        }
+                        let data = emojis.getEmoji(loc: imageURL!)
                         let range = bodyString.localizedStandardRange(of: image.toHTML!)
-                        
-                        let imagePNG = ImagePNG(url: imageURLString, width: 28, height: 25)
-                        body.append(Body(type: Body.DataType.imagePNG, data: imagePNG, range: range!))
+                        body.append(Body(type: Body.DataType.emoji, data: data, range: range!))
                     }
                     //MARK: Blockquote
                     for blockquote in bodyItem.css("div[class='comment__quote']") {
@@ -307,8 +296,28 @@ class Parser {
                         let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
                         body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
                     }
-                    body = self.parseOrdinaryText(body: body, bodyString: bodyString)
-                    body = self.removeDuplicateElements(body: body)
+                    body = self.parseOrdinaryText(body: body, bodyString: bodyString, type: Body.DataType.commentText)
+                    
+                    var prevItem = body[0]
+                    var lastCommentText = body[0]
+                    
+                    if body.isEmpty {
+                        print("Body is empty")
+                    } else {
+                        for (_, item) in body.enumerated() {
+                            if (prevItem.type == Body.DataType.commentText) && (item.type == Body.DataType.emoji) {
+                                let str = prevItem.data as! NSMutableAttributedString
+                                str.append(NSAttributedString(attachment: item.data as! NSTextAttachment))
+                                prevItem.data = str
+                                lastCommentText = prevItem
+                            } else if (prevItem.type == Body.DataType.emoji) && (item.type == Body.DataType.emoji) {
+                                let str = lastCommentText.data as! NSMutableAttributedString
+                                str.append(NSAttributedString(attachment: item.data as! NSTextAttachment))
+                                lastCommentText.data = str
+                            }
+                            prevItem = item
+                        }
+                    }
                 }
                 
                 comments.append(Comment(name: name!, date: date!, body: body, image: image))

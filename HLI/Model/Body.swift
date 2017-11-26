@@ -13,12 +13,14 @@ class Body {
     enum DataType {
         case strong
         case image
-        case imagePNG
+        case imageWithSize
         case link
         case video
         case unorderedList
         case orderedList
         case paragraph
+        case commentText
+        case emoji
         case blockquote
     }
     var type: DataType

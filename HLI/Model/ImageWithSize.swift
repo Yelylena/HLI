@@ -1,5 +1,5 @@
 //
-//  ImagePNG.swift
+//  ImageWithSize.swift
 //  HLI
 //
 //  Created by Lena on 04.10.17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-struct ImagePNG {
+struct ImageWithSize {
     var url: String
     var width: Int
     var height: Int

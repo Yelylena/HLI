@@ -35,6 +35,17 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             cell.addSubview(paragraphView)
             bodySubviews.append(paragraphView)
             position.y += paragraphView.frame.height
+            
+        //MARK: Comment text
+        case Body.DataType.commentText:
+            let commentTextView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
+            commentTextView.attributedText =  item.data as! NSMutableAttributedString
+//            commentTextView.attributedText =  commentTextView.attributedText.replacingOccurrences(of: "<br>", with: "\n")
+            commentTextView.numberOfLines = 1000
+            commentTextView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (commentTextView.attributedText?.string.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
+            cell.addSubview(commentTextView)
+            bodySubviews.append(commentTextView)
+            position.y += commentTextView.frame.height
         
         //MARK: List
         case Body.DataType.unorderedList, Body.DataType.orderedList:
@@ -56,11 +67,11 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             bodySubviews.append(imageView)
             position.y += imageView.frame.height
         
-        //MARK: ImagePNG
-        case Body.DataType.imagePNG:
-            let imagePNG = item.data as! ImagePNG
-            let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: CGFloat(imagePNG.width), height: CGFloat(imagePNG.height)))
-            imageView.sd_setImage(with: URL(string: imagePNG.url))
+        //MARK: ImageWithSize
+        case Body.DataType.imageWithSize:
+            let imageWithSize = item.data as! ImageWithSize
+            let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: CGFloat(imageWithSize.width), height: CGFloat(imageWithSize.height)))
+            imageView.sd_setImage(with: URL(string: imageWithSize.url))
             imageView.contentMode = UIViewContentMode.scaleAspectFit
             imageView.center = CGPoint(x: UIScreen.main.bounds.size.width/2, y: position.y + imageView.frame.height/2)
             cell.addSubview(imageView)

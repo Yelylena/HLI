@@ -12,44 +12,82 @@ import UIKit
 class Emojis {
     struct Emoji {
         var name: String
-        var url: String
+        var image: UIImage
         var data: String
         
-        init(name: String, url: String, data: String) {
+        init(name: String, image: UIImage, data: String) {
             self.name = name
-            self.url = url
+            self.image = image
             self.data = data
-        }
-        
-        init() {
-            name = String()
-            url = String()
-            data = String()
         }
     }
     
-    var emojis: [Emoji] = [
-        Emoji(name: "biggrin", url: "https://www.hl-inside.ru/images/emoticons/emo_biggrin.gif", data: ":-D"),
-        Emoji(name: "laugh", url: "http://www.hl-inside.ru/images/emoticons/emo_laugh.gif", data: "!-D"),
-        Emoji(name: "surprise", url: "http://www.hl-inside.ru/images/emoticons/emo_surprise.gif", data: "8-D"),
-        Emoji(name: "smile", url: "http://www.hl-inside.ru/images/emoticons/emo_smile.gif", data: ":-)"),
-        Emoji(name: "wink", url: "http://www.hl-inside.ru/images/emoticons/emo_wink.gif", data: ";-)"),
-        Emoji(name: "cool", url: "http://www.hl-inside.ru/images/emoticons/emo_cool.gif", data: ":cool:"),
-        Emoji(name: "playful", url: "http://www.hl-inside.ru/images/emoticons/emo_playful.gif", data: ":playful:"),
-        Emoji(name: "tongue", url: "http://www.hl-inside.ru/images/emoticons/emo_tongue.gif", data: ":-P"),
-        Emoji(name: "angry", url: "http://www.hl-inside.ru/images/emoticons/emo_angry.gif", data: ":angry:"),
-        Emoji(name: "arg", url: "http://www.hl-inside.ru/images/emoticons/emo_arg.gif", data: ":grrrr:"),
-        Emoji(name: "dry", url: "http://www.hl-inside.ru/images/emoticons/emo_dry.gif", data: ":dry:"),
-        Emoji(name: "blink", url: "http://www.hl-inside.ru/images/emoticons/emo_blink.gif", data: ":blink:"),
-        Emoji(name: "blush", url: "http://www.hl-inside.ru/images/emoticons/emo_blush.gif", data: ":blush:"),
-        Emoji(name: "cry", url: "http://www.hl-inside.ru/images/emoticons/emo_cry.gif", data: ":weep:"),
-        Emoji(name: "huh", url: "http://www.hl-inside.ru/images/emoticons/emo_huh.gif", data: ":huh:"),
-        Emoji(name: "ohmy", url: "http://www.hl-inside.ru/images/emoticons/emo_ohmy.gif", data: ":ohmy:"),
-        Emoji(name: "sad", url: "http://www.hl-inside.ru/images/emoticons/emo_sad.gif", data: ":-("),
-        Emoji(name: "sick", url: "http://www.hl-inside.ru/images/emoticons/emo_sick.gif", data: ":sick:"),
-        Emoji(name: "unhappy", url: "http://www.hl-inside.ru/images/emoticons/emo_unhappy.gif", data: ":unhappy:"),
-        Emoji(name: "unsure", url: "http://www.hl-inside.ru/images/emoticons/emo_unsure.gif", data: ":unsure:")
+    let emojiSize = CGRect(x: 0, y: 0, width: 30, height: 30)
+    
+    var emojis = [
+        Emoji(name: "biggrin", image: #imageLiteral(resourceName: "screen"), data: ":-D"),
+        Emoji(name: "laugh", image: #imageLiteral(resourceName: "screen"), data: "!-D"),
+        Emoji(name: "surprise", image: #imageLiteral(resourceName: "screen"), data: "8-D"),
+        Emoji(name: "smile", image: #imageLiteral(resourceName: "screen"), data: ":-)"),
+        Emoji(name: "wink", image: #imageLiteral(resourceName: "screen"), data: ";-)"),
+        Emoji(name: "cool", image: #imageLiteral(resourceName: "screen"), data: ":cool:"),
+        Emoji(name: "playful", image: #imageLiteral(resourceName: "screen"), data: ":playful:"),
+        Emoji(name: "tongue", image: #imageLiteral(resourceName: "screen"), data: ":-P"),
+        Emoji(name: "angry", image: #imageLiteral(resourceName: "screen"), data: ":angry:"),
+        Emoji(name: "arg", image: #imageLiteral(resourceName: "screen"), data: ":grrrr:"),
+        Emoji(name: "dry", image: #imageLiteral(resourceName: "screen"), data: ":dry:"),
+        Emoji(name: "blink", image: #imageLiteral(resourceName: "screen"), data: ":blink:"),
+        Emoji(name: "blush", image: #imageLiteral(resourceName: "screen"), data: ":blush:"),
+        Emoji(name: "cry", image: #imageLiteral(resourceName: "screen"), data: ":weep:"),
+        Emoji(name: "huh", image: #imageLiteral(resourceName: "screen"), data: ":huh:"),
+        Emoji(name: "ohmy", image: #imageLiteral(resourceName: "screen"), data: ":ohmy:"),
+        Emoji(name: "sad", image: #imageLiteral(resourceName: "screen"), data: ":-("),
+        Emoji(name: "sick", image: #imageLiteral(resourceName: "screen"), data: ":sick:"),
+        Emoji(name: "unhappy", image: #imageLiteral(resourceName: "screen"), data: ":unhappy:"),
+        Emoji(name: "unsure", image: #imageLiteral(resourceName: "screen"), data: ":unsure:")
     ]
     
+    //    var emojisCollection = [
+//        Emoji(name: "biggrin", image: #imageLiteral(resourceName: "emo_biggrin"), data: ":-D"),
+//        Emoji(name: "laugh", image: #imageLiteral(resourceName: "emo_laugh"), data: "!-D"),
+//        Emoji(name: "surprise", image: #imageLiteral(resourceName: "emo_surprise"), data: "8-D"),
+//        Emoji(name: "smile", image: #imageLiteral(resourceName: "emo_smile"), data: ":-)"),
+//        Emoji(name: "wink", image: #imageLiteral(resourceName: "emo_wink"), data: ";-)"),
+//        Emoji(name: "cool", image: #imageLiteral(resourceName: "emo_cool"), data: ":cool:"),
+//        Emoji(name: "playful", image: #imageLiteral(resourceName: "emo_playful"), data: ":playful:"),
+//        Emoji(name: "tongue", image: #imageLiteral(resourceName: "emo_tongue"), data: ":-P"),
+//        Emoji(name: "angry", image: #imageLiteral(resourceName: "emo_angry"), data: ":angry:"),
+//        Emoji(name: "arg", image: #imageLiteral(resourceName: "emo_arg"), data: ":grrrr:"),
+//        Emoji(name: "dry", image: #imageLiteral(resourceName: "emo_dry"), data: ":dry:"),
+//        Emoji(name: "blink", image: #imageLiteral(resourceName: "emo_blink"), data: ":blink:"),
+//        Emoji(name: "blush", image: #imageLiteral(resourceName: "emo_blush"), data: ":blush:"),
+//        Emoji(name: "cry", image: #imageLiteral(resourceName: "emo_cry"), data: ":weep:"),
+//        Emoji(name: "huh", image: #imageLiteral(resourceName: "emo_huh"), data: ":huh:"),
+//        Emoji(name: "ohmy", image: #imageLiteral(resourceName: "emo_ohmy"), data: ":ohmy:"),
+//        Emoji(name: "sad", image: #imageLiteral(resourceName: "emo_sad"), data: ":-("),
+//        Emoji(name: "sick", image: #imageLiteral(resourceName: "emo_sick"), data: ":sick:"),
+//        Emoji(name: "unhappy", image: #imageLiteral(resourceName: "emo_unhappy"), data: ":unhappy:"),
+//        Emoji(name: "unsure", image: #imageLiteral(resourceName: "emo_unsure"), data: ":unsure:")
+//    ]
+    
+    func getAttachment(emoji: Emoji, bounds: CGRect) -> NSTextAttachment {
+        let attachment = NSTextAttachment()
+        attachment.image = emoji.image
+        attachment.bounds = bounds
+        
+        return attachment
+    }
+    
+    func getEmoji(loc: String) -> NSTextAttachment {
+        var attachment = NSTextAttachment()
+        
+        for emoji in emojis {
+            if loc.contains(emoji.name) {
+                print("It's \(emoji.name)")
+                attachment = self.getAttachment(emoji: emoji, bounds: emojiSize)
+            }
+        }
+        return attachment
+    }
     
 }
