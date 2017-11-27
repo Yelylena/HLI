@@ -13,9 +13,13 @@ import Alamofire
 import SDWebImage
 import ActiveLabel
 
+
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
+    @IBOutlet weak var sendCommentBtn: UIButton!
+    @IBOutlet weak var commentTextField: UITextField!
+    
     var commentView: CommentView!
     var pageURL: URL?
     var news = [News]()
@@ -25,10 +29,9 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     let date = Date()
     let calendar = Calendar.current
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        commentTextField.becomeFirstResponder()
 //        commentView = CommentView(frame: CGRect.zero)
 //        commentView.backgroundColor = UIColor.AppColors.BgDark
 //        self.view.addSubview(commentView)

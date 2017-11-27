@@ -46,6 +46,8 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             cell.addSubview(commentTextView)
             bodySubviews.append(commentTextView)
             position.y += commentTextView.frame.height
+            
+            
         
         //MARK: List
         case Body.DataType.unorderedList, Body.DataType.orderedList:

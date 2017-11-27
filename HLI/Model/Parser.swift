@@ -63,10 +63,11 @@ class Parser {
     func parseOrdinaryText(body: [Body], bodyString: String, type: Body.DataType) -> [Body] {
         
         func getOrdinaryText(start: String.Index, end: String.Index) -> Body {
-            let text = bodyString.substring(with: start..<end)
+            var text = bodyString.substring(with: start..<end)
             let range = bodyString.localizedStandardRange(of: text)
             
             if type == Body.DataType.commentText {
+                text = text.replacingOccurrences(of: "<br>", with: "\n")
                 return Body(type: type, data: NSMutableAttributedString(string: text), range: range!)
             }
             

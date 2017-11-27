@@ -247,10 +247,13 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F9u-jb-zsv">
-                                        <rect key="frame" x="319" y="10" width="46" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F9u-jb-zsv">
+                                        <rect key="frame" x="323" y="14" width="30" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button"/>
+                                        <state key="normal" title="Button" image="screen"/>
+                                        <connections>
+                                            <action selector="SendCommentBtn:" destination="5PO-hX-cGw" eventType="touchUpInside" id="pgh-qd-QmH"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -259,7 +262,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="commentTextField" destination="Pny-1x-c2p" id="3pg-AV-NQZ"/>
                         <outlet property="detailedNewsTable" destination="ykV-W8-S6c" id="Dgo-NU-TjY"/>
+                        <outlet property="sendCommentBtn" destination="F9u-jb-zsv" id="CS7-FE-IWu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="joO-5p-8Vw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -285,4 +290,7 @@
             <point key="canvasLocation" x="53.600000000000001" y="50.824587706146929"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="screen" width="192" height="274"/>
+    </resources>
 </document>
