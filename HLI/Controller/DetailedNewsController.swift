@@ -17,29 +17,33 @@ import ActiveLabel
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
+    @IBOutlet weak var commentView: UIView!
     @IBOutlet weak var sendCommentBtn: UIButton!
+    @IBOutlet weak var emojisBtn: UIButton!
     @IBOutlet weak var commentTextField: UITextField!
     
-    var commentView: CommentView!
+    var emojisView: EmojisView!
     var pageURL: URL?
     var news = [News]()
     var comments = [Comment]()
     var formData = FormData()
-
+    
     let date = Date()
     let calendar = Calendar.current
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        commentView = CommentView(frame: CGRect.zero)
-//        commentView.backgroundColor = UIColor.AppColors.BgDark
-//        self.view.addSubview(commentView)
- //       commentView.sendButton.addTarget(self, action: #selector(sendComment), for: .touchUpInside)
         
-        // AutoLayout
-//        commentView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.init(top: UIScreen.main.bounds.height - 60.0, left: 0, bottom: 0, right: 0))
-
+        //Emojis
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        layout.itemSize = CGSize(width: 23, height: 20)
         
+        emojisView = EmojisView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50), collectionViewLayout: layout)
+        emojisView.backgroundColor = UIColor.white
+        emojisView.register(UINib(nibName: "EmojiCell", bundle: nil), forCellWithReuseIdentifier: "EmojiCell")
+      
+        //Table
         detailedNewsTable.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
         detailedNewsTable.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: "CommentCell")
         detailedNewsTable.delegate = self
@@ -66,8 +70,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             }
         }
     }
-
-    // MARK: - Table view data source    
+    
+    // MARK: - Table view data source
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -130,7 +134,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       return getHeight()
+        return getHeight()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -144,16 +148,19 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-//    func sendComment(sender: UIButton!) {
-//        let parameters = [
-//            "name": "Swift_test",
-//            "email": "",
-//            "textdata": self.commentView.textView.text!,
-//            "date": formData.date,
-//            "wallace": formData.wallace,
-//            "breen": formData.breen
-//        ]
-//        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
-//        self.detailedNewsTable.reloadData()
-//    }
+    //    func sendComment(sender: UIButton!) {
+    //        let parameters = [
+    //            "name": "Swift_test",
+    //            "email": "",
+    //            "textdata": self.commentView.textView.text!,
+    //            "date": formData.date,
+    //            "wallace": formData.wallace,
+    //            "breen": formData.breen
+    //        ]
+    //        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
+    //        self.detailedNewsTable.reloadData()
+    //    }
+    @IBAction func addEmojisToCommentText(_ sender: UIButton) {
+        commentView.addSubview(emojisView)
+    }
 }

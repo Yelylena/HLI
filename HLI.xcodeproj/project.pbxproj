@@ -26,6 +26,9 @@
 		BFB11CF61F5334CD00250E50 /* BodyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB11CF51F5334CD00250E50 /* BodyHelper.swift */; };
 		BFB8F9AC1F99FD65003E80E3 /* FormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB8F9AB1F99FD65003E80E3 /* FormData.swift */; };
 		BFB8F9AE1F9F86E5003E80E3 /* Emojis.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB8F9AD1F9F86E5003E80E3 /* Emojis.swift */; };
+		BFF2C8551FE550E0007080E9 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF2C8511FE550E0007080E9 /* EmojiCell.swift */; };
+		BFF2C8571FE550E0007080E9 /* EmojisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF2C8531FE550E0007080E9 /* EmojisView.swift */; };
+		BFF2C8581FE550E0007080E9 /* EmojiCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFF2C8541FE550E0007080E9 /* EmojiCell.xib */; };
 		BFFD70D51EF926F100E5942C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD70D41EF926F100E5942C /* Extensions.swift */; };
 		CC605B0E7FF64FC247FA9467 /* Pods_HLI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31B4C9635960A2A7C0BA3BA4 /* Pods_HLI.framework */; };
 /* End PBXBuildFile section */
@@ -55,6 +58,9 @@
 		BFB11CF51F5334CD00250E50 /* BodyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BodyHelper.swift; sourceTree = "<group>"; };
 		BFB8F9AB1F99FD65003E80E3 /* FormData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormData.swift; sourceTree = "<group>"; };
 		BFB8F9AD1F9F86E5003E80E3 /* Emojis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emojis.swift; sourceTree = "<group>"; };
+		BFF2C8511FE550E0007080E9 /* EmojiCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
+		BFF2C8531FE550E0007080E9 /* EmojisView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojisView.swift; sourceTree = "<group>"; };
+		BFF2C8541FE550E0007080E9 /* EmojiCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmojiCell.xib; sourceTree = "<group>"; };
 		BFFD70D41EF926F100E5942C /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +112,9 @@
 		BF1594971FC3539B00E2DBF3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BFF2C8511FE550E0007080E9 /* EmojiCell.swift */,
+				BFF2C8541FE550E0007080E9 /* EmojiCell.xib */,
+				BFF2C8531FE550E0007080E9 /* EmojisView.swift */,
 				BF57E02D1F8F7F7000E24BBC /* CommentView.swift */,
 				BF9CBF621EF428D8004DA7A8 /* NewsCell.swift */,
 				BF5CB3AD1EFD681E00451A7E /* CommentCell.swift */,
@@ -223,6 +232,7 @@
 				BF7898C61EF00453009B7927 /* LaunchScreen.storyboard in Resources */,
 				BF7898C31EF00453009B7927 /* Assets.xcassets in Resources */,
 				BF7898CE1EF02025009B7927 /* NewsCell.xib in Resources */,
+				BFF2C8581FE550E0007080E9 /* EmojiCell.xib in Resources */,
 				BF7898C11EF00453009B7927 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,6 +306,8 @@
 				BF9CBF631EF428D8004DA7A8 /* NewsCell.swift in Sources */,
 				BFB8F9AE1F9F86E5003E80E3 /* Emojis.swift in Sources */,
 				BFB11CF61F5334CD00250E50 /* BodyHelper.swift in Sources */,
+				BFF2C8571FE550E0007080E9 /* EmojisView.swift in Sources */,
+				BFF2C8551FE550E0007080E9 /* EmojiCell.swift in Sources */,
 				BF5CB3AE1EFD681E00451A7E /* CommentCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

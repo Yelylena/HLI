@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class EmojisView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource {
+class EmojisView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     var emoji = Emojis()
     
@@ -26,10 +26,8 @@ class EmojisView: UICollectionView, UICollectionViewDelegate, UICollectionViewDa
                                                       for: indexPath) as! EmojiCell
         
         let emojis = self.emoji.emojis[indexPath.row]
-        cell.emoji = emojis.image
+        cell.emoji.image = emojis.image
+        cell.backgroundColor = UIColor.black
         return cell
     }
-    
-    
-
 }

@@ -11,7 +11,8 @@ import UIKit
 
 class EmojiCell: UICollectionViewCell {
     
-    var emoji: UIImage! = nil
+    
+    @IBOutlet weak var emoji: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

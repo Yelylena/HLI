@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="11w-2u-5Hc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="11w-2u-5Hc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -248,11 +248,20 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F9u-jb-zsv">
-                                        <rect key="frame" x="323" y="14" width="30" height="22"/>
+                                        <rect key="frame" x="338" y="10" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="screen"/>
                                         <connections>
                                             <action selector="SendCommentBtn:" destination="5PO-hX-cGw" eventType="touchUpInside" id="pgh-qd-QmH"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qWe-xx-A2Y">
+                                        <rect key="frame" x="298" y="10" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <inset key="imageEdgeInsets" minX="3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="Button" image="emo_biggrin"/>
+                                        <connections>
+                                            <action selector="addEmojisToCommentText:" destination="5PO-hX-cGw" eventType="touchUpInside" id="v7Y-PN-k4D"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -263,7 +272,9 @@
                     </view>
                     <connections>
                         <outlet property="commentTextField" destination="Pny-1x-c2p" id="3pg-AV-NQZ"/>
+                        <outlet property="commentView" destination="hCy-NU-NpZ" id="2kR-MC-YdU"/>
                         <outlet property="detailedNewsTable" destination="ykV-W8-S6c" id="Dgo-NU-TjY"/>
+                        <outlet property="emojisBtn" destination="qWe-xx-A2Y" id="FdS-qP-yFh"/>
                         <outlet property="sendCommentBtn" destination="F9u-jb-zsv" id="CS7-FE-IWu"/>
                     </connections>
                 </viewController>
@@ -291,6 +302,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="emo_biggrin" width="46" height="40"/>
         <image name="screen" width="192" height="274"/>
     </resources>
 </document>
