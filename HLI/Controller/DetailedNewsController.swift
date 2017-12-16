@@ -37,12 +37,14 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         //Emojis
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        layout.itemSize = CGSize(width: 23, height: 20)
+        layout.itemSize = CGSize(width: 34.5, height: 30)
         
         emojisView = EmojisView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50), collectionViewLayout: layout)
-        emojisView.backgroundColor = UIColor.white
+        emojisView.backgroundColor = UIColor.black
         emojisView.register(UINib(nibName: "EmojiCell", bundle: nil), forCellWithReuseIdentifier: "EmojiCell")
-      
+        emojisView.delegate = self.emojisView
+        emojisView.dataSource = self.emojisView
+        
         //Table
         detailedNewsTable.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
         detailedNewsTable.register(UINib(nibName: "CommentCell", bundle: nil), forCellReuseIdentifier: "CommentCell")
