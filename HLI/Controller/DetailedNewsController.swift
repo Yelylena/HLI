@@ -31,7 +31,6 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        commentTextField.becomeFirstResponder()
 //        commentView = CommentView(frame: CGRect.zero)
 //        commentView.backgroundColor = UIColor.AppColors.BgDark
 //        self.view.addSubview(commentView)
