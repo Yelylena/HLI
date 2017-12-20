@@ -48,6 +48,8 @@ class Parser {
             
             //MARK: Blockquote
             
+            //MARK: Link??
+            
         }  
         return body
     }
@@ -112,11 +114,9 @@ class Parser {
     //FIXME: Fix removing
     func removeDuplicateElements(body: [Body]) -> [Body] {
         var body = body
-        var idx = 0
-        for item in body {
+       
+        for (_, item) in body.enumerated(){
             //            print("Item \(idx)(\(item.type)): low \(item.range.lowerBound), upp \(item.range.upperBound)")
-            
-            idx += 1
         }
         
         return body

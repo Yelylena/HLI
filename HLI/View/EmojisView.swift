@@ -30,4 +30,5 @@ class EmojisView: UICollectionView, UICollectionViewDelegate, UICollectionViewDa
         cell.backgroundColor = UIColor.black
         return cell
     }
+    
 }

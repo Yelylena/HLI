@@ -162,7 +162,12 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     //        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
     //        self.detailedNewsTable.reloadData()
     //    }
-    @IBAction func addEmojisToCommentText(_ sender: UIButton) {
+    @IBAction func showEmojisView(_ sender: UIButton) {
         commentView.addSubview(emojisView)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("User tapped on item \(indexPath.row)")
+    }
+    
 }
