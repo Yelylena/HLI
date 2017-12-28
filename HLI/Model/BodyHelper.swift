@@ -50,7 +50,7 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             
         
         //MARK: List
-        case Body.DataType.unorderedList, Body.DataType.orderedList:
+        case Body.DataType.unorderedListItem, Body.DataType.orderedListItem:
             let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
             listView.numberOfLines = 1000
             listView.text = item.data as? String
@@ -84,7 +84,7 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
         case Body.DataType.strong:
             let strongView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
             
-            //FIXME: Move to style file
+            
             strongView.font = UIFont.boldSystemFont(ofSize: 17.0)
             
             strongView.text = item.data as? String
@@ -96,6 +96,14 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             
         //MARK: Video
         case Body.DataType.video:
+            let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+            videoView.loadVideoID(item.data as! String)
+            cell.addSubview(videoView)
+            bodySubviews.append(videoView)
+            position.y += videoView.frame.height
+            
+        //MARK: YouTubeVideo
+        case Body.DataType.youTubeVideo:
             let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
             videoView.loadVideoID(item.data as! String)
             cell.addSubview(videoView)

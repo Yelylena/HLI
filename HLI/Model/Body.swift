@@ -16,8 +16,11 @@ class Body {
         case imageWithSize
         case link
         case video
+        case youTubeVideo
         case unorderedList
+        case unorderedListItem
         case orderedList
+        case orderedListItem
         case paragraph
         case commentText
         case emoji
@@ -26,10 +29,12 @@ class Body {
     var type: DataType
     var data: Any
     var range: Range<String.Index>
+    var priority: Int
     
-    init(type: DataType, data: Any, range:  Range<String.Index>) {
+    init(type: DataType, data: Any, range:  Range<String.Index>, priority: Int) {
         self.type = type
         self.data = data
         self.range = range
+        self.priority = priority
     }
 }

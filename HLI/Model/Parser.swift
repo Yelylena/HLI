@@ -28,29 +28,110 @@ class Parser {
     //MARK: Parse element
     
     //MARK: Parse elements in news body
-    func parseBody(element: XMLElement, selector: String) -> [Body] {
+    func parseBody(element: XMLElement, selector: String, priority: Int) -> [Body] {
         var body = [Body]()
+        let emojis = Emojis()
         
         for bodyItem in element.css(selector) {
-            //            let bodyString = bodyItem.innerHTML!
+            let bodyString = bodyItem.innerHTML!
             
             //MARK: Strong
-            
-            //MARK: Image
+            for strong in bodyItem.css("strong") {
+                let strongText = strong.text!
+                let range = bodyString.localizedStandardRange(of: strong.toHTML!)
+                body.append(Body(type: Body.DataType.strong, data: strongText, range: range!, priority: priority))
+            }
             
             //MARK: Unordered list
+            for ul in bodyItem.css("ul") {
+                let range = bodyString.localizedStandardRange(of: ul.toHTML!)
+                for li in ul.css("li") {
+                    let listItem = "\u{25CF} \(li.text!)"
+                    let range = bodyString.localizedStandardRange(of: li.toHTML!)
+                    body.append(Body(type: Body.DataType.unorderedListItem, data: listItem, range: range!, priority: priority))
+                }
+                body.append(Body(type: Body.DataType.unorderedList, data: String(), range: range!, priority: priority))
+            }
             
             //MARK: Ordered list
+            var listItemNumber = 1
+            for ol in bodyItem.css("ol") {
+                let range = bodyString.localizedStandardRange(of: ol.toHTML!)
+                for li in ol.css("li") {
+                    let listItem = "\(listItemNumber) \(li.text!)"
+                    let range = bodyString.localizedStandardRange(of: li.toHTML!)
+                    body.append(Body(type: Body.DataType.orderedListItem, data: listItem, range: range!, priority: priority))
+                    listItemNumber += 1
+                }
+                body.append(Body(type: Body.DataType.orderedList, data: String(), range: range!, priority: priority))
+            }
             
             //MARK: Video
+            for video in bodyItem.css("video") {
+//                let videoItem = video["data-youtube-id"]!
+                let range = bodyString.localizedStandardRange(of: video.toHTML!)
+                body.append(Body(type: Body.DataType.video, data: "", range: range!, priority: priority))
+            }
+            
+            //MARK: YouTubeVideo
+            for video in bodyItem.css("a[class*='video_type_youtube']") {
+                let videoItem = video["data-youtube-id"]!
+                let range = bodyString.localizedStandardRange(of: video.toHTML!)
+                body.append(Body(type: Body.DataType.youTubeVideo, data: videoItem, range: range!, priority: priority))
+            }
             
             //MARK: Paragraph
+            for paragraph in bodyItem.css("p") {
+                let paragraphText = paragraph.text!
+                let range = bodyString.localizedStandardRange(of: paragraph.toHTML!)
+                body.append(Body(type: Body.DataType.paragraph, data: paragraphText, range: range!, priority: priority))
+//               body += parseBody(element: paragraph, selector: "p", priority: priority + 1)
+            }
             
-            //MARK: Blockquote
-            
-            //MARK: Link??
-            
-        }  
+            //FIXME: Link??
+            if selector.contains("comment") {
+                //Image
+                for image in bodyItem.css("img") {
+                    let imageURL = image["src"]
+                    let data = emojis.getEmoji(loc: imageURL!)
+                    let range = bodyString.localizedStandardRange(of: image.toHTML!)
+                    body.append(Body(type: Body.DataType.emoji, data: data, range: range!, priority: priority))
+                }
+
+                //MARK: Blockquote
+                for blockquote in bodyItem.css("div[class='comment__quote']") {
+                    let blockquoteText = blockquote.text!
+                    let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
+                    body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!, priority: priority))
+//                    body += parseBody(element: blockquote, selector: "div[class='comment__quote']", priority: priority + 1)
+                }
+            } else {
+                //MARK: Image
+                for image in bodyItem.css("img") {
+                    let imageURL = image["src"]
+                    let width = image["width"]
+                    let height = image["height"]
+                    
+                    let imageURLString = ((imageURL?[1] == "/") ? "https:" : "https://www.hl-inside.ru") + imageURL!
+                    let range = bodyString.localizedStandardRange(of: image.toHTML!)
+                    if width != nil && height != nil {
+                        let image = ImageWithSize(url: imageURLString, width: Int(width!)!, height: Int(height!)!)
+                        body.append(Body(type: Body.DataType.imageWithSize, data: image, range: range!, priority: priority))
+                    } else {
+                        body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!, priority: priority))
+                    }
+                }
+                //MARK: Blockquote
+                for blockquote in bodyItem.css("blockquote") {
+                    let blockquoteText = blockquote.text!
+                    let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
+                    body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!, priority: priority))
+//                    body += parseBody(element: blockquote, selector: "div[class='comment__quote']", priority: 2)
+                }
+            }
+            body = self.parseOrdinaryText(body: body, bodyString: bodyString, type: Body.DataType.paragraph)
+            body = self.removeDuplicateElements(body: body)
+        }
         return body
     }
     
@@ -70,10 +151,10 @@ class Parser {
             
             if type == Body.DataType.commentText {
                 text = text.replacingOccurrences(of: "<br>", with: "\n")
-                return Body(type: type, data: NSMutableAttributedString(string: text), range: range!)
+                return Body(type: type, data: NSMutableAttributedString(string: text), range: range!, priority: 1)
             }
             
-            return Body(type: type, data: text, range: range!)
+            return Body(type: type, data: text, range: range!, priority: 1)
         }
         
         var body = self.sortBody(body: body)
@@ -111,6 +192,33 @@ class Parser {
         }
         return body
     }
+    
+    //MARK: Attach emoji
+    func attachEmoji(body: [Body]) -> [Body] {
+        var body = body
+        var prevItem = body[0]
+        var lastCommentText = body[0]
+        
+        if body.isEmpty {
+            print("Body is empty")
+        } else {
+            for (_, item) in body.enumerated() {
+                if (prevItem.type == Body.DataType.commentText) && (item.type == Body.DataType.emoji) {
+                    let str = prevItem.data as! NSMutableAttributedString
+                    str.append(NSAttributedString(attachment: item.data as! NSTextAttachment))
+                    prevItem.data = str
+                    lastCommentText = prevItem
+                } else if (prevItem.type == Body.DataType.emoji) && (item.type == Body.DataType.emoji) {
+                    let str = lastCommentText.data as! NSMutableAttributedString
+                    str.append(NSAttributedString(attachment: item.data as! NSTextAttachment))
+                    lastCommentText.data = str
+                }
+                prevItem = item
+            }
+        }
+        return body
+    }
+    
     //FIXME: Fix removing
     func removeDuplicateElements(body: [Body]) -> [Body] {
         var body = body
@@ -173,54 +281,51 @@ class Parser {
                 comments = newsItem.at_css("p[class='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
                 //Body
+                
+ //               body = parseBody(element: newsItem, selector: "div[class^='block-body']", priority: 1)
                 for bodyItem in newsItem.css("div[class^='block-body']") {
                     let bodyString = bodyItem.innerHTML!
                     //                    print(bodyString)
-                    
+
                     //MARK: Strong
                     for strong in bodyItem.css("strong") {
                         let strongText = strong.text!
                         let range = bodyString.localizedStandardRange(of: strong.toHTML!)
-                        body.append(Body(type: Body.DataType.strong, data: strongText, range: range!))
+                        body.append(Body(type: Body.DataType.strong, data: strongText, range: range!, priority: 1))
                     }
-                    
+
                     //MARK: Image
                     for image in bodyItem.css("img") {
                         let imageURL = image["src"]
-                        //                        var imageURLString = String()
                         let width = image["width"]
                         let height = image["height"]
-                        //                        if imageURL?[1] == "/" {
-                        //                            imageURLString = "https:" + imageURL!
-                        //                        } else {
-                        //                            imageURLString = "https://www.hl-inside.ru" + imageURL!
-                        //                        }
+
                         let imageURLString = ((imageURL?[1] == "/") ? "https:" : "https://www.hl-inside.ru") + imageURL!
                         let range = bodyString.localizedStandardRange(of: image.toHTML!)
                         if width != nil && height != nil {
                             let image = ImageWithSize(url: imageURLString, width: Int(width!)!, height: Int(height!)!)
-                            body.append(Body(type: Body.DataType.imageWithSize, data: image, range: range!))
+                            body.append(Body(type: Body.DataType.imageWithSize, data: image, range: range!, priority: 1))
                         } else {
-                            body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!))
+                            body.append(Body(type: Body.DataType.image, data: imageURLString, range: range!, priority: 1))
                         }
                     }
-                    
+
                     //MARK: Unordered list
                     for ul in bodyItem.css("ul") {
                         for li in ul.css("li") {
                             let listItem = "\u{25CF} \(li.text!)"
                             let range = bodyString.localizedStandardRange(of: li.toHTML!)
-                            body.append(Body(type: Body.DataType.unorderedList, data: listItem, range: range!))
+                            body.append(Body(type: Body.DataType.unorderedList, data: listItem, range: range!, priority: 1))
                         }
                     }
-                    
+
                     //MARK: Ordered list
                     var listItemNumber = 1
                     for ol in bodyItem.css("ol > li") {
                         for li in ol.css("li") {
                             let listItem = "\(listItemNumber) \(li.text!)"
                             let range = bodyString.localizedStandardRange(of: ol.toHTML!)
-                            body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!))
+                            body.append(Body(type: Body.DataType.orderedList, data: listItem, range: range!, priority: 1))
                         }
                         listItemNumber += 1
                     }
@@ -228,21 +333,21 @@ class Parser {
                     for video in bodyItem.css("a[class*='video_type_youtube']") {
                         let videoItem = video["data-youtube-id"]!
                         let range = bodyString.localizedStandardRange(of: video.toHTML!)
-                        body.append(Body(type: Body.DataType.video, data: videoItem, range: range!))
+                        body.append(Body(type: Body.DataType.video, data: videoItem, range: range!, priority: 1))
                     }
-                    
+
                     //MARK: Paragraph
                     for paragraph in bodyItem.css("p") {
                         let paragraphText = paragraph.text!
                         let range = bodyString.localizedStandardRange(of: paragraph.toHTML!)
-                        body.append(Body(type: Body.DataType.paragraph, data: paragraphText, range: range!))
+                        body.append(Body(type: Body.DataType.paragraph, data: paragraphText, range: range!, priority: 1))
                     }
                     //MARK: Blockquote
                     for blockquote in bodyItem.css("blockquote") {
                         let blockquoteText = blockquote.text!
                         let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
-                        body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
-                        
+                        body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!, priority: 1))
+
                     }
                     body = self.parseOrdinaryText(body: body, bodyString: bodyString, type: Body.DataType.paragraph)
                     body = self.removeDuplicateElements(body: body)
@@ -279,7 +384,7 @@ class Parser {
                 var imageLoc = commentItem.at_css("div[class='comment__steam'] > a > img")
                 image = imageLoc?["src"] ?? ""
                 
-                //Text
+                //Body
                 for bodyItem in commentItem.css("div[class='comment__text']") {
                     let bodyString = bodyItem.innerHTML!
                     print(bodyString)
@@ -289,16 +394,16 @@ class Parser {
                         let imageURL = image["src"]
                         let data = emojis.getEmoji(loc: imageURL!)
                         let range = bodyString.localizedStandardRange(of: image.toHTML!)
-                        body.append(Body(type: Body.DataType.emoji, data: data, range: range!))
+                        body.append(Body(type: Body.DataType.emoji, data: data, range: range!, priority: 1))
                     }
                     //MARK: Blockquote
                     for blockquote in bodyItem.css("div[class='comment__quote']") {
                         let blockquoteText = blockquote.text!
                         let range = bodyString.localizedStandardRange(of: blockquote.toHTML!)
-                        body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!))
+                        body.append(Body(type: Body.DataType.blockquote, data: blockquoteText, range: range!, priority: 1))
                     }
                     body = self.parseOrdinaryText(body: body, bodyString: bodyString, type: Body.DataType.commentText)
-                    
+                    //FIXME: Add to attachEmoji func
                     var prevItem = body[0]
                     var lastCommentText = body[0]
                     
