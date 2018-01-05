@@ -252,7 +252,7 @@ class Parser {
                 var body = [Body]()
                 
                 //Title
-                title = newsItem.at_css("a[class='b-link']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                title = newsItem.at_css("a[class='b-link']")?.text!
                 
                 //News URL
                 var newsURLLoc = newsItem.at_css("h2[class='news-title'] > a")
@@ -263,12 +263,12 @@ class Parser {
                 date = newsDateLoc?["data-date"] ?? String()
                 
                 //Author
-                author = newsItem.at_css("p[class='news__author']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                author = newsItem.at_css("span[class='block-bottom-author']")?.text!
                 
                 //Tags
                 
                 for tag in newsItem.css("p[class='news__tags'] > a") {
-                    tags.append(tag.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
+                    tags.append(tag.text!)
                 }
                 
                 //Tags URL
@@ -278,7 +278,7 @@ class Parser {
                 }
                 
                 //Comments
-                comments = newsItem.at_css("p[class='news__comments']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                comments = newsItem.at_css("p[class='news__comments']")?.text!
                 
                 //Body
                 
@@ -375,10 +375,10 @@ class Parser {
                 var body = [Body]()
                 
                 //Name
-                name = commentItem.at_css("div[class='comment__name']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                name = commentItem.at_css("div[class='comment__name']")?.text!
                 
                 //Comment date
-                date = commentItem.at_css("time[class='comment__date']")?.text!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                date = commentItem.at_css("time[class='comment__date']")?.text!
                 
                 //Image
                 var imageLoc = commentItem.at_css("div[class='comment__steam'] > a > img")

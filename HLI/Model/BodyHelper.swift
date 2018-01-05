@@ -116,12 +116,12 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             blockquoteView.text = item.data as? String
             blockquoteView.numberOfLines = 1000
             blockquoteView.frame = CGRect(x: 30, y: position.y, width: UIScreen.main.bounds.size.width, height: (blockquoteView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
-            blockquoteView.backgroundColor = UIColor.AppColors.Gray49
-            blockquoteView.textColor = UIColor.AppColors.Text
+            blockquoteView.backgroundColor = UIColor.AppColors.bg
+            blockquoteView.textColor = UIColor.AppColors.text
             
             //MARK: Blockquote border
             let blockquoteViewBorder = CAShapeLayer()
-            blockquoteViewBorder.strokeColor = UIColor.AppColors.Border.cgColor
+            blockquoteViewBorder.strokeColor = UIColor.AppColors.border.cgColor
             blockquoteViewBorder.lineDashPattern = [3, 3]
             blockquoteViewBorder.frame = blockquoteView.bounds
             blockquoteViewBorder.fillColor = nil
