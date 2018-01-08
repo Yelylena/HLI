@@ -45,9 +45,7 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             commentTextView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (commentTextView.attributedText?.string.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
             cell.addSubview(commentTextView)
             bodySubviews.append(commentTextView)
-            position.y += commentTextView.frame.height
-            
-            
+            position.y += commentTextView.frame.height         
         
         //MARK: List
         case Body.DataType.unorderedListItem, Body.DataType.orderedListItem:
@@ -139,6 +137,12 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
         default:
             print()
         }
+        
+        //MARK: Cell separator
+        let separatorView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 10))
+        separatorView.backgroundColor = UIColor.AppColors.bgDark
+        bodySubviews.append(separatorView)
+        position.y += separatorView.frame.height
         
         for view in bodySubviews {
             view.tag = tag

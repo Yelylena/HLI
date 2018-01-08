@@ -22,7 +22,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var emojisBtn: UIButton!
     @IBOutlet weak var commentTextField: UITextField!
     
-    var emojisView: EmojisView!
+    var emojisView: EmojisView?
     var pageURL: URL?
     var news = [News]()
     var comments = [Comment]()
@@ -38,12 +38,13 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         layout.itemSize = CGSize(width: 34.5, height: 30)
-        
-        emojisView = EmojisView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 50), collectionViewLayout: layout)
-        emojisView.backgroundColor = UIColor.black
-        emojisView.register(UINib(nibName: "EmojiCell", bundle: nil), forCellWithReuseIdentifier: "EmojiCell")
-        emojisView.delegate = self.emojisView
-        emojisView.dataSource = self.emojisView
+
+        emojisView = EmojisView(frame: CGRect(x: 0, y: self.view.frame.size.height-216, width: self.view.frame.size.width, height: 216), collectionViewLayout: layout)
+        emojisView?.backgroundColor = UIColor.black
+        emojisView?.layer.zPosition = CGFloat(MAXFLOAT)
+        emojisView?.register(UINib(nibName: "EmojiCell", bundle: nil), forCellWithReuseIdentifier: "EmojiCell")
+        emojisView?.delegate = self.emojisView
+        emojisView?.dataSource = self.emojisView
         
         //Table
         detailedNewsTable.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
@@ -51,6 +52,10 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         detailedNewsTable.delegate = self
         detailedNewsTable.dataSource = self
         self.parse()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -163,11 +168,28 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     //        self.detailedNewsTable.reloadData()
     //    }
     @IBAction func showEmojisView(_ sender: UIButton) {
-        commentView.addSubview(emojisView)
+        let windowCount = UIApplication.shared.windows.count
+        UIApplication.shared.windows[windowCount-1].addSubview(emojisView!)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("User tapped on item \(indexPath.row)")
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
     }
     
 }
