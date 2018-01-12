@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Body {
+struct Body {
     enum DataType {
         case strong
         case image

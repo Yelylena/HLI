@@ -14,7 +14,7 @@ import SDWebImage
 import ActiveLabel
 
 
-class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
     @IBOutlet weak var commentView: UIView!
@@ -39,11 +39,11 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         layout.itemSize = CGSize(width: 34.5, height: 30)
 
-        emojisView = EmojisView(frame: CGRect(x: 0, y: self.view.frame.size.height-216, width: self.view.frame.size.width, height: 216), collectionViewLayout: layout)
+        emojisView = EmojisView(frame: CGRect(x: 0, y: self.view.frame.size.height-258, width: self.view.frame.size.width, height: 258), collectionViewLayout: layout)
         emojisView?.backgroundColor = UIColor.black
         emojisView?.layer.zPosition = CGFloat(MAXFLOAT)
         emojisView?.register(UINib(nibName: "EmojiCell", bundle: nil), forCellWithReuseIdentifier: "EmojiCell")
-        emojisView?.delegate = self.emojisView
+        emojisView?.delegate = self
         emojisView?.dataSource = self.emojisView
         
         //Table
@@ -173,13 +173,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("User tapped on item \(indexPath.row)")
+        let emoji = emojisView?.emoji.emojis[indexPath.row]
+        commentTextField.text = "\(commentTextField.text!) \((emoji?.data)!) "
     }
     
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0{
+                self.detailedNewsTable.frame.origin.y += keyboardSize.height + commentView.frame.height + 15
                 self.view.frame.origin.y -= keyboardSize.height
+                print(keyboardSize.height)
             }
         }
     }

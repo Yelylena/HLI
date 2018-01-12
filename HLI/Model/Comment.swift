@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Comment {
+struct Comment {
     var name: String
     var date: String
     var body: [Body]
