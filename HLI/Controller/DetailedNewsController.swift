@@ -19,7 +19,6 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var detailedNewsTable: UITableView!
     @IBOutlet weak var commentView: UIView!
     @IBOutlet weak var sendCommentBtn: UIButton!
-    @IBOutlet weak var emojisBtn: UIButton!
     @IBOutlet weak var commentTextField: UITextField!
     
     var emojisView: EmojisView?
@@ -34,7 +33,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Emojis
+        //Emojis view
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         layout.itemSize = CGSize(width: 34.5, height: 30)
@@ -45,6 +44,15 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         emojisView?.register(UINib(nibName: "EmojiCell", bundle: nil), forCellWithReuseIdentifier: "EmojiCell")
         emojisView?.delegate = self
         emojisView?.dataSource = self.emojisView
+        
+        //Emojis button
+        let emojisButton = UIButton(type: .custom)
+        emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
+        emojisButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0)
+        emojisButton.frame = CGRect(x: CGFloat(commentTextField.frame.size.width - 30), y: CGFloat(5), width: 29, height: 25)
+        emojisButton.addTarget(self, action: #selector(self.showEmojisView), for: .touchUpInside)
+        commentTextField.rightView = emojisButton
+        commentTextField.rightViewMode = .whileEditing
         
         //Table
         detailedNewsTable.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
@@ -178,11 +186,15 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func keyboardWillShow(notification: NSNotification) {
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        layout.itemSize = CGSize(width: 34.5, height: 30)
+        
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0{
                 self.detailedNewsTable.frame.origin.y += keyboardSize.height + commentView.frame.height + 15
                 self.view.frame.origin.y -= keyboardSize.height
-                print(keyboardSize.height)
+                self.emojisView?.frame = CGRect(x: 0, y: self.view.frame.size.height-keyboardSize.height, width: self.view.frame.size.width, height: keyboardSize.height)
             }
         }
     }
