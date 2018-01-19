@@ -26,9 +26,11 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     var news = [News]()
     var comments = [Comment]()
     var formData = FormData()
+    let emojisButton = UIButton(type: .custom)
     
     let date = Date()
     let calendar = Calendar.current
+    var keyboardIsOpen = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +40,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         layout.itemSize = CGSize(width: 34.5, height: 30)
 
-        emojisView = EmojisView(frame: CGRect(x: 0, y: self.view.frame.size.height-258, width: self.view.frame.size.width, height: 258), collectionViewLayout: layout)
+        emojisView = EmojisView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0), collectionViewLayout: layout)
         emojisView?.backgroundColor = UIColor.black
         emojisView?.layer.zPosition = CGFloat(MAXFLOAT)
         emojisView?.register(UINib(nibName: "EmojiCell", bundle: nil), forCellWithReuseIdentifier: "EmojiCell")
@@ -46,7 +48,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         emojisView?.dataSource = self.emojisView
         
         //Emojis button
-        let emojisButton = UIButton(type: .custom)
+//        let emojisButton = UIButton(type: .custom)
         emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
         emojisButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0)
         emojisButton.frame = CGRect(x: CGFloat(commentTextField.frame.size.width - 30), y: CGFloat(5), width: 29, height: 25)
@@ -64,12 +66,20 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        view.addGestureRecognizer(tap)
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+//    deinit {
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//    }
     
     func parse() {
         Alamofire.request(pageURL!).responseString { response in
@@ -175,9 +185,11 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     //        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
     //        self.detailedNewsTable.reloadData()
     //    }
+    
     @IBAction func showEmojisView(_ sender: UIButton) {
         let windowCount = UIApplication.shared.windows.count
         UIApplication.shared.windows[windowCount-1].addSubview(emojisView!)
+        self.emojisButton.setImage(#imageLiteral(resourceName: "keyboard-25"), for: .normal)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -186,25 +198,37 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        layout.itemSize = CGSize(width: 34.5, height: 30)
-        
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0{
-                self.detailedNewsTable.frame.origin.y += keyboardSize.height + commentView.frame.height + 15
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
                 self.view.frame.origin.y -= keyboardSize.height
+                self.detailedNewsTable.frame.origin.y += keyboardSize.height
+                //                    self.view.frame.size.height -= keyboardSize.height
                 self.emojisView?.frame = CGRect(x: 0, y: self.view.frame.size.height-keyboardSize.height, width: self.view.frame.size.width, height: keyboardSize.height)
+
+                print(self.detailedNewsTable.frame.origin.y)
+                print(self.view.frame.origin.y)
+                print(keyboardSize.height)
             }
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y != 0{
-                self.view.frame.origin.y += keyboardSize.height
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0 {
+                self.view.frame.origin.y = 0
+                self.detailedNewsTable.frame.origin.y = 0
+                commentTextField.text = ""
+                
+                print(self.detailedNewsTable.frame.origin.y)
+                print(self.view.frame.origin.y)
+                print(keyboardSize.height)
             }
         }
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
 }
