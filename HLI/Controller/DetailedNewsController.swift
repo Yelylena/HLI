@@ -14,11 +14,11 @@ import SDWebImage
 import ActiveLabel
 
 
-class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate {
+class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var detailedNewsTable: UITableView!
     @IBOutlet weak var commentView: UIView!
-    @IBOutlet weak var sendCommentBtn: UIButton!
+//    @IBOutlet weak var sendCommentBtn: UIButton!
     @IBOutlet weak var commentTextField: UITextField!
     
     var emojisView: EmojisView?
@@ -26,7 +26,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     var news = [News]()
     var comments = [Comment]()
     var formData = FormData()
-    let emojisButton = UIButton(type: .custom)
+    let emojisButton = UIButton()
+    let sendCommentButton = UIButton()
     
     let date = Date()
     let calendar = Calendar.current
@@ -48,13 +49,18 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         emojisView?.dataSource = self.emojisView
         
         //Emojis button
-//        let emojisButton = UIButton(type: .custom)
         emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
         emojisButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0)
         emojisButton.frame = CGRect(x: CGFloat(commentTextField.frame.size.width - 30), y: CGFloat(5), width: 29, height: 25)
         emojisButton.addTarget(self, action: #selector(self.showEmojisView), for: .touchUpInside)
         commentTextField.rightView = emojisButton
         commentTextField.rightViewMode = .whileEditing
+        
+        //Send comment button
+        sendCommentButton.setImage(#imageLiteral(resourceName: "send"), for: .normal)
+        sendCommentButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0)
+        sendCommentButton.frame = CGRect(x: CGFloat(333), y: CGFloat(10), width: 35, height: 30)
+        sendCommentButton.addTarget(self, action: #selector(self.sendComment), for: .touchUpInside)
         
         //Table
         detailedNewsTable.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
@@ -63,10 +69,13 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         detailedNewsTable.dataSource = self
         self.parse()
         
+        //Text field
+        commentTextField.delegate = self
+        
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(DetailedNewsController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
     }
@@ -173,7 +182,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    //    func sendComment(sender: UIButton!) {
+        func sendComment(sender: UIButton!) {
     //        let parameters = [
     //            "name": "Swift_test",
     //            "email": "",
@@ -184,7 +193,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     //        ]
     //        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
     //        self.detailedNewsTable.reloadData()
-    //    }
+        }
     
     @IBAction func showEmojisView(_ sender: UIButton) {
         let windowCount = UIApplication.shared.windows.count
@@ -202,11 +211,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             if self.view.frame.origin.y == 0 {
                 self.view.frame.origin.y -= keyboardSize.height
                 self.detailedNewsTable.frame.origin.y += keyboardSize.height
-                //                    self.view.frame.size.height -= keyboardSize.height
                 self.emojisView?.frame = CGRect(x: 0, y: self.view.frame.size.height-keyboardSize.height, width: self.view.frame.size.width, height: keyboardSize.height)
-
-                print(self.detailedNewsTable.frame.origin.y)
-                print(self.view.frame.origin.y)
+                
                 print(keyboardSize.height)
             }
         }
@@ -218,9 +224,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 self.view.frame.origin.y = 0
                 self.detailedNewsTable.frame.origin.y = 0
                 commentTextField.text = ""
+                self.commentView.willRemoveSubview(sendCommentButton)
                 
-                print(self.detailedNewsTable.frame.origin.y)
-                print(self.view.frame.origin.y)
                 print(keyboardSize.height)
             }
         }
@@ -231,4 +236,35 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         view.endEditing(true)
     }
     
+    // UITextField Delegates
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        print("TextField did begin editing method called")
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+//        print("TextField did end editing method called")
+        sendCommentButton.removeFromSuperview()
+        
+    }
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+//        print("TextField should begin editing method called")
+        return true;
+    }
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+//        print("TextField should clear method called")
+        return true;
+    }
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+//        print("TextField should end editing method called")
+        return true;
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        print("While entering the characters this method gets called")
+        self.commentView.addSubview(sendCommentButton)
+        return true;
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        print("TextField should return method called")
+        textField.resignFirstResponder();
+        return true;
+    }
 }
