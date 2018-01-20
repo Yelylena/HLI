@@ -32,6 +32,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     let date = Date()
     let calendar = Calendar.current
     var keyboardIsOpen = false
+    var emojisViewIsOpen = false
+    var sendCommentButtonWillShow = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,10 +87,9 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-//    deinit {
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-//    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     func parse() {
         Alamofire.request(pageURL!).responseString { response in
@@ -196,9 +197,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
     
     @IBAction func showEmojisView(_ sender: UIButton) {
-        let windowCount = UIApplication.shared.windows.count
-        UIApplication.shared.windows[windowCount-1].addSubview(emojisView!)
-        self.emojisButton.setImage(#imageLiteral(resourceName: "keyboard-25"), for: .normal)
+        if emojisViewIsOpen == false {
+            let windowCount = UIApplication.shared.windows.count
+            UIApplication.shared.windows[windowCount-1].addSubview(emojisView!)
+            self.emojisButton.setImage(#imageLiteral(resourceName: "keyboard-25"), for: .normal)
+            emojisViewIsOpen = true
+        } else {
+            self.emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
+            self.emojisView?.removeFromSuperview()
+            emojisViewIsOpen = false
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -212,21 +220,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 self.view.frame.origin.y -= keyboardSize.height
                 self.detailedNewsTable.frame.origin.y += keyboardSize.height
                 self.emojisView?.frame = CGRect(x: 0, y: self.view.frame.size.height-keyboardSize.height, width: self.view.frame.size.width, height: keyboardSize.height)
-                
-                print(keyboardSize.height)
             }
         }
     }
-    
+
     @objc func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y = 0
+                self.view.frame.origin.y += keyboardSize.height
                 self.detailedNewsTable.frame.origin.y = 0
-                commentTextField.text = ""
                 self.commentView.willRemoveSubview(sendCommentButton)
-                
-                print(keyboardSize.height)
             }
         }
     }
@@ -242,9 +245,12 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
 //        print("TextField did end editing method called")
-        self.sendCommentButton.fadeOut()
-        sendCommentButton.removeFromSuperview()
-        self.commentTextField.sizeIncrease()
+        if sendCommentButtonWillShow == true {
+            self.sendCommentButton.fadeOut()
+            sendCommentButton.removeFromSuperview()
+            self.commentTextField.sizeIncrease()
+            sendCommentButtonWillShow = false
+        }
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -261,9 +267,12 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 //        print("While entering the characters this method gets called")
-        self.commentTextField.sizeReduce()
-        self.commentView.addSubview(sendCommentButton)
-        self.sendCommentButton.fadeIn()
+        if sendCommentButtonWillShow == false {
+            self.commentTextField.sizeReduce()
+            self.commentView.addSubview(sendCommentButton)
+            self.sendCommentButton.fadeIn()
+            sendCommentButtonWillShow = true
+        }
         
         return true
     }

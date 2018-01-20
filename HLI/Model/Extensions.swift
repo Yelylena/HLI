@@ -71,13 +71,13 @@ extension UIButton {
 extension UITextField {
     func sizeReduce(_ duration: TimeInterval = 0.1, delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
         UITextField.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseIn, animations: {
-            self.frame.size.width -= 25
+            self.frame.size.width -= 40
         }, completion: completion)
     }
     
     func sizeIncrease(_ duration: TimeInterval = 0.1, delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
-        UITextField.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseIn, animations: {
-            self.frame.size.width += 25
+        UITextField.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseOut, animations: {
+            self.frame.size.width += 40
         }, completion: completion)
     }
 }
