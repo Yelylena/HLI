@@ -263,8 +263,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCy-NU-NpZ">
                                 <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add your comment" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pny-1x-c2p">
-                                        <rect key="frame" x="10" y="10" width="300" height="30"/>
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add your comment" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pny-1x-c2p">
+                                        <rect key="frame" x="10" y="10" width="355" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.31764705882352939" green="0.31764705882352939" blue="0.31764705882352939" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -273,11 +274,7 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.12156862745098039" green="0.10588235294117647" blue="0.10588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="Pny-1x-c2p" firstAttribute="top" secondItem="hCy-NU-NpZ" secondAttribute="top" constant="10" id="67e-vN-PLB"/>
-                                    <constraint firstAttribute="trailing" secondItem="Pny-1x-c2p" secondAttribute="trailing" constant="65" id="6hp-ym-eeq"/>
                                     <constraint firstAttribute="width" secondItem="hCy-NU-NpZ" secondAttribute="height" multiplier="15:2" id="Get-7d-ftb"/>
-                                    <constraint firstItem="Pny-1x-c2p" firstAttribute="leading" secondItem="hCy-NU-NpZ" secondAttribute="leading" constant="10" id="RYQ-pG-wfe"/>
-                                    <constraint firstAttribute="bottom" secondItem="Pny-1x-c2p" secondAttribute="bottom" constant="10" id="S72-9L-eyC"/>
                                 </constraints>
                             </view>
                         </subviews>

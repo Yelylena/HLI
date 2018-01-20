@@ -57,7 +57,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         commentTextField.rightViewMode = .whileEditing
         
         //Send comment button
-        sendCommentButton.setImage(#imageLiteral(resourceName: "send"), for: .normal)
+        sendCommentButton.setImage(#imageLiteral(resourceName: "send30"), for: .normal)
         sendCommentButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0)
         sendCommentButton.frame = CGRect(x: CGFloat(333), y: CGFloat(10), width: 35, height: 30)
         sendCommentButton.addTarget(self, action: #selector(self.sendComment), for: .touchUpInside)
@@ -242,29 +242,34 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
 //        print("TextField did end editing method called")
+        self.sendCommentButton.fadeOut()
         sendCommentButton.removeFromSuperview()
-        
+        self.commentTextField.sizeIncrease()
     }
+    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
 //        print("TextField should begin editing method called")
-        return true;
+        return true
     }
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
 //        print("TextField should clear method called")
-        return true;
+        return true
     }
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
 //        print("TextField should end editing method called")
-        return true;
+        return true
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 //        print("While entering the characters this method gets called")
+        self.commentTextField.sizeReduce()
         self.commentView.addSubview(sendCommentButton)
-        return true;
+        self.sendCommentButton.fadeIn()
+        
+        return true
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 //        print("TextField should return method called")
-        textField.resignFirstResponder();
-        return true;
+        textField.resignFirstResponder()
+        return true
     }
 }
