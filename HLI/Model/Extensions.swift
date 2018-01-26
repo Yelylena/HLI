@@ -56,12 +56,12 @@ extension UIColor {
 }
 
 extension UIButton {
-    func fadeIn(_ duration: TimeInterval = 0.5, delay: TimeInterval = 0.0, completion: @escaping ((Bool) -> Void) = {(finished: Bool) -> Void in}) {
+    func fadeIn(duration: TimeInterval = 0.5,_ delay: TimeInterval = 0.0, completion: @escaping ((Bool) -> Void) = {(finished: Bool) -> Void in}) {
         UIButton.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseIn, animations: {
             self.alpha = 1.0
         }, completion: completion)  }
     
-    func fadeOut(_ duration: TimeInterval = 0.5, delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
+    func fadeOut(duration: TimeInterval = 0.5,_ delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
         UIButton.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseIn, animations: {
             self.alpha = 0.0
         }, completion: completion)
@@ -69,15 +69,19 @@ extension UIButton {
 }
 
 extension UITextField {
-    func sizeReduce(_ duration: TimeInterval = 0.1, delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
+    func sizeReduce(width: CGFloat, height: CGFloat,_ duration: TimeInterval = 0.1, delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
         UITextField.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseIn, animations: {
-            self.frame.size.width -= 40
+            self.frame.size.width -= width
+            self.frame.size.height -= height
         }, completion: completion)
     }
     
-    func sizeIncrease(_ duration: TimeInterval = 0.1, delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
+    func sizeIncrease(width: CGFloat, height: CGFloat,_ duration: TimeInterval = 0.1, delay: TimeInterval = 0.0, completion: @escaping (Bool) -> Void = {(finished: Bool) -> Void in}) {
         UITextField.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseOut, animations: {
-            self.frame.size.width += 40
+            self.frame.size.width += width
+            self.frame.size.height += height
         }, completion: completion)
     }
 }
+
+

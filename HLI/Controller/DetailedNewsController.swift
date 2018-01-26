@@ -18,7 +18,6 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var detailedNewsTable: UITableView!
     @IBOutlet weak var commentView: UIView!
-//    @IBOutlet weak var sendCommentBtn: UIButton!
     @IBOutlet weak var commentTextField: UITextField!
     
     var emojisView: EmojisView?
@@ -31,9 +30,11 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     
     let date = Date()
     let calendar = Calendar.current
+    
+    var charsInCommentTextField = 0
     var keyboardIsOpen = false
     var emojisViewIsOpen = false
-    var sendCommentButtonWillShow = false
+    var sendCommentButtonDidShow = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -221,53 +222,70 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         view.endEditing(true)
     }
     
-    // UITextField Delegates
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("TextField did begin editing method called")
-        if sendCommentButtonWillShow == false {
-            self.commentTextField.sizeReduce()
-            self.commentView.addSubview(sendCommentButton)
-            self.sendCommentButton.fadeIn()
-            sendCommentButtonWillShow = true
-        }
-    }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("TextField did end editing method called")
-        if sendCommentButtonWillShow == true  {
-            self.sendCommentButton.fadeOut()
-            sendCommentButton.removeFromSuperview()
-            self.commentTextField.sizeIncrease()
-            sendCommentButtonWillShow = false
-        }
+    func addSendCommentButton() {
+        self.commentTextField.sizeReduce(width: 40, height: 0)
+        self.commentView.addSubview(sendCommentButton)
+        self.sendCommentButton.fadeIn(duration: 0.3)
+        sendCommentButtonDidShow = true
     }
     
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        print("TextField should begin editing method called")
-        return true
+    func removeSendCommentButton() {
+        self.sendCommentButton.fadeOut(duration: 0.3)
+        sendCommentButton.removeFromSuperview()
+        self.commentTextField.sizeIncrease(width: 40, height: 0)
+        sendCommentButtonDidShow = false
     }
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        print("TextField should clear method called")
-        return false
-    }
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        print("TextField should end editing method called")
-        return true
-    }
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print("While entering the characters this method gets called")
-//        if sendCommentButtonWillShow == false {
-//            self.commentTextField.sizeReduce()
-//            self.commentView.addSubview(sendCommentButton)
-//            self.sendCommentButton.fadeIn()
-//            sendCommentButtonWillShow = true
-//        }
-        
-        return true
-    }
+    
+    //MARK: UITextField Delegates
+    //1
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("TextField should return method called")
         textField.resignFirstResponder()
         return true
+    }
+    //2
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        print("TextField should begin editing method called")
+        charsInCommentTextField = (commentTextField.text?.count)!
+        print("Chars in textField: \(charsInCommentTextField)")
+        return true
+    }
+    //3
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        print("TextField should clear method called")
+        return false
+    }
+    //4
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("TextField did begin editing method called")
+        if sendCommentButtonDidShow == false && charsInCommentTextField != 0 {
+            self.addSendCommentButton()
+        }
+    }
+    //5
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        print("While entering the characters this method gets called")
+        if sendCommentButtonDidShow == false {
+            self.addSendCommentButton()
+        }
+        
+        return true
+    }
+    //6
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        print("TextField should end editing method called")
+        self.emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
+        emojisViewIsOpen = false
+        charsInCommentTextField = (commentTextField.text?.count)!
+        print("Chars in textField: \(charsInCommentTextField)")
+        return true
+    }
+    //7
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("TextField did end editing method called")
+        if sendCommentButtonDidShow == true && charsInCommentTextField == 0 {
+            self.removeSendCommentButton()
+        }
     }
     
     @IBAction func showEmojisView(_ sender: UIButton) {
@@ -282,10 +300,13 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             emojisViewIsOpen = false
         }
     }
-    
+    //MARK: UICollectionView Delegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let emoji = emojisView?.emoji.emojis[indexPath.row]
         commentTextField.text = "\(commentTextField.text!) \((emoji?.data)!) "
+        if sendCommentButtonDidShow == false {
+            self.addSendCommentButton()
+        }
     }
     
 }
