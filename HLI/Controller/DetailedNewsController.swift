@@ -53,7 +53,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         
         //Emojis button
         emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
-        emojisButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0)
+        emojisButton.imageEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0)
         emojisButton.frame = CGRect(x: CGFloat(commentTextField.frame.size.width - 30), y: CGFloat(5), width: 29, height: 25)
         emojisButton.addTarget(self, action: #selector(self.showEmojisView), for: .touchUpInside)
         commentTextField.rightView = emojisButton
@@ -61,8 +61,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         
         //Send comment button
         sendCommentButton.setImage(#imageLiteral(resourceName: "send30"), for: .normal)
-        sendCommentButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0)
-        sendCommentButton.frame = CGRect(x: CGFloat(333), y: CGFloat(10), width: 35, height: 30)
+        sendCommentButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+        sendCommentButton.frame = CGRect(x: self.view.frame.size.width - 45, y: 10, width: 35, height: 30)
         sendCommentButton.addTarget(self, action: #selector(self.sendComment), for: .touchUpInside)
         
         //Table
@@ -72,8 +72,14 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         detailedNewsTable.dataSource = self
         self.parse()
         
-        //Text field
+        //Comment text field
         commentTextField.delegate = self
+        commentTextField.frame = CGRect(x: 10, y: 10, width: self.view.frame.size.width - 20, height: 30)
+        
+        //Comment view
+        
+//        commentView.frame = CGRect(x: 0, y: self.view.frame.origin.y, width: self.view.frame.size.width, height: 50)
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -91,7 +97,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     func parse() {
         Alamofire.request(pageURL!).responseString { response in
             let html = response.result.value!
@@ -223,7 +229,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func addSendCommentButton() {
-        self.commentTextField.sizeReduce(width: 40, height: 0)
+        self.commentTextField.sizeReduce(width: 45, height: 0)
         self.commentView.addSubview(sendCommentButton)
         self.sendCommentButton.fadeIn(duration: 0.3)
         sendCommentButtonDidShow = true
@@ -232,7 +238,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     func removeSendCommentButton() {
         self.sendCommentButton.fadeOut(duration: 0.3)
         sendCommentButton.removeFromSuperview()
-        self.commentTextField.sizeIncrease(width: 40, height: 0)
+        self.commentTextField.sizeIncrease(width: 45, height: 0)
         sendCommentButtonDidShow = false
     }
     
@@ -262,13 +268,18 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             self.addSendCommentButton()
         }
     }
+    
+    
+    
     //5
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print("While entering the characters this method gets called")
+        
         if sendCommentButtonDidShow == false {
             self.addSendCommentButton()
         }
-        
+        charsInCommentTextField = (commentTextField.text?.count)!
+        print("Chars while entering:\(charsInCommentTextField)")
         return true
     }
     //6

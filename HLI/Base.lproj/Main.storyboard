@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="11w-2u-5Hc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="11w-2u-5Hc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -20,20 +21,17 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="NewsController" customModule="HLI" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UpY-9L-jNU">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="616"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="617"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="UpY-9L-jNU" secondAttribute="height" multiplier="375:616" id="vYX-x6-QdW"/>
+                                    <constraint firstAttribute="width" secondItem="UpY-9L-jNU" secondAttribute="height" multiplier="375:617" id="ysT-rp-eHS"/>
                                 </constraints>
+                                <viewLayoutGuide key="safeArea" id="xZX-UI-LRF"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsCell" rowHeight="200" id="G9Y-ug-KSy" customClass="NewsCell" customModule="HLI" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="200"/>
@@ -112,51 +110,31 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="qhL-8f-n6y"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Brc-QL-utP">
-                                <rect key="frame" x="190" y="617" width="185" height="50"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EYI-X9-rv0">
+                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                                 <color key="backgroundColor" red="0.1215686275" green="0.1058823529" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Qg1-CU-I4k"/>
-                                    <constraint firstAttribute="width" secondItem="Brc-QL-utP" secondAttribute="height" multiplier="37:10" id="fHk-r0-PyJ"/>
+                                    <constraint firstAttribute="height" constant="50" id="ogX-bK-ueK"/>
                                 </constraints>
-                                <state key="normal" image="forward30"/>
-                                <connections>
-                                    <action selector="showPrevNews:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F0Q-Z2-pUZ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hcv-WA-9Cf">
-                                <rect key="frame" x="0.0" y="617" width="185" height="50"/>
-                                <color key="backgroundColor" red="0.1215686275" green="0.1058823529" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Hcv-WA-9Cf" secondAttribute="height" multiplier="37:10" id="4BT-Gw-EfF"/>
-                                    <constraint firstAttribute="height" constant="50" id="r9b-PP-SNe"/>
-                                </constraints>
-                                <state key="normal" image="back30"/>
-                                <connections>
-                                    <action selector="showNextNews:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lua-By-l0n"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.12156862745098039" green="0.10588235294117647" blue="0.10588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="UpY-9L-jNU" secondAttribute="trailing" id="4Lb-MA-q5c"/>
-                            <constraint firstItem="Brc-QL-utP" firstAttribute="top" secondItem="UpY-9L-jNU" secondAttribute="bottom" constant="1" id="7eV-Mo-8lX"/>
-                            <constraint firstItem="Hcv-WA-9Cf" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AOE-k3-x1X"/>
-                            <constraint firstItem="Hcv-WA-9Cf" firstAttribute="top" secondItem="UpY-9L-jNU" secondAttribute="bottom" constant="1" id="Bb5-py-cjn"/>
-                            <constraint firstItem="UpY-9L-jNU" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Jvj-BF-50l"/>
-                            <constraint firstItem="Brc-QL-utP" firstAttribute="leading" secondItem="Hcv-WA-9Cf" secondAttribute="trailing" constant="5" id="SgN-Po-Bpx"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Brc-QL-utP" secondAttribute="bottom" id="Si4-Ze-SZv"/>
-                            <constraint firstAttribute="trailing" secondItem="Brc-QL-utP" secondAttribute="trailing" id="Zrd-dK-t4h"/>
-                            <constraint firstItem="Brc-QL-utP" firstAttribute="top" secondItem="UpY-9L-jNU" secondAttribute="bottom" constant="1" id="cZV-Jd-5oH"/>
-                            <constraint firstItem="UpY-9L-jNU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="mDK-zT-fff"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Hcv-WA-9Cf" secondAttribute="bottom" id="tTK-dt-wHP"/>
+                            <constraint firstItem="EYI-X9-rv0" firstAttribute="bottom" secondItem="OAy-ca-kYn" secondAttribute="bottom" id="18e-iG-MLH"/>
+                            <constraint firstItem="UpY-9L-jNU" firstAttribute="trailing" secondItem="OAy-ca-kYn" secondAttribute="trailing" id="3L5-Ge-V8z"/>
+                            <constraint firstItem="UpY-9L-jNU" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Mu6-oU-yIP"/>
+                            <constraint firstItem="EYI-X9-rv0" firstAttribute="top" secondItem="OAy-ca-kYn" secondAttribute="bottom" constant="-50" id="OjN-Jv-96q"/>
+                            <constraint firstItem="EYI-X9-rv0" firstAttribute="top" secondItem="UpY-9L-jNU" secondAttribute="bottom" id="daX-Iq-6cC"/>
+                            <constraint firstItem="UpY-9L-jNU" firstAttribute="leading" secondItem="OAy-ca-kYn" secondAttribute="leading" id="gBw-7V-y00"/>
+                            <constraint firstItem="EYI-X9-rv0" firstAttribute="trailing" secondItem="OAy-ca-kYn" secondAttribute="trailing" id="n7I-a6-Egs"/>
+                            <constraint firstItem="EYI-X9-rv0" firstAttribute="leading" secondItem="OAy-ca-kYn" secondAttribute="leading" id="rHX-ru-ECi"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="OAy-ca-kYn"/>
                     </view>
                     <navigationItem key="navigationItem" id="X4c-fc-PvX"/>
                     <connections>
+                        <outlet property="navigationView" destination="EYI-X9-rv0" id="btE-0W-P8C"/>
                         <outlet property="newsTable" destination="UpY-9L-jNU" id="RAr-cM-8Zu"/>
-                        <outlet property="nextButton" destination="Hcv-WA-9Cf" id="LRk-US-22Q"/>
-                        <outlet property="prevButton" destination="Brc-QL-utP" id="t2Z-Ax-Bvc"/>
                         <segue destination="5PO-hX-cGw" kind="show" identifier="DetailedNewsSegue" id="aQV-yv-uPz"/>
                     </connections>
                 </viewController>
@@ -168,10 +146,6 @@
         <scene sceneID="X3G-kR-pBM">
             <objects>
                 <viewController id="5PO-hX-cGw" customClass="DetailedNewsController" customModule="HLI" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="7BR-S9-DKe"/>
-                        <viewControllerLayoutGuide type="bottom" id="Ia0-Lg-WKf"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Cg5-Tv-tWM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -180,8 +154,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="374.5" height="617"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="ykV-W8-S6c" secondAttribute="height" multiplier="374:617" id="Xrg-Ey-dyI"/>
+                                    <constraint firstAttribute="width" secondItem="ykV-W8-S6c" secondAttribute="height" multiplier="374:617" id="mhr-bo-T5c"/>
                                 </constraints>
+                                <viewLayoutGuide key="safeArea" id="n2P-1q-QVm"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="NewsCell" rowHeight="200" id="4l6-ga-gFP" customClass="NewsCell" customModule="HLI" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="374.5" height="200"/>
@@ -263,32 +238,34 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCy-NU-NpZ">
                                 <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add your comment" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pny-1x-c2p">
+                                    <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add your comment" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pny-1x-c2p">
                                         <rect key="frame" x="10" y="10" width="355" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.31764705882352939" green="0.31764705882352939" blue="0.31764705882352939" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.12156862745098039" green="0.10588235294117647" blue="0.10588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="hCy-NU-NpZ" secondAttribute="height" multiplier="15:2" id="Get-7d-ftb"/>
+                                    <constraint firstAttribute="height" constant="50" id="obK-60-gi6"/>
                                 </constraints>
+                                <viewLayoutGuide key="safeArea" id="ARn-xS-gjf"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.12156862745098039" green="0.10588235294117647" blue="0.10588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="ykV-W8-S6c" firstAttribute="top" secondItem="Cg5-Tv-tWM" secondAttribute="top" id="1eT-3x-WgC"/>
-                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="top" secondItem="ykV-W8-S6c" secondAttribute="bottom" id="B7x-Y5-t73"/>
-                            <constraint firstItem="Ia0-Lg-WKf" firstAttribute="top" secondItem="hCy-NU-NpZ" secondAttribute="bottom" id="Dp3-Wh-hAw"/>
-                            <constraint firstItem="ykV-W8-S6c" firstAttribute="leading" secondItem="Cg5-Tv-tWM" secondAttribute="leading" id="Igo-Kw-lzk"/>
-                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="leading" secondItem="Cg5-Tv-tWM" secondAttribute="leading" id="c3c-sn-c3Q"/>
-                            <constraint firstAttribute="trailing" secondItem="ykV-W8-S6c" secondAttribute="trailing" id="jpV-SV-4lF"/>
-                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="top" secondItem="ykV-W8-S6c" secondAttribute="bottom" id="kkA-LV-mpD"/>
-                            <constraint firstAttribute="trailing" secondItem="hCy-NU-NpZ" secondAttribute="trailing" id="vkQ-RK-sxq"/>
+                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="top" secondItem="ykV-W8-S6c" secondAttribute="bottom" id="Dre-5e-ONm"/>
+                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="bottom" secondItem="9dh-VM-dhn" secondAttribute="bottom" id="Fs3-V6-2CN"/>
+                            <constraint firstItem="ykV-W8-S6c" firstAttribute="leading" secondItem="9dh-VM-dhn" secondAttribute="leading" id="QNZ-wZ-Lge"/>
+                            <constraint firstItem="9dh-VM-dhn" firstAttribute="trailing" secondItem="ykV-W8-S6c" secondAttribute="trailing" id="YQ6-Fl-ifO"/>
+                            <constraint firstItem="ykV-W8-S6c" firstAttribute="top" secondItem="9dh-VM-dhn" secondAttribute="top" constant="-64" id="jYt-F6-3yv"/>
+                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="leading" secondItem="9dh-VM-dhn" secondAttribute="leading" id="nKt-1x-gaG"/>
+                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="trailing" secondItem="9dh-VM-dhn" secondAttribute="trailing" id="qMK-Qr-EZ4"/>
+                            <constraint firstItem="hCy-NU-NpZ" firstAttribute="top" secondItem="9dh-VM-dhn" secondAttribute="bottom" constant="-50" id="zMA-R5-eqv"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="9dh-VM-dhn"/>
                     </view>
                     <connections>
                         <outlet property="commentTextField" destination="Pny-1x-c2p" id="3pg-AV-NQZ"/>
@@ -319,8 +296,4 @@
             <point key="canvasLocation" x="53.600000000000001" y="50.824587706146929"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="back30" width="30" height="30"/>
-        <image name="forward30" width="30" height="30"/>
-    </resources>
 </document>
