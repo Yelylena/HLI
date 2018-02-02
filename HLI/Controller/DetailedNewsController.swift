@@ -278,8 +278,12 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         if sendCommentButtonDidShow == false {
             self.addSendCommentButton()
         }
-        charsInCommentTextField = (commentTextField.text?.count)!
-        print("Chars while entering:\(charsInCommentTextField)")
+        
+        let length = (commentTextField.text?.count)! + string.count - range.length
+        if length == 0 {
+            self.removeSendCommentButton()
+        }
+
         return true
     }
     //6
