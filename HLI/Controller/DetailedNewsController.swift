@@ -279,8 +279,8 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
             self.addSendCommentButton()
         }
         
-        let length = (commentTextField.text?.count)! + string.count - range.length
-        if length == 0 {
+        charsInCommentTextField = (commentTextField.text?.count)! + string.count - range.length
+        if charsInCommentTextField == 0 {
             self.removeSendCommentButton()
         }
 
