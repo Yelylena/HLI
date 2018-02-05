@@ -452,23 +452,23 @@ class Parser {
     }
     
     //MARK: Navigation
-    func parseNavigation() -> (prevNews: URL?, nextNews: URL?) {
+    func parseNavigation() -> (prevNewsURL: URL?, nextNewsURL: URL?) {
         
-        var prevNews: URL?
-        var nextNews: URL?
+        var prevNewsURL: URL?
+        var nextNewsURL: URL?
         
         if let doc = HTML(html: html, encoding: .windowsCP1251) {
             for newsNavigation in doc.css("div[class='next-prev']") {
                 
                 //Previous news
                 let prevLoc = newsNavigation.at_css("span[class='next-prev__prev'] > a")
-                prevNews = URL(string: "https://www.hl-inside.ru" + ((prevLoc != nil) ? (prevLoc?["href"])! : "/"))
+                prevNewsURL = URL(string: "https://www.hl-inside.ru" + ((prevLoc != nil) ? (prevLoc?["href"])! : "/"))
                 
                 //Next news
                 var nextLoc = newsNavigation.at_css("span[class='next-prev__next'] > a")
-                nextNews = URL(string: "https://www.hl-inside.ru" + ((nextLoc != nil) ? (nextLoc?["href"])! : "/"))
+                nextNewsURL = URL(string: "https://www.hl-inside.ru" + ((nextLoc != nil) ? (nextLoc?["href"])! : "/"))
             }
         }
-        return (prevNews!, nextNews!)
+        return (prevNewsURL!, nextNewsURL!)
     }
 }

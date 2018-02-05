@@ -245,59 +245,44 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     //MARK: UITextField Delegates
     //1
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("TextField should return method called")
         textField.resignFirstResponder()
         return true
     }
     //2
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        print("TextField should begin editing method called")
         charsInCommentTextField = (commentTextField.text?.count)!
-        print("Chars in textField: \(charsInCommentTextField)")
         return true
     }
     //3
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        print("TextField should clear method called")
         return false
     }
     //4
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("TextField did begin editing method called")
         if sendCommentButtonDidShow == false && charsInCommentTextField != 0 {
             self.addSendCommentButton()
         }
     }
-    
-    
-    
     //5
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print("While entering the characters this method gets called")
-        
         if sendCommentButtonDidShow == false {
             self.addSendCommentButton()
         }
-        
         charsInCommentTextField = (commentTextField.text?.count)! + string.count - range.length
         if charsInCommentTextField == 0 {
             self.removeSendCommentButton()
         }
-
         return true
     }
     //6
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        print("TextField should end editing method called")
         self.emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
         emojisViewIsOpen = false
         charsInCommentTextField = (commentTextField.text?.count)!
-        print("Chars in textField: \(charsInCommentTextField)")
         return true
     }
     //7
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("TextField did end editing method called")
         if sendCommentButtonDidShow == true && charsInCommentTextField == 0 {
             self.removeSendCommentButton()
         }

@@ -16,14 +16,15 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var newsTable: UITableView!
     @IBOutlet weak var navigationView: UIView!
     
+    var mainPageButton = UIButton()
     var prevNewsButton = UIButton()
     var nextNewsButton = UIButton()
     
     var news = [News]()
     private var mainPageURL = URL(string: "https://www.hl-inside.ru/")
-    private var pageURL = URL(string: "https://www.hl-inside.ru/")
-    private var prevNews: URL?
-    private var nextNews: URL?
+    private var currentPageURL = URL(string: "https://www.hl-inside.ru/")
+    private var prevNewsURL: URL?
+    private var nextNewsURL: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,16 +36,25 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.parse()
         
         //Navigation buttons
+        mainPageButton.setImage(#imageLiteral(resourceName: "screen"), for: .normal)
+        mainPageButton.imageEdgeInsets = UIEdgeInsetsMake(5, 0, 5, 0)
+        mainPageButton.frame = CGRect(x: self.view.frame.size.width / 2 - 15, y: 0, width: 30, height: 50)
+        mainPageButton.addTarget(self, action: #selector(self.returnToMainPage), for: .touchUpInside)
+        navigationView.addSubview(mainPageButton)
+        
         nextNewsButton.setImage(#imageLiteral(resourceName: "back30"), for: .normal)
         nextNewsButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0)
-        nextNewsButton.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width / 2, height: 50)
+        nextNewsButton.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width / 2 - 15, height: 50)
         nextNewsButton.addTarget(self, action: #selector(self.showNextNews), for: .touchUpInside)
+        nextNewsButton.isEnabled = false
+        navigationView.addSubview(nextNewsButton)
+        
         
         prevNewsButton.setImage(#imageLiteral(resourceName: "forward30"), for: .normal)
         prevNewsButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0)
-        prevNewsButton.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 50)
+        prevNewsButton.frame = CGRect(x: self.view.frame.size.width / 2 + 15, y: 0, width: self.view.frame.size.width / 2 - 15, height: 50)
         prevNewsButton.addTarget(self, action: #selector(self.showPrevNews), for: .touchUpInside)
-        self.navigationView.addSubview(prevNewsButton)
+        navigationView.addSubview(prevNewsButton)
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,13 +70,13 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func parse() {
-        Alamofire.request(pageURL!).responseString { response in
+        Alamofire.request(currentPageURL!).responseString { response in
             let html = response.result.value!
-            let parser = Parser(pageURL: self.pageURL!, html: html)
+            let parser = Parser(pageURL: self.currentPageURL!, html: html)
 
             self.news = parser.parseNews()
-            self.nextNews = parser.parseNavigation().nextNews
-            self.prevNews = parser.parseNavigation().prevNews
+            self.nextNewsURL = parser.parseNavigation().nextNewsURL
+            self.prevNewsURL = parser.parseNavigation().prevNewsURL
             
             DispatchQueue.main.async {
                 self.newsTable.reloadData()
@@ -74,33 +84,27 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    @IBAction func showPrevNews(_ sender: UIButton) {
-        pageURL = prevNews
+    func parseAndReloadData(url: URL?) {
+        currentPageURL = url
         news = [News]()
         self.parse()
         self.newsTable.reloadData()
-        self.addNextNewsButton()
     }
     
-    @IBAction func showNextNews(_ sender: UIButton) {
-        pageURL = nextNews
-        news = [News]()
-        self.parse()
-        self.newsTable.reloadData()
-        self.removeNextNewsButton()
+    func returnToMainPage(_ sender: UIButton) {
+        self.parseAndReloadData(url: mainPageURL)
+        self.nextNewsButton.isEnabled = false
     }
     
-    func addNextNewsButton() {
-        if pageURL != mainPageURL {
-            self.navigationView.addSubview(nextNewsButton)
-            prevNewsButton.frame = CGRect(x: self.view.frame.size.width / 2, y: 0, width: self.view.frame.size.width / 2, height: 50)
-//            self.view.updateConstraintsIfNeeded()
-        }
+    func showPrevNews(_ sender: UIButton) {
+        self.parseAndReloadData(url: prevNewsURL)
+        self.nextNewsButton.isEnabled = true
     }
-    func removeNextNewsButton() {
-        if pageURL == mainPageURL {
-            nextNewsButton.removeFromSuperview()
-            prevNewsButton.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 50)
+    
+    func showNextNews(_ sender: UIButton) {
+        self.parseAndReloadData(url: nextNewsURL)
+        if currentPageURL == mainPageURL {
+            self.nextNewsButton.isEnabled = false
         }
     }
     
