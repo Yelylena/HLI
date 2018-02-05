@@ -15,7 +15,8 @@ var bodyHeight: CGFloat = 0
 
 func getSubviews(body: [Body], cell: UITableViewCell) {
     
-    var position = CGPoint(x: 0, y: 120)
+    var position = CGPoint(x: 10, y: 120)
+    let width = UIScreen.main.bounds.size.width - 20
     var tag = 1000
     
     for item in body {
@@ -30,36 +31,34 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             paragraphView.text = item.data as? String
             paragraphView.text = paragraphView.text?.replacingOccurrences(of: "<br>", with: "\n")
             paragraphView.numberOfLines = 1000
-            paragraphView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (paragraphView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
-            //                print("Height of paragraph: \(paragraphView.frame.height)")
+            paragraphView.frame = CGRect(x: position.x, y: position.y, width: width, height: (paragraphView.text?.height(withConstrainedWidth: width, font: UIFont.systemFont(ofSize: 17.0)))!)
             cell.addSubview(paragraphView)
             bodySubviews.append(paragraphView)
             position.y += paragraphView.frame.height
             
         //MARK: Comment text
         case Body.DataType.commentText:
-            let commentTextView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
+            let commentTextView = UILabel(frame: CGRect(x: position.x, y: position.y, width: width, height: 0))
             commentTextView.attributedText =  item.data as! NSMutableAttributedString
-//            commentTextView.attributedText =  commentTextView.attributedText.replacingOccurrences(of: "<br>", with: "\n")
             commentTextView.numberOfLines = 1000
-            commentTextView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (commentTextView.attributedText?.string.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
+            commentTextView.frame = CGRect(x: position.x, y: position.y, width: width, height: (commentTextView.attributedText?.string.height(withConstrainedWidth: width, font: UIFont.systemFont(ofSize: 17.0)))!)
             cell.addSubview(commentTextView)
             bodySubviews.append(commentTextView)
             position.y += commentTextView.frame.height         
         
         //MARK: List
         case Body.DataType.unorderedListItem, Body.DataType.orderedListItem:
-            let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
+            let listView = UILabel(frame: CGRect(x: position.x, y: position.y, width: width, height: 0))
             listView.numberOfLines = 1000
             listView.text = item.data as? String
-            listView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (listView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
+            listView.frame = CGRect(x: position.x, y: position.y, width: width, height: (listView.text?.height(withConstrainedWidth: width, font: UIFont.systemFont(ofSize: 17.0)))!)
             cell.addSubview(listView)
             bodySubviews.append(listView)
             position.y += listView.frame.height
         
         //MARK: Image
         case Body.DataType.image:
-            let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+            let imageView = UIImageView(frame: CGRect(x: position.x, y: position.y, width: width, height: 200))
             //                        imageView.center = cell.center
             imageView.sd_setImage(with: URL(string: item.data as! String))
             imageView.contentMode = UIViewContentMode.scaleAspectFit
@@ -80,21 +79,21 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             
         //MARK: Strong
         case Body.DataType.strong:
-            let strongView = UILabel(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
+            let strongView = UILabel(frame: CGRect(x: position.x, y: position.y, width: width, height: 0))
             
             
             strongView.font = UIFont.boldSystemFont(ofSize: 17.0)
             
             strongView.text = item.data as? String
             strongView.numberOfLines = 1000
-            strongView.frame = CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: (strongView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: strongView.font))!)
+            strongView.frame = CGRect(x: position.x, y: position.y, width: width, height: (strongView.text?.height(withConstrainedWidth: width, font: strongView.font))!)
             cell.addSubview(strongView)
             bodySubviews.append(strongView)
             position.y += strongView.frame.height
             
         //MARK: Video
         case Body.DataType.video:
-            let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+            let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: width, height: 200))
             videoView.loadVideoID(item.data as! String)
             cell.addSubview(videoView)
             bodySubviews.append(videoView)
@@ -102,7 +101,7 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
             
         //MARK: YouTubeVideo
         case Body.DataType.youTubeVideo:
-            let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: UIScreen.main.bounds.size.width, height: 200))
+            let videoView = YouTubePlayerView(frame: CGRect(x: position.x, y: position.y, width: width, height: 200))
             videoView.loadVideoID(item.data as! String)
             cell.addSubview(videoView)
             bodySubviews.append(videoView)
@@ -110,10 +109,10 @@ func getSubviews(body: [Body], cell: UITableViewCell) {
         
         //MARK: Blockquote
         case Body.DataType.blockquote:
-            let blockquoteView = UILabel(frame: CGRect(x: 30, y: position.y, width: UIScreen.main.bounds.size.width, height: 0))
+            let blockquoteView = UILabel(frame: CGRect(x: 30, y: position.y, width: UIScreen.main.bounds.size.width - 20, height: 0))
             blockquoteView.text = item.data as? String
             blockquoteView.numberOfLines = 1000
-            blockquoteView.frame = CGRect(x: 30, y: position.y, width: UIScreen.main.bounds.size.width, height: (blockquoteView.text?.height(withConstrainedWidth: UIScreen.main.bounds.size.width, font: UIFont.systemFont(ofSize: 17.0)))!)
+            blockquoteView.frame = CGRect(x: 20, y: position.y, width: width - 10, height: (blockquoteView.text?.height(withConstrainedWidth: width - 10, font: UIFont.systemFont(ofSize: 17.0)))!)
             blockquoteView.backgroundColor = UIColor.AppColors.bg
             blockquoteView.textColor = UIColor.AppColors.text
             
