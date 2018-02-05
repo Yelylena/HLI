@@ -205,20 +205,20 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     
     func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardSize.height
-                self.detailedNewsTable.frame.origin.y += keyboardSize.height
-                self.emojisView?.frame = CGRect(x: 0, y: self.view.frame.size.height-keyboardSize.height, width: self.view.frame.size.width, height: keyboardSize.height)
+            if keyboardIsOpen == false {
+                self.view.frame.size.height -= keyboardSize.height
+                self.emojisView?.frame = CGRect(x: 0, y: self.view.frame.maxY, width: self.view.frame.size.width, height: keyboardSize.height)
+                keyboardIsOpen = true
             }
         }
     }
-
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y += keyboardSize.height
-                self.detailedNewsTable.frame.origin.y = 0
+            if keyboardIsOpen == true {
+                self.view.frame.size.height += keyboardSize.height
                 self.commentView.willRemoveSubview(sendCommentButton)
+                keyboardIsOpen = false
             }
         }
     }
@@ -226,6 +226,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
+        keyboardIsOpen = false
     }
     
     func addSendCommentButton() {
@@ -288,7 +289,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    @IBAction func showEmojisView(_ sender: UIButton) {
+    func showEmojisView(_ sender: UIButton) {
         if emojisViewIsOpen == false {
             let windowCount = UIApplication.shared.windows.count
             UIApplication.shared.windows[windowCount-1].addSubview(emojisView!)
