@@ -53,7 +53,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         
         //Emojis button
         emojisButton.setImage(#imageLiteral(resourceName: "emo_biggrin25"), for: .normal)
-        emojisButton.imageEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0)
+        emojisButton.imageEdgeInsets = UIEdgeInsetsMake(0, -15, 1, 0)
         emojisButton.frame = CGRect(x: CGFloat(commentTextField.frame.size.width - 30), y: CGFloat(5), width: 29, height: 25)
         emojisButton.addTarget(self, action: #selector(self.showEmojisView), for: .touchUpInside)
         commentTextField.rightView = emojisButton
@@ -74,12 +74,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         
         //Comment text field
         commentTextField.delegate = self
-        commentTextField.frame = CGRect(x: 10, y: 10, width: self.view.frame.size.width - 20, height: 30)
-        
-        //Comment view
-        
-//        commentView.frame = CGRect(x: 0, y: self.view.frame.origin.y, width: self.view.frame.size.width, height: 50)
-        
+        commentTextField.frame = CGRect(x: 10, y: 10, width: self.view.frame.size.width - 20, height: 30)        
         
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(DetailedNewsController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
