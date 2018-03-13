@@ -9,7 +9,6 @@
 import UIKit
 import Foundation
 import Kanna
-import Alamofire
 import SDWebImage
 import ActiveLabel
 
