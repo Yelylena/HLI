@@ -9,7 +9,7 @@
 import UIKit
 import Kanna
 import Alamofire
-import ActiveLabel
+//import ActiveLabel
 
 class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -131,13 +131,13 @@ class NewsController: UIViewController, UITableViewDelegate, UITableViewDataSour
             for tag in news.tags {
                 tags += "\(tag) "
             }
-            cell.tags.enabledTypes = [.mention, .hashtag, .url]
+            //cell.tags.enabledTypes = [.mention, .hashtag, .url]
             cell.tags.text = tags
 
             cell.comments.text = news.comments
             
             //MARK: Body
-            cell.body.enabledTypes = [.mention, .hashtag, .url]
+            //cell.body.enabledTypes = [.mention, .hashtag, .url]
             
             removeSubviews(cell: cell) // remove old subviews
             getSubviews(body: news.body, cell: cell) // create new subviews

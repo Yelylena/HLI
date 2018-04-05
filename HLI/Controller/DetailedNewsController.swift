@@ -11,7 +11,7 @@ import Foundation
 import Kanna
 import Alamofire
 import SDWebImage
-import ActiveLabel
+//import ActiveLabel
 
 
 class DetailedNewsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UITextFieldDelegate {
@@ -140,13 +140,13 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
                 for tag in news.tags {
                     temp += "\(tag) "
                 }
-                cell.tags.enabledTypes = [.mention, .hashtag, .url]
+                //cell.tags.enabledTypes = [.mention, .hashtag, .url]
                 cell.tags.text = temp
                 
                 cell.comments.text = ""
                 
                 //MARK: Body
-                cell.body.enabledTypes = [.mention, .hashtag, .url]
+                //cell.body.enabledTypes = [.mention, .hashtag, .url]
                 
                 removeSubviews(cell: cell)
                 getSubviews(body: news.body, cell: cell)
