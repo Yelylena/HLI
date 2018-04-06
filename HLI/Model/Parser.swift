@@ -8,10 +8,10 @@
 
 import UIKit
 import Foundation
+import SwiftSoup
 import Kanna
-import Alamofire
 import SDWebImage
-import ActiveLabel
+//import ActiveLabel
 
 class Parser {
     
@@ -23,9 +23,7 @@ class Parser {
         self.html = html
     }
     
-    //MARK: Get range
     
-    //MARK: Parse element
     
     //MARK: Parse elements in news body
     func parseBody(element: XMLElement, selector: String, priority: Int) -> [Body] {
@@ -241,7 +239,7 @@ class Parser {
         var author: String?
         var comments: String?
         
-        if let doc = HTML(html: html, encoding: .windowsCP1251) {
+        if let doc = try? HTML(html: html, encoding: .windowsCP1251) {
             
             for newsItem in doc.css("div[class='block block_type_news']") {
                 
@@ -368,7 +366,7 @@ class Parser {
         var date: String?
         var image: String?
         
-        if let doc = HTML(html: html, encoding: .windowsCP1251) {
+        if let doc = try? HTML(html: html, encoding: .windowsCP1251) {
             
             for commentItem in doc.css("div[itemscope='itemscope']") {
                 
@@ -435,7 +433,7 @@ class Parser {
     //MARK: Form
     func parseForm() -> FormData {
         var formData = FormData(date: String(), wallace: String(), breen: String())
-        if let doc = HTML(html: html, encoding: .windowsCP1251) {
+        if let doc = try? HTML(html: html, encoding: .windowsCP1251) {
             for form in doc.css("form") {
                 for date in form.css("input[name='date']") {
                     formData.date = date["value"]!
@@ -457,7 +455,7 @@ class Parser {
         var prevNewsURL: URL?
         var nextNewsURL: URL?
         
-        if let doc = HTML(html: html, encoding: .windowsCP1251) {
+        if let doc = try? HTML(html: html, encoding: .windowsCP1251) {
             for newsNavigation in doc.css("div[class='next-prev']") {
                 
                 //Previous news
