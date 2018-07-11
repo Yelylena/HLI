@@ -91,6 +91,22 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		43BE2E0720F63FD100F57B5B /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				BF7898BF1EF00453009B7927 /* Main.storyboard */,
+				BF7898C41EF00453009B7927 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		43BE2E0820F645D800F57B5B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		BF1594961FC3534900E2DBF3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,10 +127,10 @@
 			isa = PBXGroup;
 			children = (
 				BFF2C8511FE550E0007080E9 /* EmojiCell.swift */,
-				BFF2C8541FE550E0007080E9 /* EmojiCell.xib */,
 				BFF2C8531FE550E0007080E9 /* EmojisView.swift */,
 				BF9CBF621EF428D8004DA7A8 /* NewsCell.swift */,
 				BF5CB3AD1EFD681E00451A7E /* CommentCell.swift */,
+				BFF2C8541FE550E0007080E9 /* EmojiCell.xib */,
 				BF7898CD1EF02025009B7927 /* NewsCell.xib */,
 				BF5CB3AB1EFD67CA00451A7E /* CommentCell.xib */,
 			);
@@ -151,14 +167,14 @@
 		BF7898BA1EF00453009B7927 /* HLI */ = {
 			isa = PBXGroup;
 			children = (
-				BF7898BB1EF00453009B7927 /* AppDelegate.swift */,
+				43BE2E0820F645D800F57B5B /* Extensions */,
+				43BE2E0720F63FD100F57B5B /* Storyboard */,
 				BF1594961FC3534900E2DBF3 /* Model */,
 				BF1594971FC3539B00E2DBF3 /* View */,
 				BF1594991FC353DC00E2DBF3 /* Controller */,
-				BF7898BF1EF00453009B7927 /* Main.storyboard */,
 				BF7898C21EF00453009B7927 /* Assets.xcassets */,
-				BF7898C41EF00453009B7927 /* LaunchScreen.storyboard */,
 				BF7898C71EF00453009B7927 /* Info.plist */,
+				BF7898BB1EF00453009B7927 /* AppDelegate.swift */,
 			);
 			path = HLI;
 			sourceTree = "<group>";
@@ -197,6 +213,7 @@
 				TargetAttributes = {
 					BF7898B71EF00453009B7927 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 7Z6T588M79;
 						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 					};
@@ -447,6 +464,7 @@
 			baseConfigurationReference = 0B93FA9B3C4CB2E79671553A /* Pods-HLI.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7Z6T588M79;
 				INFOPLIST_FILE = HLI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Yelylena.HLI;
@@ -461,6 +479,7 @@
 			baseConfigurationReference = BC52B3B54CF02F1F803B08B2 /* Pods-HLI.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7Z6T588M79;
 				INFOPLIST_FILE = HLI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Yelylena.HLI;

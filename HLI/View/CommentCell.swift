@@ -10,11 +10,14 @@ import UIKit
 
 class CommentCell: UITableViewCell {
     
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var date: UILabel!
-    //FIXME: Add image
-    @IBOutlet weak var commentImage: UIImageView!
-    @IBOutlet weak var commentText: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var commentImageView: UIImageView!
+    @IBOutlet weak var commentTextLabel: UILabel! {
+        didSet {
+            commentTextLabel.numberOfLines = 0
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

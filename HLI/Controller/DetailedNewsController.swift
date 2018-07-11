@@ -186,16 +186,16 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
     }
     
         func sendComment(sender: UIButton!) {
-    //        let parameters = [
-    //            "name": "Swift_test",
-    //            "email": "",
-    //            "textdata": self.commentView.textView.text!,
-    //            "date": formData.date,
-    //            "wallace": formData.wallace,
-    //            "breen": formData.breen
-    //        ]
-    //        //Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
-    //        self.detailedNewsTable.reloadData()
+            let parameters = [
+                "name": "Swift_test",
+                "email": "",
+//                "textdata": self.commentView.textView.text!,
+                "date": formData.date,
+                "wallace": formData.wallace,
+                "breen": formData.breen
+            ]
+            Alamofire.request(pageURL!, method: .post, parameters: parameters, encoding:  URLEncoding.default, headers: nil)
+            self.detailedNewsTable.reloadData()
         }
     
     func keyboardWillShow(notification: NSNotification) {
@@ -284,7 +284,7 @@ class DetailedNewsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func showEmojisView(_ sender: UIButton) {
+    @objc func showEmojisView(_ sender: UIButton) {
         if emojisViewIsOpen == false {
             let windowCount = UIApplication.shared.windows.count
             UIApplication.shared.windows[windowCount-1].addSubview(emojisView!)
